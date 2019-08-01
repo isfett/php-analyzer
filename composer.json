@@ -11,9 +11,18 @@
     "support": {
         "issues": "https://github.com/isfett/php-analyzer/issues"
     },
+    "bin": ["bin/php-analyzer", "bin/php-analyzer.bat", "bin/php-analyzer.php"],
     "require": {
         "php": "^7.1",
-        "symfony/console": "^4.0"
+        "symfony/console": "^4.0",
+        "symfony/finder": "^4.0",
+        "nikic/php-parser": "^4.2",
+        "symfony/dependency-injection": "^4.3",
+        "symfony/config": "^4.3",
+        "symfony/http-kernel": "^4.3",
+        "symfony/yaml": "^4.3",
+        "doctrine/collections": "^1.6",
+        "symfony/event-dispatcher": "^4.3"
     },
     "require-dev": {
         "isfett/coding-standard": "^1.0",

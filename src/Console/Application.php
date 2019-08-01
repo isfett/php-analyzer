@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Console;
 
+use Isfett\PhpAnalyzer\Console\Command\MostUsedConditionsCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,9 +64,9 @@ class Application extends BaseApplication
      */
     protected function getDefaultCommands(): array
     {
-        $defaultCommands = parent::getDefaultCommands();
+        $commands = parent::getDefaultCommands();
 
-        return $defaultCommands;
+        return $commands;
     }
 
     /**
@@ -95,6 +96,6 @@ class Application extends BaseApplication
      */
     private function checkParameterOptionVersion(InputInterface $input): bool
     {
-        return $input->hasParameterOption('--version') || $input->hasParameterOption('-v');
+        return $input->hasParameterOption('--version')/* || $input->hasParameterOption('-v')*/;
     }
 }
