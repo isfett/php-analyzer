@@ -35,6 +35,7 @@ class FlipCheckingConditionList extends ConditionList
                 $flippedCondHash = md5($flippedCond);
                 if (in_array($flippedCondHash, $this->conditionHashes)) {
                     $condition->setCondition($flippedCond);
+                    $condition->getOccurrence()->setIsFlipped(true);
                     break;
                 }
             }

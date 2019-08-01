@@ -1,3 +1,5 @@
 /.idea/
 /codecoverage/
 /vendor/
+/var/
+php-analyzer.phar

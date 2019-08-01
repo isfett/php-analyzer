@@ -5,6 +5,8 @@ namespace Isfett\PhpAnalyzer\Console;
 
 use Isfett\PhpAnalyzer\Console\Command\MostUsedConditionsCommand;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,6 +48,7 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        $this->initStyles($output);
         $this->printApplicationInfoWhenNotInQuietMode($input, $output);
 
         if ($this->checkParameterOptionVersion($input)) {
@@ -97,5 +100,31 @@ class Application extends BaseApplication
     private function checkParameterOptionVersion(InputInterface $input): bool
     {
         return $input->hasParameterOption('--version')/* || $input->hasParameterOption('-v')*/;
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    private function initStyles(OutputInterface $output): void
+    {
+        $output->getFormatter()->setStyle(
+            'commandstart',
+            new OutputFormatterStyle('red', 'black', ['bold'])
+        );
+
+        $output->getFormatter()->setStyle(
+            'focus',
+            new OutputFormatterStyle('cyan', 'black', ['bold'])
+        );
+
+        $output->getFormatter()->setStyle(
+            'flag',
+            new OutputFormatterStyle('yellow', 'black')
+        );
+
+        ProgressBar::setFormatDefinition('messageOnly', '<info>%message%</info>');
+        ProgressBar::setFormatDefinition('messageDuration', '<info>%message%</info> (took %elapsed:6s%)');
+        ProgressBar::setFormatDefinition('customFinder', '%elapsed:6s% | %message% -> %filename%');
+        ProgressBar::setFormatDefinition('customBar', '%current%/%max% (%percent:2s%%) [%bar%] %elapsed:6s% -> %message%');
     }
 }

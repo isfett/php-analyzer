@@ -101,7 +101,7 @@ class MostUsedConditionsCommand extends Command
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $output->write(['<error>Starting most-used-conditions command</error>'], ['']);
+        $output->write(['<commandstart>Starting most-used-conditions command</commandstart>'], ['']);
 
         $directory = realpath($input->getArgument('directory'));
         if (false === $directory) {
@@ -142,7 +142,7 @@ class MostUsedConditionsCommand extends Command
             $traverser->addVisitor($visitor);
         }
 
-        $traverserProgressBar = $this->createProgressBar($output, 'customTraverser', 100);
+        $traverserProgressBar = $this->createProgressBar($output, 'customBar', 100);
         $traverserProgressBar->setMaxSteps(count($files));
 
         foreach ($files as $file) {
@@ -182,7 +182,7 @@ class MostUsedConditionsCommand extends Command
                 $this->processorRunner->addProcessor($processor);
             }
 
-            $processorRunnerProgressBar = $this->createProgressBar($output, 'customTraverser', 100);
+            $processorRunnerProgressBar = $this->createProgressBar($output, 'customBar', 100);
 
             foreach ($processorRunnerProgressBar->iterate($this->processorRunner->process($nodeOccurrenceList), count($processors)) as $processorsDone) {
                 $processorRunnerProgressBar->setMessage(sprintf('Processors are processing conditions. Condition count: %d', count($nodeOccurrenceList->getOccurrences())));
@@ -192,7 +192,7 @@ class MostUsedConditionsCommand extends Command
         }
 
         $flipChecking = $input->getOption('flipchecking');
-        $conditionListProgressBar = $this->createProgressBar($output, 'customTraverser', 100);
+        $conditionListProgressBar = $this->createProgressBar($output, 'customBar', 100);
         $conditionListProgressBar->setMaxSteps(count($nodeOccurrenceList->getOccurrences()));
         $conditionListProgressBar->setMessage(sprintf(
             'Create ConditionList (print ast nodes). Flip-Check: %s',
@@ -230,7 +230,7 @@ class MostUsedConditionsCommand extends Command
         $sortDirection = $this->getSortDirection($input);
         $countedConditionsList = new CountedConditionList($sortDirection);
 
-        $countedConditionListProgressBar = $this->createProgressBar($output, 'customTraverser', 100);
+        $countedConditionListProgressBar = $this->createProgressBar($output, 'customBar', 100);
         $countedConditionListProgressBar->setMaxSteps(count($rawConditions));
         $countedConditionListProgressBar->setMessage('Check for multiple conditions');
 
@@ -248,11 +248,16 @@ class MostUsedConditionsCommand extends Command
 
         $maximumEntries = $this->getMaximumEntries($input);
 
-        $output->writeln(sprintf('<info>sort Conditions by occurrences %s. Showing maximum %d entries.</info>', $sortDirection, $maximumEntries));
+        $output->writeln(sprintf('<info>sort Conditions by occurrences %s. Showing maximum %d conditions</info>', $sortDirection, $maximumEntries));
         $sortedConditions = $countedConditionsList->getCountedConditionsSorted($maximumEntries);
 
         $hideOccurrences = $input->getOption('hide-occurrences');
         $maximumOccurrences = $input->getOption('max-occurrences');
+        $minOccurrences = $input->getOption('min-occurrences');
+        if (null !== $minOccurrences) {
+            $minOccurrences = (int) $minOccurrences;
+            $output->writeln(sprintf('<info>Just showing conditions with at least %d occurrences</info>', $minOccurrences));
+        }
         if (null !== $maximumOccurrences) {
             $maximumOccurrences = (int) $maximumOccurrences;
         }
@@ -264,12 +269,17 @@ class MostUsedConditionsCommand extends Command
             'count',
         ]);
 
+        $conditionKeys = array_keys($sortedConditions);
+        $lastKey = end($conditionKeys);
         /** @var CountedCondition $countedCondition */
         foreach ($sortedConditions as $key => $countedCondition) {
-            if ($key > 0) {
-                $table->addRow([new TableSeparator(), new TableSeparator()]);
+            if (null !== $minOccurrences && $minOccurrences > $countedCondition->getCount()) {
+                continue;
             }
-            $table->addRow([$countedCondition->getCondition(), $countedCondition->getCount()]);
+            $table->addRow([
+                sprintf('<focus>%s</focus>', $countedCondition->getCondition()),
+                $countedCondition->getCount(),
+            ]);
             if ($hideOccurrences) {
                 continue;
             }
@@ -281,19 +291,32 @@ class MostUsedConditionsCommand extends Command
                 }
                 $line = $occurrence->getNode()->getStartLine();
                 if ($occurrence->getNode()->getStartLine() !== $occurrence->getNode()->getEndLine()) {
-                    $line .= sprintf(' - %s', $occurrence->getNode()->getEndLine());
+                    $line .= sprintf('-%s', $occurrence->getNode()->getEndLine());
+                }
+                $flags = [];
+                if ($occurrence->isFlipped()) {
+                    $flags[] = 'flipped';
                 }
                 $table->addRow([
-                    $occurrence->getFile()->getRelativePathname() . ':' . $line,
+                    sprintf(
+                        '%s:%s <flag>%s</flag>',
+                        $occurrence->getFile()->getRelativePathname(),
+                        $line,
+                        0 === count($flags) ? '' : '(' . implode(',', $flags) . ')'
+                    ),
                     '',
                 ]);
                 $counter++;
+            }
+            if ($key < $lastKey) {
+                $table->addRow([new TableSeparator(), new TableSeparator()]);
             }
         }
 
         $table->render();
 
         echo PHP_EOL;
+
         return Application::EXIT_CODE_SUCCESS;
     }
 
@@ -385,6 +408,12 @@ class MostUsedConditionsCommand extends Command
                 'maximum occurrences'
             )
             ->addOption(
+                'min-occurrences',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'minimum occurrences'
+            )
+            ->addOption(
                 'flipchecking',
                 null,
                 InputOption::VALUE_NONE,
@@ -398,10 +427,6 @@ class MostUsedConditionsCommand extends Command
             )
             ;
 
-        ProgressBar::setFormatDefinition('messageOnly', '<info>%message%</info>');
-        ProgressBar::setFormatDefinition('messageDuration', '<info>%message%</info> (took %elapsed:6s%)');
-        ProgressBar::setFormatDefinition('customFinder', '%elapsed:6s% | %message% -> %filename%');
-        ProgressBar::setFormatDefinition('customTraverser', '%current%/%max% (%percent:2s%%) [%bar%] %elapsed:6s% -> %message%');
     }
 
     /**

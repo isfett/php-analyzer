@@ -17,6 +17,9 @@ class Occurrence
     /** @var SplFileInfo */
     private $file;
 
+    /** @var bool */
+    private $isFlipped = false;
+
     /**
      * Condition constructor.
      *
@@ -51,5 +54,21 @@ class Occurrence
     public function getFile(): SplFileInfo
     {
         return $this->file;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFlipped(): bool
+    {
+        return $this->isFlipped;
+    }
+
+    /**
+     * @param bool $isFlipped
+     */
+    public function setIsFlipped(bool $isFlipped): void
+    {
+        $this->isFlipped = $isFlipped;
     }
 }
