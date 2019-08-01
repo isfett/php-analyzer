@@ -60,17 +60,17 @@ class ParamTest extends AbstractNodeRepresentationTest
         );
 
         if (null !== $default) {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn('$x', '$value');
         } else {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn('$value');
         }
 
-        $representation = new Param($this->representation, $node);
+        $representation = new Param($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->getRepresentation());
+        $this->assertEquals($expectedOutput, $representation->representation());
     }
 }

@@ -13,14 +13,15 @@ class ClosureUse extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\ClosureUse $node */
         $node = $this->node;
 
-        return sprintf('%s%s',
+        return sprintf(
+            '%s%s',
             $node->byRef ? '&' : '',
-            $this->representation($node->var)
+            $this->representate($node->var)
         );
     }
 }

@@ -31,12 +31,12 @@ class PropertyFetchTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$this', 'x');
 
-        $representation = new PropertyFetch($this->representation, $node);
+        $representation = new PropertyFetch($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$this->x', $representation->getRepresentation());
+        $this->assertEquals('$this->x', $representation->representation());
     }
 }

@@ -1,21 +1,21 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Service;
 
 use Isfett\PhpAnalyzer\Exception\NodeRepresentationClassDoesNotExistException;
-use Isfett\PhpAnalyzer\Node\Representation;
-use PhpParser\Node\Stmt\TraitUseAdaptation;
+use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
+use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Stmt;
 
 /**
- * Class RepresentationTest
+ * Class NodeRepresentationServiceTest
  */
-class RepresentationTest extends AbstractNodeTestCase
+class NodeRepresentationServiceTest extends AbstractNodeTestCase
 {
-    /** @var Representation */
-    private $representation;
+    /** @var NodeRepresentationService */
+    private $nodeRepresentationService;
 
     /**
      * @return void
@@ -24,7 +24,7 @@ class RepresentationTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->representation = new Representation();
+        $this->nodeRepresentationService = new NodeRepresentationService();
     }
 
     /**
@@ -34,7 +34,7 @@ class RepresentationTest extends AbstractNodeTestCase
     {
         $node = $this->createNameNode('test');
 
-        $this->assertEquals('test', $this->representation->getRepresentationForNode($node));
+        $this->assertEquals('test', $this->nodeRepresentationService->representationForNode($node));
     }
 
     /**
@@ -44,7 +44,7 @@ class RepresentationTest extends AbstractNodeTestCase
     {
         $node = new Int_($this->createVariableNode('i'), $this->getNodeAttributes());
 
-        $this->assertEquals('(int) $i', $this->representation->getRepresentationForNode($node));
+        $this->assertEquals('(int) $i', $this->nodeRepresentationService->representationForNode($node));
     }
 
     /**
@@ -57,7 +57,7 @@ class RepresentationTest extends AbstractNodeTestCase
         $this->expectException(NodeRepresentationClassDoesNotExistException::class);
         $this->expectExceptionMessage('No Representation for node PhpParser\Node\Stmt\Trait_ found');
 
-        $this->representation->getRepresentationForNode($node);
+        $this->nodeRepresentationService->representationForNode($node);
     }
 
     /**
@@ -65,7 +65,7 @@ class RepresentationTest extends AbstractNodeTestCase
      */
     public function testGetArgumentsEmpty(): void
     {
-        $this->assertCount(0, $this->representation->getArguments([]));
+        $this->assertCount(0, $this->nodeRepresentationService->representationForArguments([]));
     }
 
     /**
@@ -77,7 +77,7 @@ class RepresentationTest extends AbstractNodeTestCase
             $this->createVariableNode('test'),
         ];
 
-        $transformedArguments = $this->representation->getArguments($arguments);
+        $transformedArguments = $this->nodeRepresentationService->representationForArguments($arguments);
 
         $this->assertCount(1, $transformedArguments);
         $this->assertEquals('$test', $transformedArguments[0]);
@@ -93,7 +93,7 @@ class RepresentationTest extends AbstractNodeTestCase
             $this->createVariableNode('test2'),
         ];
 
-        $transformedArguments = $this->representation->getArguments($arguments);
+        $transformedArguments = $this->nodeRepresentationService->representationForArguments($arguments);
 
         $this->assertCount(2, $transformedArguments);
         $this->assertEquals('$test', $transformedArguments[0]);

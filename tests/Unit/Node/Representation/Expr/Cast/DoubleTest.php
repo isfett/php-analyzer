@@ -52,12 +52,12 @@ class DoubleTest extends AbstractNodeRepresentationTest
             )
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$variable');
 
-        $representation = new Double($this->representation, $node);
+        $representation = new Double($this->nodeRepresentationService, $node);
 
-        $this->assertEquals(sprintf('(%s) $variable', $expectedType), $representation->getRepresentation());
+        $this->assertEquals(sprintf('(%s) $variable', $expectedType), $representation->representation());
     }
 }

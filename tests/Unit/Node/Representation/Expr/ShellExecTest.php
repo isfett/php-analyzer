@@ -32,12 +32,12 @@ class ShellExecTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$command']);
 
-        $representation = new ShellExec($this->representation, $node);
+        $representation = new ShellExec($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('shell_exec($command)', $representation->getRepresentation());
+        $this->assertEquals('shell_exec($command)', $representation->representation());
     }
 }

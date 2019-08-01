@@ -13,15 +13,15 @@ class Instanceof_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Instanceof_ $node */
         $node = $this->node;
 
         return sprintf(
             '%s instanceof %s',
-            $this->representation($node->expr),
-            $this->representation($node->class)
+            $this->representate($node->expr),
+            $this->representate($node->class)
         );
     }
 }

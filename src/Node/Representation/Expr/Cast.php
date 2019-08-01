@@ -13,7 +13,7 @@ class Cast extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Cast $node */
         $node = $this->node;
@@ -26,7 +26,7 @@ class Cast extends AbstractRepresentation
         return sprintf(
             '(%s) %s',
             $type,
-            $this->representation($node->expr)
+            $this->representate($node->expr)
         );
     }
 }

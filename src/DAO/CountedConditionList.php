@@ -25,7 +25,7 @@ class CountedConditionList
     /**
      * CountedConditionList constructor.
      *
-     * @param string        $sortDirection
+     * @param string|null $sortDirection
      */
     public function __construct(?string $sortDirection = null)
     {

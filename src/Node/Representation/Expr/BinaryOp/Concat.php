@@ -13,16 +13,16 @@ class Concat extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\BinaryOp\Concat $node */
         $node = $this->node;
 
         return sprintf(
             '%s%s%s',
-            $this->representation($node->left),
+            $this->representate($node->left),
             $node->getOperatorSigil(),
-            $this->representation($node->right)
+            $this->representate($node->right)
         );
     }
 }

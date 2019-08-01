@@ -29,9 +29,9 @@ class NameTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new Name($this->representation, $node);
+        $representation = new Name($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('test', $representation->getRepresentation());
+        $this->assertEquals('test', $representation->representation());
     }
 
     /**
@@ -47,8 +47,8 @@ class NameTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new Name($this->representation, $node);
+        $representation = new Name($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('test\\test2', $representation->getRepresentation());
+        $this->assertEquals('test\\test2', $representation->representation());
     }
 }

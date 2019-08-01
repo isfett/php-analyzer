@@ -13,7 +13,7 @@ class Exit_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Exit_ $node */
         $node = $this->node;
@@ -24,7 +24,7 @@ class Exit_ extends AbstractRepresentation
 
         return sprintf(
             'exit(%s)',
-            $this->representation($node->expr)
+            $this->representate($node->expr)
         );
     }
 }

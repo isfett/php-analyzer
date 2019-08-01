@@ -49,12 +49,12 @@ class Include_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn("'path/to/file'");
 
-        $representation = new Include_($this->representation, $node);
+        $representation = new Include_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals(sprintf("%s('path/to/file')", $includeFunction), $representation->getRepresentation());
+        $this->assertEquals(sprintf("%s('path/to/file')", $includeFunction), $representation->representation());
     }
 }

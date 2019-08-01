@@ -13,7 +13,7 @@ class ArrowFunction extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\ArrowFunction $node */
         $node = $this->node;
@@ -25,7 +25,7 @@ class ArrowFunction extends AbstractRepresentation
 
         $returnType = '';
         if (null !== $node->returnType) {
-            $returnType = sprintf(': %s', $this->representation($node->returnType));
+            $returnType = sprintf(': %s', $this->representate($node->returnType));
         }
 
         return sprintf(
@@ -34,7 +34,7 @@ class ArrowFunction extends AbstractRepresentation
             $node->byRef ? '&' : '',
             $this->arguments($node->params),
             $returnType,
-            $this->representation($node->expr)
+            $this->representate($node->expr)
         );
     }
 }

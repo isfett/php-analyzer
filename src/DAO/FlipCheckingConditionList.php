@@ -33,7 +33,7 @@ class FlipCheckingConditionList extends ConditionList
             if (false !== strpos($condition->getCondition(), ' '.$operator.' ')) {
                 $flippedCond = $this->flipCondition($condition->getCondition(), $operator);
                 $flippedCondHash = md5($flippedCond);
-                if (in_array($flippedCondHash, $this->conditionHashes)) {
+                if (in_array($flippedCondHash, $this->conditionHashes, true)) {
                     $condition->setCondition($flippedCond);
                     $condition->getOccurrence()->setIsFlipped(true);
                     break;
@@ -51,9 +51,13 @@ class FlipCheckingConditionList extends ConditionList
      *
      * @return string
      */
-    private function flipCondition(string $condition, string $operator): string {
-        return substr($condition, strpos($condition, $operator) + strlen($operator) + 1) .
-        ' ' . $operator . ' ' .
-        substr($condition, 0, strpos($condition, $operator) - 1);
+    private function flipCondition(string $condition, string $operator): string
+    {
+        return sprintf(
+            '%s %s %s',
+            substr($condition, strpos($condition, $operator) + strlen($operator) + 1),
+            $operator,
+            substr($condition, 0, strpos($condition, $operator) - 1)
+        );
     }
 }

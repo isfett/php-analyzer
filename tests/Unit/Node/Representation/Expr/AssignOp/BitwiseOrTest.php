@@ -31,12 +31,12 @@ class BitwiseOrTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$variable', '$variable2');
 
-        $representation = new BitwiseOr($this->representation, $node);
+        $representation = new BitwiseOr($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable |= $variable2', $representation->getRepresentation());
+        $this->assertEquals('$variable |= $variable2', $representation->representation());
     }
 }

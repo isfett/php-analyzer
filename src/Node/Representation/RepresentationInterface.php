@@ -11,5 +11,5 @@ interface RepresentationInterface
     /**
      * @return string
      */
-    public function getRepresentation(): string;
+    public function representation(): string;
 }

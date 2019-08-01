@@ -55,21 +55,21 @@ class ArrayItemTest extends AbstractNodeRepresentationTest
         );
 
         if ($unpack) {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn('$items');
         } elseif (null !== $key) {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn("'key'", '$value');
         } else {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn('$value');
         }
 
-        $representation = new ArrayItem($this->representation, $node);
+        $representation = new ArrayItem($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->getRepresentation());
+        $this->assertEquals($expectedOutput, $representation->representation());
     }
 }

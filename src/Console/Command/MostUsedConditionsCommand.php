@@ -18,19 +18,14 @@ use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Finder\Finder;
 use Isfett\PhpAnalyzer\Node\AbstractVisitor;
 use Isfett\PhpAnalyzer\Node\ProcessorRunner;
-use Isfett\PhpAnalyzer\Node\ProcessorInterface;
 use Isfett\PhpAnalyzer\Node\ProcessorRunnerInterface;
-use Isfett\PhpAnalyzer\Node\Representation;
 use Isfett\PhpAnalyzer\Node\Traverser;
-use Isfett\PhpAnalyzer\Node\Visitor;
-use Isfett\PhpAnalyzer\Node\Visitor\IfConditionVisitor;
-use Isfett\PhpAnalyzer\Node\Visitor\TernaryConditionVisitor;
+use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -59,8 +54,8 @@ class MostUsedConditionsCommand extends Command
     /** @var ProcessorBuilderInterface */
     private $processorBuilder;
 
-    /** @var Representation */
-    private $representation;
+    /** @var NodeRepresentationService */
+    private $nodeRepresentationService;
 
     /** @var ProcessorRunner */
     private $processorRunner;
@@ -73,7 +68,7 @@ class MostUsedConditionsCommand extends Command
      * @param VisitorBuilderInterface       $visitorBuilder
      * @param ProcessorBuilderInterface     $processorBuilder
      * @param ProcessorRunnerInterface      $processorRunner
-     * @param Representation                $representation
+     * @param NodeRepresentationService     $nodeRepresentationService
      */
     public function __construct(
         FinderBuilderInterface $finderBuilder,
@@ -81,13 +76,13 @@ class MostUsedConditionsCommand extends Command
         VisitorBuilderInterface $visitorBuilder,
         ProcessorBuilderInterface $processorBuilder,
         ProcessorRunnerInterface $processorRunner,
-        Representation $representation
+        NodeRepresentationService $nodeRepresentationService
     ) {
         $this->finderBuilder = $finderBuilder;
         $this->conditionListBuilder = $conditionListBuilder;
         $this->visitorBuilder = $visitorBuilder;
         $this->processorBuilder = $processorBuilder;
-        $this->representation = $representation;
+        $this->nodeRepresentationService = $nodeRepresentationService;
         $this->processorRunner = $processorRunner;
 
         parent::__construct(self::NAME);
@@ -131,7 +126,7 @@ class MostUsedConditionsCommand extends Command
         if (0 === count($files)) {
             $output->writeln('<error>No files found</error>');
 
-            return Application::EXIT_CODE_SUCCESS;
+            return Application::EXIT_CODE_FAILURE;
         }
 
         $traverser = new Traverser();
@@ -175,6 +170,7 @@ class MostUsedConditionsCommand extends Command
 
         $processors = $this->processorBuilder->setNames($input->getOption('processors'))->getProcessors();
         // @todo create a remove assignments processor?
+        // @todo !! processor
 
         if (count($processors)) {
             foreach ($processors as $processor) {
@@ -182,13 +178,20 @@ class MostUsedConditionsCommand extends Command
                 $this->processorRunner->addProcessor($processor);
             }
 
-            $processorRunnerProgressBar = $this->createProgressBar($output, 'customBar', 100);
+            $processorsProgressBar = $this->createProgressBar($output, 'customBar', 100);
 
-            foreach ($processorRunnerProgressBar->iterate($this->processorRunner->process($nodeOccurrenceList), count($processors)) as $processorsDone) {
-                $processorRunnerProgressBar->setMessage(sprintf('Processors are processing conditions. Condition count: %d', count($nodeOccurrenceList->getOccurrences())));
+            foreach ($processorsProgressBar->iterate(
+                $this->processorRunner->process($nodeOccurrenceList),
+                count($processors)
+            ) as $processorsDone) {
+                $processorsProgressBar->setMessage(sprintf(
+                    'Processor %d is processing conditions. Condition count: %d',
+                    $processorsDone,
+                    count($nodeOccurrenceList->getOccurrences())
+                ));
             }
 
-            $this->finishProgressBar($processorRunnerProgressBar, $output);
+            $this->finishProgressBar($processorsProgressBar, $output);
         }
 
         $flipChecking = $input->getOption('flipchecking');
@@ -207,7 +210,7 @@ class MostUsedConditionsCommand extends Command
         $flippedConditionCounter = 0;
         /** @var Occurrence $occurrence */
         foreach ($nodeOccurrenceList->getOccurrences() as $occurrence) {
-            $representation = $this->representation->getRepresentationForNode($occurrence->getNode());
+            $representation = $this->nodeRepresentationService->representationForNode($occurrence->getNode());
             $condition = new Condition($representation, $occurrence);
             $conditionList->addCondition($condition);
 
@@ -230,25 +233,29 @@ class MostUsedConditionsCommand extends Command
         $sortDirection = $this->getSortDirection($input);
         $countedConditionsList = new CountedConditionList($sortDirection);
 
-        $countedConditionListProgressBar = $this->createProgressBar($output, 'customBar', 100);
-        $countedConditionListProgressBar->setMaxSteps(count($rawConditions));
-        $countedConditionListProgressBar->setMessage('Check for multiple conditions');
+        $countedListProgressBar = $this->createProgressBar($output, 'customBar', 100);
+        $countedListProgressBar->setMaxSteps(count($rawConditions));
+        $countedListProgressBar->setMessage('Check for multiple conditions');
 
         foreach ($rawConditions as $condition) {
             $countedConditionsList->addCondition($condition);
 
-            $countedConditionListProgressBar->advance();
-            $countedConditionListProgressBar->setMessage(sprintf(
+            $countedListProgressBar->advance();
+            $countedListProgressBar->setMessage(sprintf(
                 'Check for multiple conditions. Unique conditions: %d',
                 count($countedConditionsList->getCountedConditions())
             ));
         }
 
-        $this->finishProgressBar($countedConditionListProgressBar, $output);
+        $this->finishProgressBar($countedListProgressBar, $output);
 
         $maximumEntries = $this->getMaximumEntries($input);
 
-        $output->writeln(sprintf('<info>sort Conditions by occurrences %s. Showing maximum %d conditions</info>', $sortDirection, $maximumEntries));
+        $output->writeln(sprintf(
+            '<info>sort Conditions by occurrences %s. Showing maximum %d conditions</info>',
+            $sortDirection,
+            $maximumEntries
+        ));
         $sortedConditions = $countedConditionsList->getCountedConditionsSorted($maximumEntries);
 
         $hideOccurrences = $input->getOption('hide-occurrences');
@@ -256,7 +263,10 @@ class MostUsedConditionsCommand extends Command
         $minOccurrences = $input->getOption('min-occurrences');
         if (null !== $minOccurrences) {
             $minOccurrences = (int) $minOccurrences;
-            $output->writeln(sprintf('<info>Just showing conditions with at least %d occurrences</info>', $minOccurrences));
+            $output->writeln(sprintf(
+                '<info>Just showing conditions with at least %d occurrences</info>',
+                $minOccurrences
+            ));
         }
         if (null !== $maximumOccurrences) {
             $maximumOccurrences = (int) $maximumOccurrences;

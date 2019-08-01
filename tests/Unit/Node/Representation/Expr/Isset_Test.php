@@ -32,12 +32,12 @@ class Isset_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$x']);
 
-        $representation = new Isset_($this->representation, $node);
+        $representation = new Isset_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('isset($x)', $representation->getRepresentation());
+        $this->assertEquals('isset($x)', $representation->representation());
     }
 }

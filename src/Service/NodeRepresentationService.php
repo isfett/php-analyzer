@@ -1,16 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Node;
+namespace Isfett\PhpAnalyzer\Service;
 
 use Isfett\PhpAnalyzer\Exception\NodeRepresentationClassDoesNotExistException;
 use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
+use Isfett\PhpAnalyzer\Node\Representation\RepresentationInterface;
 use PhpParser\Node;
 
 /**
- * Class Representation
+ * Class NodeRepresentationService
  */
-class Representation
+class NodeRepresentationService
 {
     /**
      * @param Node $node
@@ -18,7 +19,7 @@ class Representation
      * @return string|null
      * @throws NodeRepresentationClassDoesNotExistException
      */
-    public function getRepresentationForNode(Node $node): ?string
+    public function representationForNode(Node $node): ?string
     {
         $representationClassname = $this->transformClassname(get_class($node));
         if (!class_exists($representationClassname)) {
@@ -29,10 +30,10 @@ class Representation
             throw new NodeRepresentationClassDoesNotExistException($node);
         }
 
-        /** @var AbstractRepresentation $representationClass */
+        /** @var RepresentationInterface $representationClass */
         $representationClass = new $representationClassname($this, $node);
 
-        return $representationClass->getRepresentation();
+        return $representationClass->representation();
     }
 
     /**
@@ -40,7 +41,7 @@ class Representation
      *
      * @return array
      */
-    public function getArguments(array $arguments): array
+    public function representationForArguments(array $arguments): array
     {
         if (0 === count($arguments)) {
             return [];
@@ -49,7 +50,7 @@ class Representation
         $representedArguments = [];
 
         foreach ($arguments as $key => $argument) {
-            $representedArguments[$key] = $this->getRepresentationForNode($argument);
+            $representedArguments[$key] = $this->representationForNode($argument);
         }
 
         return $representedArguments;
@@ -67,12 +68,12 @@ class Representation
         $keyPhpParser = array_search('PhpParser', $classWithNamespaces, true);
         unset($classWithNamespaces[$keyPhpParser]);
 
-        $keyPhpParser = array_search('Node', $classWithNamespaces, true);
-        unset($classWithNamespaces[$keyPhpParser]);
+        $keyNode = array_search('Node', $classWithNamespaces, true);
+        unset($classWithNamespaces[$keyNode]);
 
         return sprintf(
             '%s\\%s',
-            __CLASS__,
+            'Isfett\\PhpAnalyzer\\Node\\Representation',
             implode('\\', $classWithNamespaces)
         );
     }

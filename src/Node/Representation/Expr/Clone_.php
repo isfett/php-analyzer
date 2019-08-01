@@ -13,14 +13,14 @@ class Clone_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Clone_ $node */
         $node = $this->node;
 
         return sprintf(
             'clone %s',
-            $this->representation($node->expr)
+            $this->representate($node->expr)
         );
     }
 }

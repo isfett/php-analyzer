@@ -32,12 +32,12 @@ class Array_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$test']);
 
-        $representation = new Array_($this->representation, $node);
+        $representation = new Array_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('[$test]', $representation->getRepresentation());
+        $this->assertEquals('[$test]', $representation->representation());
     }
 }

@@ -61,19 +61,19 @@ class ArrowFunctionTest extends AbstractNodeRepresentationTest
         );
 
         if (null === $returnType) {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn('1');
         } else {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn($returnType, '1');
         }
 
 
 
-        $representation = new ArrowFunction($this->representation, $node);
+        $representation = new ArrowFunction($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->getRepresentation());
+        $this->assertEquals($expectedOutput, $representation->representation());
     }
 }

@@ -30,12 +30,12 @@ class PostDecTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$x');
 
-        $representation = new PostDec($this->representation, $node);
+        $representation = new PostDec($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x--', $representation->getRepresentation());
+        $this->assertEquals('$x--', $representation->representation());
     }
 }

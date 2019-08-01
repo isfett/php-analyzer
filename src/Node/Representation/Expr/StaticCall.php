@@ -13,15 +13,15 @@ class StaticCall extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\StaticCall $node */
         $node = $this->node;
 
         return sprintf(
             '%s::%s(%s)',
-            $this->representation($node->class),
-            $this->representation($node->name),
+            $this->representate($node->class),
+            $this->representate($node->name),
             $this->arguments($node->args)
         );
     }

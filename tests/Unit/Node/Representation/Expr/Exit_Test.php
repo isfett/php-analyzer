@@ -30,13 +30,13 @@ class Exit_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('1');
 
-        $representation = new Exit_($this->representation, $node);
+        $representation = new Exit_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('exit(1)', $representation->getRepresentation());
+        $this->assertEquals('exit(1)', $representation->representation());
     }
 
     /**
@@ -49,8 +49,8 @@ class Exit_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new Exit_($this->representation, $node);
+        $representation = new Exit_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('exit', $representation->getRepresentation());
+        $this->assertEquals('exit', $representation->representation());
     }
 }

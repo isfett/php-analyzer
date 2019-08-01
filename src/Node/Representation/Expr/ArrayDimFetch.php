@@ -13,7 +13,7 @@ class ArrayDimFetch extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\ArrayDimFetch $node */
         $node = $this->node;
@@ -21,8 +21,8 @@ class ArrayDimFetch extends AbstractRepresentation
 
         return sprintf(
             '%s[%s]',
-            $this->representation($node->var),
-            null === $node->dim ? '' : $this->representation($node->dim)
+            $this->representate($node->var),
+            null === $node->dim ? '' : $this->representate($node->dim)
         );
     }
 }

@@ -31,12 +31,12 @@ class AssignTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$x', '$y');
 
-        $representation = new Assign($this->representation, $node);
+        $representation = new Assign($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x = $y', $representation->getRepresentation());
+        $this->assertEquals('$x = $y', $representation->representation());
     }
 }

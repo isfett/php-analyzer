@@ -31,12 +31,12 @@ class MulTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$variable', '$variable2');
 
-        $representation = new Mul($this->representation, $node);
+        $representation = new Mul($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable *= $variable2', $representation->getRepresentation());
+        $this->assertEquals('$variable *= $variable2', $representation->representation());
     }
 }

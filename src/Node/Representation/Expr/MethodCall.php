@@ -13,15 +13,15 @@ class MethodCall extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\MethodCall $node */
         $node = $this->node;
 
         return sprintf(
             '%s->%s(%s)',
-            $this->representation($node->var),
-            $this->representation($node->name),
+            $this->representate($node->var),
+            $this->representate($node->name),
             $this->arguments($node->args)
         );
     }

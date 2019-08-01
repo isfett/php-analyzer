@@ -30,8 +30,8 @@ class EncapsedStringPartTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new EncapsedStringPart($this->representation, $node);
+        $representation = new EncapsedStringPart($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('test', $representation->getRepresentation());
+        $this->assertEquals('test', $representation->representation());
     }
 }

@@ -31,12 +31,12 @@ class Instanceof_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$classObject', 'test');
 
-        $representation = new Instanceof_($this->representation, $node);
+        $representation = new Instanceof_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$classObject instanceof test', $representation->getRepresentation());
+        $this->assertEquals('$classObject instanceof test', $representation->representation());
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Representation;
 
-use Isfett\PhpAnalyzer\Node\Representation;
+use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -12,8 +12,8 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 abstract class AbstractNodeRepresentationTest extends AbstractNodeTestCase
 {
-    /** @var MockObject|Representation */
-    protected $representation;
+    /** @var MockObject|NodeRepresentationService */
+    protected $nodeRepresentationService;
 
     /**
      * @return void
@@ -22,8 +22,6 @@ abstract class AbstractNodeRepresentationTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->representation = $this->createMock(Representation::class);
-        //$this->representation->method('getRepresentationForNode')->willReturn('');
-        //$this->representation->method('getArguments')->willReturn([]);
+        $this->nodeRepresentationService = $this->createMock(NodeRepresentationService::class);
     }
 }

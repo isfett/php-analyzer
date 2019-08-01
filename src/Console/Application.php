@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Console;
 
-use Isfett\PhpAnalyzer\Console\Command\MostUsedConditionsCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -63,16 +62,6 @@ class Application extends BaseApplication
     }
 
     /**
-     * @return array
-     */
-    protected function getDefaultCommands(): array
-    {
-        $commands = parent::getDefaultCommands();
-
-        return $commands;
-    }
-
-    /**
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
@@ -107,17 +96,16 @@ class Application extends BaseApplication
      */
     private function initStyles(OutputInterface $output): void
     {
-        $output->getFormatter()->setStyle(
+        $outputFormatter = $output->getFormatter();
+        $outputFormatter->setStyle(
             'commandstart',
             new OutputFormatterStyle('red', 'black', ['bold'])
         );
-
-        $output->getFormatter()->setStyle(
+        $outputFormatter->setStyle(
             'focus',
             new OutputFormatterStyle('cyan', 'black', ['bold'])
         );
-
-        $output->getFormatter()->setStyle(
+        $outputFormatter->setStyle(
             'flag',
             new OutputFormatterStyle('yellow', 'black')
         );

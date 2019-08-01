@@ -13,15 +13,15 @@ class Pow extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\AssignOp\Pow $node */
         $node = $this->node;
 
         return sprintf(
             '%s **= %s',
-            $this->representation($node->var),
-            $this->representation($node->expr)
+            $this->representate($node->var),
+            $this->representate($node->expr)
         );
     }
 }

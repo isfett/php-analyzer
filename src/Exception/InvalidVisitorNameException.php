@@ -34,7 +34,7 @@ class InvalidVisitorNameException extends \LogicException
         $finder = new Finder([dirname(__DIR__) . '/Node/Visitor'], [], [], [], ['VisitorInterface.php'], []);
         $finder->sortByName();
         $possibleVisitorNames = [];
-        foreach ($finder->files() as $file) {
+        foreach ($finder->getIterator() as $file) {
             $possibleVisitorNames[] = str_replace('ConditionVisitor.php', '', $file->getRelativePathname());
         }
 

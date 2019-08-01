@@ -30,12 +30,12 @@ class UnaryPlusTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$x');
 
-        $representation = new UnaryPlus($this->representation, $node);
+        $representation = new UnaryPlus($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('+$x', $representation->getRepresentation());
+        $this->assertEquals('+$x', $representation->representation());
     }
 }

@@ -52,17 +52,17 @@ class ArgTest extends AbstractNodeRepresentationTest
         );
 
         if ($unpack) {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn('$items');
         } else {
-            $this->representation
-                ->method('getRepresentationForNode')
+            $this->nodeRepresentationService
+                ->method('representationForNode')
                 ->willReturn('$value');
         }
 
-        $representation = new Arg($this->representation, $node);
+        $representation = new Arg($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->getRepresentation());
+        $this->assertEquals($expectedOutput, $representation->representation());
     }
 }

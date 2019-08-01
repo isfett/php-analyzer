@@ -13,7 +13,7 @@ class ArrayItem extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\ArrayItem $node */
         $node = $this->node;
@@ -23,9 +23,9 @@ class ArrayItem extends AbstractRepresentation
         if (null !== $node->key) {
             return sprintf(
                 '%s => %s%s',
-                $this->representation($node->key),
+                $this->representate($node->key),
                 $byRef,
-                $this->representation($node->value)
+                $this->representate($node->value)
             );
         }
 
@@ -35,7 +35,7 @@ class ArrayItem extends AbstractRepresentation
             '%s%s%s',
             $unpack,
             $byRef,
-            $this->representation($node->value)
+            $this->representate($node->value)
         );
     }
 }

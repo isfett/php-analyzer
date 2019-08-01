@@ -13,7 +13,7 @@ class Array_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Array_ $node */
         $node = $this->node;

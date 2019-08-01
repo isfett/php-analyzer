@@ -31,12 +31,12 @@ class ShiftLeftTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$variable', '$variable2');
 
-        $representation = new ShiftLeft($this->representation, $node);
+        $representation = new ShiftLeft($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable <<= $variable2', $representation->getRepresentation());
+        $this->assertEquals('$variable <<= $variable2', $representation->representation());
     }
 }

@@ -29,8 +29,8 @@ class IdentifierTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new Identifier($this->representation, $node);
+        $representation = new Identifier($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('test', $representation->getRepresentation());
+        $this->assertEquals('test', $representation->representation());
     }
 }

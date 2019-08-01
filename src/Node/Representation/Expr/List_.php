@@ -13,7 +13,7 @@ class List_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\List_ $node */
         $node = $this->node;

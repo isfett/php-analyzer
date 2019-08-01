@@ -30,12 +30,12 @@ class Print_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$x');
 
-        $representation = new Print_($this->representation, $node);
+        $representation = new Print_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('print($x)', $representation->getRepresentation());
+        $this->assertEquals('print($x)', $representation->representation());
     }
 }

@@ -13,15 +13,15 @@ class PropertyFetch extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\PropertyFetch $node */
         $node = $this->node;
 
         return sprintf(
             '%s->%s',
-            $this->representation($node->var),
-            $this->representation($node->name)
+            $this->representate($node->var),
+            $this->representate($node->name)
         );
     }
 }

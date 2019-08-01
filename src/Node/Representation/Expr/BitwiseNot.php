@@ -13,7 +13,7 @@ class BitwiseNot extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\BitwiseNot $node */
         $node = $this->node;
@@ -21,7 +21,7 @@ class BitwiseNot extends AbstractRepresentation
         return sprintf(
             '%s%s',
             '~',
-            $this->representation($node->expr)
+            $this->representate($node->expr)
         );
     }
 }

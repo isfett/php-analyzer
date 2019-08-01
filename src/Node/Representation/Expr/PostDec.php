@@ -13,14 +13,14 @@ class PostDec extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\PostDec $node */
         $node = $this->node;
 
         return sprintf(
             '%s--',
-            $this->representation($node->var)
+            $this->representate($node->var)
         );
     }
 }

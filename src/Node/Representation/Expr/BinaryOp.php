@@ -14,7 +14,7 @@ class BinaryOp extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\BinaryOp $node */
         $node = $this->node;
@@ -30,9 +30,9 @@ class BinaryOp extends AbstractRepresentation
 
         return sprintf(
             $format,
-            $this->representation($node->left),
+            $this->representate($node->left),
             $node->getOperatorSigil(),
-            $this->representation($node->right)
+            $this->representate($node->right)
         );
     }
 }

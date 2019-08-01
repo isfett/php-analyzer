@@ -13,7 +13,7 @@ class Isset_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Isset_ $node */
         $node = $this->node;

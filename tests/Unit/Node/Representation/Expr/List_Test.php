@@ -32,12 +32,12 @@ class List_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$x']);
 
-        $representation = new List_($this->representation, $node);
+        $representation = new List_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('list($x)', $representation->getRepresentation());
+        $this->assertEquals('list($x)', $representation->representation());
     }
 }

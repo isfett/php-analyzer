@@ -11,7 +11,7 @@ class Name extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Name $node */
         $node = $this->node;

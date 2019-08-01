@@ -33,15 +33,15 @@ class New_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('Classname');
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$x']);
 
-        $representation = new New_($this->representation, $node);
+        $representation = new New_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('(new Classname($x))', $representation->getRepresentation());
+        $this->assertEquals('(new Classname($x))', $representation->representation());
     }
 }

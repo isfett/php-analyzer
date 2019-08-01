@@ -30,8 +30,8 @@ class LNumberTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new LNumber($this->representation, $node);
+        $representation = new LNumber($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('1337', $representation->getRepresentation());
+        $this->assertEquals('1337', $representation->representation());
     }
 }

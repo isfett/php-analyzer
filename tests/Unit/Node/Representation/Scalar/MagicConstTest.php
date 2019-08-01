@@ -51,8 +51,8 @@ class MagicConstTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new MagicConst($this->representation, $node);
+        $representation = new MagicConst($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->getRepresentation());
+        $this->assertEquals($expectedOutput, $representation->representation());
     }
 }

@@ -13,7 +13,7 @@ class Closure extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Closure $node */
         $node = $this->node;

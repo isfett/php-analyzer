@@ -33,13 +33,13 @@ class EncapsedTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$x']);
 
-        $representation = new Encapsed($this->representation, $node);
+        $representation = new Encapsed($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('"$x"', $representation->getRepresentation());
+        $this->assertEquals('"$x"', $representation->representation());
     }
 
     /**
@@ -55,12 +55,12 @@ class EncapsedTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['\\', '$x']);
 
-        $representation = new Encapsed($this->representation, $node);
+        $representation = new Encapsed($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('"\\$x"', $representation->getRepresentation());
+        $this->assertEquals('"\\$x"', $representation->representation());
     }
 }

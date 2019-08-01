@@ -34,7 +34,7 @@ class InvalidProcessorNameException extends \LogicException
         $finder = new Finder([dirname(__DIR__) . '/Node/Processor'], [], [], [], ['ProcessorInterface.php'], []);
         $finder->sortByName();
         $possibleVisitorNames = [];
-        foreach ($finder->files() as $file) {
+        foreach ($finder->getIterator() as $file) {
             $possibleVisitorNames[] = str_replace('Processor.php', '', $file->getRelativePathname());
         }
 

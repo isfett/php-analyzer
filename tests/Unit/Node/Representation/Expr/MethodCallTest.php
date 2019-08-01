@@ -34,15 +34,15 @@ class MethodCallTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$classObject', 'test');
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$x']);
 
-        $representation = new MethodCall($this->representation, $node);
+        $representation = new MethodCall($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$classObject->test($x)', $representation->getRepresentation());
+        $this->assertEquals('$classObject->test($x)', $representation->representation());
     }
 }

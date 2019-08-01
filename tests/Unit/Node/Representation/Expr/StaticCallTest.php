@@ -34,15 +34,15 @@ class StaticCallTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('Classname', 'x');
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$x']);
 
-        $representation = new StaticCall($this->representation, $node);
+        $representation = new StaticCall($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('Classname::x($x)', $representation->getRepresentation());
+        $this->assertEquals('Classname::x($x)', $representation->representation());
     }
 }

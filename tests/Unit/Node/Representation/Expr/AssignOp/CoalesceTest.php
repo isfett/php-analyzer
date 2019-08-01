@@ -31,12 +31,12 @@ class CoalesceTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$variable', '$variable2');
 
-        $representation = new Coalesce($this->representation, $node);
+        $representation = new Coalesce($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable ??= $variable2', $representation->getRepresentation());
+        $this->assertEquals('$variable ??= $variable2', $representation->representation());
     }
 }

@@ -10,7 +10,8 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class Include_ extends AbstractRepresentation
 {
-    private $includeFunctions = [
+    /** @var array */
+    private static $includeFunctions = [
         \PhpParser\Node\Expr\Include_::TYPE_INCLUDE => 'include',
         \PhpParser\Node\Expr\Include_::TYPE_INCLUDE_ONCE => 'include_once',
         \PhpParser\Node\Expr\Include_::TYPE_REQUIRE => 'require',
@@ -20,15 +21,15 @@ class Include_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Include_ $node */
         $node = $this->node;
 
         return sprintf(
             '%s(%s)',
-            $this->includeFunctions[$node->type],
-            $this->representation($node->expr)
+            self::$includeFunctions[$node->type],
+            $this->representate($node->expr)
         );
     }
 }

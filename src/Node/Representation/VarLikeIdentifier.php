@@ -11,7 +11,7 @@ class VarLikeIdentifier extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\VarLikeIdentifier $node */
         $node = $this->node;

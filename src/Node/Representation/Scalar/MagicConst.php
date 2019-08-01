@@ -13,7 +13,7 @@ class MagicConst extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Scalar\MagicConst $node */
         $node = $this->node;

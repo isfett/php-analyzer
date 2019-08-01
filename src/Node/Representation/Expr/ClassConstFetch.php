@@ -13,15 +13,15 @@ class ClassConstFetch extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\ClassConstFetch $node */
         $node = $this->node;
 
         return sprintf(
             '%s::%s',
-            $this->representation($node->class),
-            $this->representation($node->name)
+            $this->representate($node->class),
+            $this->representate($node->name)
         );
     }
 }

@@ -30,12 +30,12 @@ class ConstFetchTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('self');
 
-        $representation = new ConstFetch($this->representation, $node);
+        $representation = new ConstFetch($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('self', $representation->getRepresentation());
+        $this->assertEquals('self', $representation->representation());
     }
 }

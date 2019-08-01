@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node\Representation;
 
-use Isfett\PhpAnalyzer\Node\Representation;
+use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use PhpParser\Node;
 
 /**
@@ -11,8 +11,8 @@ use PhpParser\Node;
  */
 abstract class AbstractRepresentation implements RepresentationInterface
 {
-    /** @var Representation */
-    protected $representation;
+    /** @var NodeRepresentationService */
+    protected $nodeRepresentationService;
 
     /** @var Node */
     protected $node;
@@ -20,12 +20,12 @@ abstract class AbstractRepresentation implements RepresentationInterface
     /**
      * AbstractRepresentation constructor.
      *
-     * @param Representation $representation
-     * @param Node           $node
+     * @param NodeRepresentationService $nodeRepresentationService
+     * @param Node                      $node
      */
-    public function __construct(Representation $representation, Node $node)
+    public function __construct(NodeRepresentationService $nodeRepresentationService, Node $node)
     {
-        $this->representation = $representation;
+        $this->nodeRepresentationService = $nodeRepresentationService;
         $this->node = $node;
     }
 
@@ -34,20 +34,19 @@ abstract class AbstractRepresentation implements RepresentationInterface
      *
      * @return string|null
      */
-    protected function representation(Node $node): ?string
+    protected function representate(Node $node): ?string
     {
-        return $this->representation->getRepresentationForNode($node);
+        return $this->nodeRepresentationService->representationForNode($node);
     }
 
     /**
      * @param array  $arguments
-     *
      * @param string $implodeBy
      *
      * @return string
      */
     protected function arguments(array $arguments, string $implodeBy = ', '): string
     {
-        return implode($implodeBy, $this->representation->getArguments($arguments));
+        return implode($implodeBy, $this->nodeRepresentationService->representationForArguments($arguments));
     }
 }

@@ -11,7 +11,7 @@ class Arg extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Arg $node */
         $node = $this->node;
@@ -24,7 +24,7 @@ class Arg extends AbstractRepresentation
             '%s%s%s',
             $unpack,
             $byRef,
-            $this->representation($node->value)
+            $this->representate($node->value)
         );
     }
 }

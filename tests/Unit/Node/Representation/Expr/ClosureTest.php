@@ -56,9 +56,9 @@ class ClosureTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $representation = new Closure($this->representation, $node);
+        $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->getRepresentation());
+        $this->assertEquals($expectedOutput, $representation->representation());
     }
 
     /**
@@ -78,13 +78,13 @@ class ClosureTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$test']);
 
-        $representation = new Closure($this->representation, $node);
+        $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('function($test) { /* CLOSURE */ }', $representation->getRepresentation());
+        $this->assertEquals('function($test) { /* CLOSURE */ }', $representation->representation());
     }
 
     /**
@@ -104,13 +104,13 @@ class ClosureTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$test'],[]);
 
-        $representation = new Closure($this->representation, $node);
+        $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('function() use ($test) { /* CLOSURE */ }', $representation->getRepresentation());
+        $this->assertEquals('function() use ($test) { /* CLOSURE */ }', $representation->representation());
     }
 
     /**
@@ -132,12 +132,12 @@ class ClosureTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getArguments')
+        $this->nodeRepresentationService
+            ->method('representationForArguments')
             ->willReturn(['$test'],['$test2']);
 
-        $representation = new Closure($this->representation, $node);
+        $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('function&($test2) use ($test) { /* CLOSURE */ }', $representation->getRepresentation());
+        $this->assertEquals('function&($test2) use ($test) { /* CLOSURE */ }', $representation->representation());
     }
 }

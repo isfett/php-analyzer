@@ -31,12 +31,12 @@ class BitwiseXorTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$variable', '$variable2');
 
-        $representation = new BitwiseXor($this->representation, $node);
+        $representation = new BitwiseXor($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable ^= $variable2', $representation->getRepresentation());
+        $this->assertEquals('$variable ^= $variable2', $representation->representation());
     }
 }

@@ -13,14 +13,14 @@ class FuncCall extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\FuncCall $node */
         $node = $this->node;
 
         return sprintf(
             '%s(%s)',
-            $this->representation($node->name),
+            $this->representate($node->name),
             $this->arguments($node->args)
         );
     }

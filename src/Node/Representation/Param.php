@@ -11,14 +11,14 @@ class Param extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Param $node */
         $node = $this->node;
 
         $byRef = $node->byRef ? '&' : '';
         $type = $node->type ? $node->type.' ' : '';
-        $default = $node->default ? ' = '. $this->representation($node->default) : '';
+        $default = $node->default ? ' = '. $this->representate($node->default) : '';
         $variadic = $node->variadic ? '...' : '';
 
         return sprintf(
@@ -26,7 +26,7 @@ class Param extends AbstractRepresentation
             $type,
             $variadic,
             $byRef,
-            $this->representation($node->var),
+            $this->representate($node->var),
             $default
         );
     }

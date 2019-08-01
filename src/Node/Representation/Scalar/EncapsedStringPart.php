@@ -13,7 +13,7 @@ class EncapsedStringPart extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Scalar\EncapsedStringPart $node */
         $node = $this->node;

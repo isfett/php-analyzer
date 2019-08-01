@@ -30,12 +30,12 @@ class Eval_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn("'return 1337;'");
 
-        $representation = new Eval_($this->representation, $node);
+        $representation = new Eval_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals("eval('return 1337;')", $representation->getRepresentation());
+        $this->assertEquals("eval('return 1337;')", $representation->representation());
     }
 }

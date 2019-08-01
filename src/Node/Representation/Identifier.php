@@ -11,7 +11,7 @@ class Identifier extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Identifier $node */
         $node = $this->node;

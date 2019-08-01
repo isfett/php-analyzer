@@ -11,7 +11,7 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
 class Double extends AbstractRepresentation
 {
     /** @var array */
-    private $doubleTypes = [
+    private static $doubleTypes = [
         \PhpParser\Node\Expr\Cast\Double::KIND_DOUBLE => 'double',
         \PhpParser\Node\Expr\Cast\Double::KIND_FLOAT => 'float',
         \PhpParser\Node\Expr\Cast\Double::KIND_REAL => 'real',
@@ -20,15 +20,15 @@ class Double extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Cast\Double $node */
         $node = $this->node;
 
         return sprintf(
             '(%s) %s',
-            $this->doubleTypes[$node->getAttribute('kind')],
-            $this->representation($node->expr)
+            self::$doubleTypes[$node->getAttribute('kind')],
+            $this->representate($node->expr)
         );
     }
 }

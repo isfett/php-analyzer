@@ -13,14 +13,14 @@ class Eval_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Eval_ $node */
         $node = $this->node;
 
         return sprintf(
             'eval(%s)',
-            $this->representation($node->expr)
+            $this->representate($node->expr)
         );
     }
 }

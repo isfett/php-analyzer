@@ -51,12 +51,12 @@ class CastTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$variable');
 
-        $representation = new Cast($this->representation, $node);
+        $representation = new Cast($this->nodeRepresentationService, $node);
 
-        $this->assertEquals(sprintf('(%s) $variable', $expectedType), $representation->getRepresentation());
+        $this->assertEquals(sprintf('(%s) $variable', $expectedType), $representation->representation());
     }
 }

@@ -5,7 +5,7 @@ namespace Isfett\PhpAnalyzer\Builder;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Isfett\PhpAnalyzer\Exception\InvalidProcessorNameException;
-use Isfett\PhpAnalyzer\Node\ProcessorInterface;
+use Isfett\PhpAnalyzer\Node\Processor\ProcessorInterface;
 
 /**
  * Class ProcessorBuilder

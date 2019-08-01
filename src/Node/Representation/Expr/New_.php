@@ -13,14 +13,14 @@ class New_ extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\New_ $node */
         $node = $this->node;
 
         return sprintf(
             '(new %s(%s))',
-            $this->representation($node->class),
+            $this->representate($node->class),
             $this->arguments($node->args)
         );
     }

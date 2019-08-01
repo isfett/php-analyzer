@@ -30,12 +30,12 @@ class Clone_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$x');
 
-        $representation = new Clone_($this->representation, $node);
+        $representation = new Clone_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('clone $x', $representation->getRepresentation());
+        $this->assertEquals('clone $x', $representation->representation());
     }
 }

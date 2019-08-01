@@ -30,12 +30,12 @@ class PreDecTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$x');
 
-        $representation = new PreDec($this->representation, $node);
+        $representation = new PreDec($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('--$x', $representation->getRepresentation());
+        $this->assertEquals('--$x', $representation->representation());
     }
 }

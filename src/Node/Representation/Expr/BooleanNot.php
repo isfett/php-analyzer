@@ -13,7 +13,7 @@ class BooleanNot extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\BooleanNot $node */
         $node = $this->node;
@@ -21,7 +21,7 @@ class BooleanNot extends AbstractRepresentation
         return sprintf(
             '%s%s',
             '!',
-            $this->representation($node->expr)
+            $this->representate($node->expr)
         );
     }
 }

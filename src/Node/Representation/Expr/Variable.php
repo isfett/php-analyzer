@@ -13,7 +13,7 @@ class Variable extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Variable $node */
         $node = $this->node;
@@ -21,7 +21,7 @@ class Variable extends AbstractRepresentation
         $name = $node->name;
 
         if (!is_string($name)) {
-            $name = $this->representation($name);
+            $name = $this->representate($name);
         }
 
         return sprintf(

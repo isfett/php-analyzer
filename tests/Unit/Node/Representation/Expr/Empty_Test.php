@@ -30,12 +30,12 @@ class Empty_Test extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        $this->representation
-            ->method('getRepresentationForNode')
+        $this->nodeRepresentationService
+            ->method('representationForNode')
             ->willReturn('$x');
 
-        $representation = new Empty_($this->representation, $node);
+        $representation = new Empty_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('empty($x)', $representation->getRepresentation());
+        $this->assertEquals('empty($x)', $representation->representation());
     }
 }

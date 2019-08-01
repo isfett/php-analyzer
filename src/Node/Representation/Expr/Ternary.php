@@ -13,14 +13,14 @@ class Ternary extends AbstractRepresentation
     /**
      * @return string
      */
-    public function getRepresentation(): string
+    public function representation(): string
     {
         /** @var \PhpParser\Node\Expr\Ternary $node */
         $node = $this->node;
 
         return sprintf(
             '%s',
-            $this->representation($node->cond)
+            $this->representate($node->cond)
         );
     }
 }
