@@ -354,7 +354,9 @@ class MostUsedConditionsCommand extends Command
                     $counter++;
                 }
             }
-            if (null === $maximumEntries || $conditionCounter < $maximumEntries) {
+            if ((null === $maximumEntries && $conditionCounter < $countedConditions->count()) ||
+                $conditionCounter < $maximumEntries
+            ) {
                 $table->addRow([new TableSeparator(), new TableSeparator()]);
             }
         }

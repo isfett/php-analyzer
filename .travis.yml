@@ -5,13 +5,14 @@ php:
   - '7.2'
   - '7.3'
   - '7.4snapshot' # beta1
-  - nightly #8
+  #- nightly #8 (symfony does not support php 8 yet)
 
 before_install:
   - composer update
 
 script:
   - vendor/bin/phpunit --testdox --testsuite=unit,integration
+  - bin/php-analyzer tests/Unit/data
 
 notifications:
   email:
