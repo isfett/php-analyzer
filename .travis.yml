@@ -12,7 +12,7 @@ before_install:
 
 script:
   - vendor/bin/phpunit --testdox --testsuite=unit,integration
-  - bin/php-analyzer tests/Unit/data
+  - bin/php-analyzer most-used-conditions tests/Unit/data
 
 notifications:
   email:

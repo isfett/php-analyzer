@@ -363,7 +363,7 @@ class MostUsedConditionsCommand extends Command
 
         $table->render();
 
-        echo PHP_EOL;
+        $output->write(PHP_EOL);
 
         return Application::EXIT_CODE_SUCCESS;
     }
