@@ -42,7 +42,7 @@ $phar->setStub(
 putenv('APPLICATION_ENV=prod');
 Phar::mapPhar('$pharFilename');
 require 'phar://$pharFilename/bin/php-analyzer.php';
-__halt_compiler();"
+__HALT_COMPILER();"
 );
 
 // reset vendor with dev requirements
