@@ -1,6 +1,17 @@
 <?php
 declare(strict_types = 1);
 
+if ($a === 3) {
+
+} elseif ($b === 4) {
+
+} elseif ($c === 5) {}
+
+/*
+if (!($a === $b && !($b !== $a))) {}
+
+if ($x = in_array('test', ['test'])) {} return;
+
 $user = null; // not logged in
 if ($user && isset($_SESSION['user'], $_SESSION['user']['id']) && 2019 === date('Y')) {
     echo 'wow';
@@ -55,3 +66,4 @@ if(exit) {}
 if($d = clone $x) {}
 
 if($a = eval('return 1337;')) {}
+*/

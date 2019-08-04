@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr;
 
@@ -12,13 +12,13 @@ use PhpParser\Node\Expr;
  */
 abstract class AbstractProcessor implements Processor\ProcessorInterface
 {
-    /** @var NodeOccurrenceList */
+    /** @var OccurrenceList */
     protected $nodeOccurrenceList;
 
     /**
-     * @param NodeOccurrenceList $nodeOccurrenceList
+     * @param OccurrenceList $nodeOccurrenceList
      */
-    public function setNodeOccurrenceList(NodeOccurrenceList $nodeOccurrenceList): void
+    public function setNodeOccurrenceList(OccurrenceList $nodeOccurrenceList): void
     {
         $this->nodeOccurrenceList = $nodeOccurrenceList;
     }

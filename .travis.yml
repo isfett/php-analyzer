@@ -1,0 +1,20 @@
+language: php
+
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - '7.2'
+  - '7.3'
+  - hhvm
+  - nightly
+
+before_install:
+  - composer update
+
+script:
+  - vendon/bin/phpunit --testdox --testsuite=unit,integration
+
+notifications:
+  email:
+    - chris@isfett.com

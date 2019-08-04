@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Node\Processor\NegateBooleanNotProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
@@ -50,7 +50,7 @@ class NegateBooleanNotProcessorTest extends AbstractNodeTestCase
 
         $occurrence = $this->createOccurrence($node);
 
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence($occurrence);
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
@@ -94,7 +94,7 @@ class NegateBooleanNotProcessorTest extends AbstractNodeTestCase
 
         $occurrence = $this->createOccurrence($node);
 
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence($occurrence);
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
@@ -143,7 +143,7 @@ class NegateBooleanNotProcessorTest extends AbstractNodeTestCase
 
         $occurrence = $this->createOccurrence($node);
 
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence($occurrence);
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 

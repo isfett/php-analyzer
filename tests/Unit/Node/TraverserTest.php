@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Node\Traverser;
 use Isfett\PhpAnalyzer\Node\AbstractVisitor;
@@ -57,7 +57,7 @@ class TraverserTest extends AbstractNodeTestCase
         $file = $this->createSplFileInfoMock();
 
         $node = $this->createVariableNode();
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence(new Occurrence($node, $file));
         $nodeOccurrenceList->addOccurrence(new Occurrence($node, $file));
         $nodeOccurrenceList->addOccurrence(new Occurrence($node, $file));

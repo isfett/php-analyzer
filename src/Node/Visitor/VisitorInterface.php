@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node\Visitor;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -19,7 +19,7 @@ interface VisitorInterface
     public function setFile(SplFileInfo $file): void;
 
     /**
-     * @return NodeOccurrenceList
+     * @return OccurrenceList
      */
-    public function getNodeOccurrenceList(): NodeOccurrenceList;
+    public function getNodeOccurrenceList(): OccurrenceList;
 }

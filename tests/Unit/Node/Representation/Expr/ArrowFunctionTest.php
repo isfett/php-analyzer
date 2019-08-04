@@ -32,7 +32,22 @@ class ArrowFunctionTest extends AbstractNodeRepresentationTest
             'byRef' => ['(fn&() => 1)', [], null, false, true],
             'static byRef' => ['(static fn&() => 1)', [], null, true, true],
             'static byRef returnType' => ['(static fn&(): int => 1)', [], 'int', true, true],
-            // @todo params?
+            'returnType params' => [
+                '(fn(int $number): int => $number)',
+                [
+                    new Node\Param(
+                        $this->createVariableNode('number'),
+                        null,
+                        $this->createIdentifierNode('int'),
+                        false,
+                        false,
+                        $this->getNodeAttributes()
+                    ),
+                ],
+                'int',
+                false,
+                false,
+            ],
         ];
     }
 
@@ -64,13 +79,21 @@ class ArrowFunctionTest extends AbstractNodeRepresentationTest
             $this->nodeRepresentationService
                 ->method('representationForNode')
                 ->willReturn('1');
+        } elseif (count($params)) {
+            $this->nodeRepresentationService
+                ->method('representationForNode')
+                ->willReturn($returnType, '$number');
         } else {
             $this->nodeRepresentationService
                 ->method('representationForNode')
                 ->willReturn($returnType, '1');
         }
 
-
+        if (count($params)) {
+            $this->nodeRepresentationService
+                ->method('representationForArguments')
+                ->willReturn(['int $number']);
+        }
 
         $representation = new ArrowFunction($this->nodeRepresentationService, $node);
 

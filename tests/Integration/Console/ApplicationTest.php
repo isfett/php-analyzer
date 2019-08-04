@@ -13,7 +13,9 @@ use Symfony\Component\Console\Output\BufferedOutput;
  */
 class ApplicationTest extends TestCase
 {
-    const APPLICATION_INFO = 'php-analyzer 1.0.0 by Christopher Stenke <chris@isfett.com>';
+    /** @var string */
+    private const APPLICATION_INFO = 'php-analyzer 1.0.0 by Christopher Stenke <chris@isfett.com>' . PHP_EOL;
+
     /** @var Application */
     private $application;
 
@@ -92,21 +94,7 @@ class ApplicationTest extends TestCase
 
         $output = new BufferedOutput();
         $exitCode = $this->application->doRun($input, $output);
-
-        $this->assertStringStartsWith(
-            self::APPLICATION_INFO,
-            $output->fetch()
-        );
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
-
-        $input = new ArrayInput([
-            '-v' => true,
-        ]);
-
-        $output = new BufferedOutput();
-        $this->application->doRun($input, $output);
-
-        $this->assertStringStartsWith(
+        $this->assertEquals(
             self::APPLICATION_INFO,
             $output->fetch()
         );

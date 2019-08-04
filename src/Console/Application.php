@@ -88,7 +88,7 @@ class Application extends BaseApplication
      */
     private function checkParameterOptionVersion(InputInterface $input): bool
     {
-        return $input->hasParameterOption('--version')/* || $input->hasParameterOption('-v')*/;
+        return $input->hasParameterOption('--version');
     }
 
     /**
@@ -98,7 +98,7 @@ class Application extends BaseApplication
     {
         $outputFormatter = $output->getFormatter();
         $outputFormatter->setStyle(
-            'commandstart',
+            'command-start',
             new OutputFormatterStyle('red', 'black', ['bold'])
         );
         $outputFormatter->setStyle(
@@ -110,9 +110,21 @@ class Application extends BaseApplication
             new OutputFormatterStyle('yellow', 'black')
         );
 
-        ProgressBar::setFormatDefinition('messageOnly', '<info>%message%</info>');
-        ProgressBar::setFormatDefinition('messageDuration', '<info>%message%</info> (took %elapsed:6s%)');
-        ProgressBar::setFormatDefinition('customFinder', '%elapsed:6s% | %message% -> %filename%');
-        ProgressBar::setFormatDefinition('customBar', '%current%/%max% (%percent:2s%%) [%bar%] %elapsed:6s% -> %message%');
+        ProgressBar::setFormatDefinition(
+            'messageOnly',
+            '<info>%message%</info>'
+        );
+        ProgressBar::setFormatDefinition(
+            'messageDuration',
+            '<info>%message%</info> (took %elapsed:6s%)'
+        );
+        ProgressBar::setFormatDefinition(
+            'customFinder',
+            '%elapsed:6s% | %message% -> %filename%'
+        );
+        ProgressBar::setFormatDefinition(
+            'customBar',
+            '%current%/%max% (%percent:2s%%) [%bar%] %elapsed:6s% -> %message%'
+        );
     }
 }

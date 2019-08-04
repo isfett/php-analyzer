@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\Node\Processor\SplitLogicalOperatorProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -58,7 +58,7 @@ class SplitLogicalOperatorProcessorTest extends AbstractNodeTestCase
 
         $occurrence = $this->createOccurrence($node);
 
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence($occurrence);
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
@@ -100,7 +100,7 @@ class SplitLogicalOperatorProcessorTest extends AbstractNodeTestCase
 
         $occurrence = $this->createOccurrence($node);
 
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence($occurrence);
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
@@ -135,7 +135,7 @@ class SplitLogicalOperatorProcessorTest extends AbstractNodeTestCase
 
         $occurrence = $this->createOccurrence($node);
 
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence($occurrence);
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 

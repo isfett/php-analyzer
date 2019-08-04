@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\Node\Processor\ProcessorInterface;
 use Isfett\PhpAnalyzer\Node\ProcessorRunner;
 
@@ -30,7 +30,7 @@ class ProcessorRunnerTest extends AbstractNodeTestCase
      */
     public function testProcess(): void
     {
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $nodeOccurrenceList = new OccurrenceList();
         $nodeOccurrenceList->addOccurrence($this->createOccurrence($this->createVariableNode('var1')));
         $nodeOccurrenceList->addOccurrence($this->createOccurrence($this->createVariableNode('var2')));
         $nodeOccurrenceList->addOccurrence($this->createOccurrence($this->createVariableNode('var3')));

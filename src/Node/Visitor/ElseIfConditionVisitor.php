@@ -7,9 +7,9 @@ use Isfett\PhpAnalyzer\Node\AbstractVisitor;
 use PhpParser\Node;
 
 /**
- * Class IfConditionVisitor
+ * Class ElseIfConditionVisitor
  */
-class IfConditionVisitor extends AbstractVisitor
+class ElseIfConditionVisitor extends AbstractVisitor
 {
     /**
      * @param Node $node
@@ -19,7 +19,9 @@ class IfConditionVisitor extends AbstractVisitor
     public function enterNode(Node $node): ?int
     {
         if ($node instanceof Node\Stmt\If_) {
-            $this->addNodeOccurrence($node->cond);
+            foreach ($node->elseifs as $elseif) {
+                $this->addNodeOccurrence($elseif->cond);
+            }
         }
 
         return null;

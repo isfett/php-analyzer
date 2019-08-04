@@ -30,11 +30,11 @@ interface FinderBuilderInterface
     public function setIncludeFiles(array $files): self;
 
     /**
-     * @param array $exludes
+     * @param array $excludes
      *
      * @return FinderBuilderInterface
      */
-    public function setExcludes(array $exludes): self;
+    public function setExcludes(array $excludes): self;
 
     /**
      * @param array $directories

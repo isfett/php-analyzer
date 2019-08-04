@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Isfett\PhpAnalyzer\Builder;
 
 use Isfett\PhpAnalyzer\DAO\ConditionList;
-use Isfett\PhpAnalyzer\DAO\FlipCheckingConditionList;
+use Isfett\PhpAnalyzer\Node\ConditionList\FlipChecking;
 
 /**
  * Class ConditionListBuilder
@@ -20,7 +20,7 @@ class ConditionListBuilder implements ConditionListBuilderInterface
     public function getConditionList(): ConditionList
     {
         if ($this->isFlipCheckingAware) {
-            return new FlipCheckingConditionList();
+            return new FlipChecking();
         }
 
         return new ConditionList();

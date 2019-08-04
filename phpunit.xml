@@ -16,10 +16,6 @@
         <testsuite name="integration">
             <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
-        <testsuite name="full">
-            <directory suffix="Test.php">./tests/Unit</directory>
-            <directory suffix="Test.php">./tests/Integration</directory>
-        </testsuite>
     </testsuites>
 
     <filter>

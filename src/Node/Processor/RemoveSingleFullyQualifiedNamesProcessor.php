@@ -21,7 +21,6 @@ class RemoveSingleFullyQualifiedNamesProcessor extends AbstractProcessor
     {
         /** @var Node $node */
         $node = $occurrence->getNode();
-        //print_r($node);
         if ($node instanceof Node\Expr\BinaryOp) {
             $node = $this->replaceFullyQualifiedNameInBinaryOp($node);
         } else {
@@ -37,11 +36,14 @@ class RemoveSingleFullyQualifiedNamesProcessor extends AbstractProcessor
      */
     private function replaceFullyQualifiedName(Node $node): Node
     {
+        /** @var Node\Expr\FuncCall|Node\Expr\ConstFetch $node */
         if (property_exists($node, 'name') &&
             $node->name instanceof Node\Name\FullyQualified &&
             1 === count($node->name->parts)
         ) {
-            $node->name = $this->generateNameNodeFromFullyQualified($node->name);
+            /** @var Node\Name\FullyQualified $name */
+            $name = $node->name;
+            $node->name = $this->generateNameNodeFromFullyQualified($name);
         }
 
         return $node;
@@ -50,7 +52,7 @@ class RemoveSingleFullyQualifiedNamesProcessor extends AbstractProcessor
     /**
      * @param Node\Expr\BinaryOp $node
      *
-     * @return void
+     * @return Node\Expr\BinaryOp
      */
     private function replaceFullyQualifiedNameInBinaryOp(Node\Expr\BinaryOp $node): Node\Expr\BinaryOp
     {

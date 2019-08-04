@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node\Processor;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 
 /**
@@ -19,9 +19,9 @@ interface ProcessorInterface
     public function process(Occurrence $occurrence): void;
 
     /**
-     * @param NodeOccurrenceList $nodeOccurrenceList
+     * @param OccurrenceList $nodeOccurrenceList
      *
      * @return void
      */
-    public function setNodeOccurrenceList(NodeOccurrenceList $nodeOccurrenceList): void;
+    public function setNodeOccurrenceList(OccurrenceList $nodeOccurrenceList): void;
 }

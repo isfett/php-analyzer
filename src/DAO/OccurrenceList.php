@@ -6,15 +6,15 @@ namespace Isfett\PhpAnalyzer\DAO;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Class NodeOccurrenceList
+ * Class OccurrenceList
  */
-class NodeOccurrenceList
+class OccurrenceList
 {
     /** @var ArrayCollection<Occurrence> */
     private $occurrences;
 
     /**
-     * ExpressionList constructor.
+     * OccurrenceList constructor.
      */
     public function __construct()
     {

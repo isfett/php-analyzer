@@ -1,29 +1,29 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\DAO;
+namespace Isfett\PhpAnalyzer\Node\ConditionList;
+
+use Isfett\PhpAnalyzer\DAO\Condition;
+use Isfett\PhpAnalyzer\DAO\ConditionList;
+use Isfett\PhpAnalyzer\Node\Representation\Expr\BinaryOp;
 
 /**
- * Class FlipCheckingConditionList
+ * Class FlipChecking
  */
-class FlipCheckingConditionList extends ConditionList
+class FlipChecking extends ConditionList
 {
     private const FLIP_OPERATORS = [
-        '===',
-        '!==',
-        '==',
-        '!=',
-        '>=',
-        '<=',
-        '>',
-        '<',
+        BinaryOp::OPERATOR_SIGN_IDENTICAL,
+        BinaryOp::OPERATOR_SIGN_NOT_IDENTICAL,
+        BinaryOp::OPERATOR_SIGN_EQUAL,
+        BinaryOp::OPERATOR_SIGN_NOT_EQUAL,
     ];
 
     /** @var array */
     private $conditionHashes = [];
 
     /**
-     * @param string $condition
+     * @param Condition $condition
      *
      * @return void
      */
@@ -42,7 +42,8 @@ class FlipCheckingConditionList extends ConditionList
         }
 
         $this->conditionHashes[] = md5($condition->getCondition());
-        $this->conditions[] = $condition;
+
+        parent::addCondition($condition);
     }
 
     /**

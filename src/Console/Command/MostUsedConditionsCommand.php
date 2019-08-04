@@ -6,14 +6,16 @@ namespace Isfett\PhpAnalyzer\Console\Command;
 use Isfett\PhpAnalyzer\Builder\ConditionListBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\FinderBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\ProcessorBuilderInterface;
+use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilder;
+use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\VisitorBuilderInterface;
 use Isfett\PhpAnalyzer\Console\Application;
 use Isfett\PhpAnalyzer\DAO\Condition;
 use Isfett\PhpAnalyzer\DAO\ConditionList;
 use Isfett\PhpAnalyzer\DAO\CountedCondition;
-use Isfett\PhpAnalyzer\DAO\CountedConditionList;
-use Isfett\PhpAnalyzer\DAO\FlipCheckingConditionList;
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\Node\ConditionList\Countable;
+use Isfett\PhpAnalyzer\Node\ConditionList\FlipChecking;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Finder\Finder;
 use Isfett\PhpAnalyzer\Node\AbstractVisitor;
@@ -21,6 +23,7 @@ use Isfett\PhpAnalyzer\Node\ProcessorRunner;
 use Isfett\PhpAnalyzer\Node\ProcessorRunnerInterface;
 use Isfett\PhpAnalyzer\Node\Traverser;
 use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
+use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
@@ -54,8 +57,14 @@ class MostUsedConditionsCommand extends Command
     /** @var ProcessorBuilderInterface */
     private $processorBuilder;
 
+    /** @var SortConfigurationBuilder */
+    private $sortConfigurationBuilder;
+
     /** @var NodeRepresentationService */
     private $nodeRepresentationService;
+
+    /** @var SortService */
+    private $sortService;
 
     /** @var ProcessorRunner */
     private $processorRunner;
@@ -63,27 +72,33 @@ class MostUsedConditionsCommand extends Command
     /**
      * MostUsedConditionsCommand constructor.
      *
-     * @param FinderBuilderInterface        $finderBuilder
-     * @param ConditionListBuilderInterface $conditionListBuilder
-     * @param VisitorBuilderInterface       $visitorBuilder
-     * @param ProcessorBuilderInterface     $processorBuilder
-     * @param ProcessorRunnerInterface      $processorRunner
-     * @param NodeRepresentationService     $nodeRepresentationService
+     * @param FinderBuilderInterface            $finderBuilder
+     * @param ConditionListBuilderInterface     $conditionListBuilder
+     * @param VisitorBuilderInterface           $visitorBuilder
+     * @param ProcessorBuilderInterface         $processorBuilder
+     * @param SortConfigurationBuilderInterface $sortConfigurationBuilder
+     * @param ProcessorRunnerInterface          $processorRunner
+     * @param NodeRepresentationService         $nodeRepresentationService
+     * @param SortService                       $sortService
      */
     public function __construct(
         FinderBuilderInterface $finderBuilder,
         ConditionListBuilderInterface $conditionListBuilder,
         VisitorBuilderInterface $visitorBuilder,
         ProcessorBuilderInterface $processorBuilder,
+        SortConfigurationBuilderInterface $sortConfigurationBuilder,
         ProcessorRunnerInterface $processorRunner,
-        NodeRepresentationService $nodeRepresentationService
+        NodeRepresentationService $nodeRepresentationService,
+        SortService $sortService
     ) {
         $this->finderBuilder = $finderBuilder;
         $this->conditionListBuilder = $conditionListBuilder;
         $this->visitorBuilder = $visitorBuilder;
+        $this->sortConfigurationBuilder = $sortConfigurationBuilder;
         $this->processorBuilder = $processorBuilder;
         $this->nodeRepresentationService = $nodeRepresentationService;
         $this->processorRunner = $processorRunner;
+        $this->sortService = $sortService;
 
         parent::__construct(self::NAME);
     }
@@ -96,7 +111,7 @@ class MostUsedConditionsCommand extends Command
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $output->write(['<commandstart>Starting most-used-conditions command</commandstart>'], ['']);
+        $output->write(['<command-start>Starting most-used-conditions command</command-start>'], ['']);
 
         $directory = realpath($input->getArgument('directory'));
         if (false === $directory) {
@@ -131,9 +146,8 @@ class MostUsedConditionsCommand extends Command
 
         $traverser = new Traverser();
         $visitors = $this->visitorBuilder->setNames($input->getOption('visitors'))->getVisitors();
-
         foreach ($visitors as $visitor) {
-            $output->writeln('Adding '.$this->getClassnameWithoutNamespace($visitor).' Visitor');
+            $output->writeln('Adding '.$this->getClassnameWithoutNamespace(get_class($visitor)).' Visitor');
             $traverser->addVisitor($visitor);
         }
 
@@ -147,69 +161,67 @@ class MostUsedConditionsCommand extends Command
                 continue;
             } finally {
                 $traverserProgressBar->advance();
-                $traverserProgressBar->setMessage(sprintf(
-                    'Visitors are checking for conditions in files. Condition count: %d',
-                    $traverser->getNodeOccurrencesCount()
-                ));
             }
             $traverser->setFile($file);
             $traverser->traverse($ast);
+            $traverserProgressBar->setMessage(sprintf(
+                'Visitors are checking for conditions in files. Condition count: %d',
+                $traverser->getNodeOccurrencesCount()
+            ));
         }
 
         $this->finishProgressBar($traverserProgressBar, $output);
 
-        $nodeOccurrenceList = new NodeOccurrenceList();
+        $occurrenceList = new OccurrenceList();
 
         /** @var AbstractVisitor $visitor */
         foreach ($visitors as $visitor) {
             /** @var Occurrence $occurrence */
             foreach ($visitor->getNodeOccurrenceList()->getOccurrences() as $occurrence) {
-                $nodeOccurrenceList->addOccurrence($occurrence);
+                $occurrenceList->addOccurrence($occurrence);
             }
         }
 
         $processors = $this->processorBuilder->setNames($input->getOption('processors'))->getProcessors();
-        // @todo create a remove assignments processor?
-        // @todo !! processor
 
         if (count($processors)) {
             foreach ($processors as $processor) {
-                $output->writeln('Adding '.$this->getClassnameWithoutNamespace($processor).' Processor');
+                $output->writeln('Adding '.$this->getClassnameWithoutNamespace(get_class($processor)).' Processor');
                 $this->processorRunner->addProcessor($processor);
             }
 
             $processorsProgressBar = $this->createProgressBar($output, 'customBar', 100);
 
             foreach ($processorsProgressBar->iterate(
-                $this->processorRunner->process($nodeOccurrenceList),
+                $this->processorRunner->process($occurrenceList),
                 count($processors)
             ) as $processorsDone) {
                 $processorsProgressBar->setMessage(sprintf(
                     'Processor %d is processing conditions. Condition count: %d',
                     $processorsDone,
-                    count($nodeOccurrenceList->getOccurrences())
+                    count($occurrenceList->getOccurrences())
                 ));
             }
 
             $this->finishProgressBar($processorsProgressBar, $output);
         }
 
-        $flipChecking = $input->getOption('flipchecking');
+        $flipChecking = $input->getOption('with-flip-check');
         $conditionListProgressBar = $this->createProgressBar($output, 'customBar', 100);
-        $conditionListProgressBar->setMaxSteps(count($nodeOccurrenceList->getOccurrences()));
+        $conditionListProgressBar->setMaxSteps(count($occurrenceList->getOccurrences()));
         $conditionListProgressBar->setMessage(sprintf(
             'Create ConditionList (print ast nodes). Flip-Check: %s',
             $flipChecking ? 'active' : 'inactive'
         ));
 
-        /** @var ConditionList|FlipCheckingConditionList $conditionList */
+        /** @var ConditionList|FlipChecking $conditionList */
         $conditionList = $this->conditionListBuilder
             ->setIsFlipCheckingAware($flipChecking)
             ->getConditionList();
 
         $flippedConditionCounter = 0;
         /** @var Occurrence $occurrence */
-        foreach ($nodeOccurrenceList->getOccurrences() as $occurrence) {
+        foreach ($occurrenceList->getOccurrences() as $occurrence) {
             $representation = $this->nodeRepresentationService->representationForNode($occurrence->getNode());
             $condition = new Condition($representation, $occurrence);
             $conditionList->addCondition($condition);
@@ -230,8 +242,7 @@ class MostUsedConditionsCommand extends Command
         $this->finishProgressBar($conditionListProgressBar, $output);
 
         $rawConditions = $conditionList->getConditions();
-        $sortDirection = $this->getSortDirection($input);
-        $countedConditionsList = new CountedConditionList($sortDirection);
+        $countedConditionsList = new Countable();
 
         $countedListProgressBar = $this->createProgressBar($output, 'customBar', 100);
         $countedListProgressBar->setMaxSteps(count($rawConditions));
@@ -250,13 +261,33 @@ class MostUsedConditionsCommand extends Command
         $this->finishProgressBar($countedListProgressBar, $output);
 
         $maximumEntries = $this->getMaximumEntries($input);
+        $sortDirection = $this->getSort($input);
+
+        $countedConditions = $countedConditionsList->getCountedConditions();
 
         $output->writeln(sprintf(
-            '<info>sort Conditions by occurrences %s. Showing maximum %d conditions</info>',
-            $sortDirection,
-            $maximumEntries
+            '<info>Sort Conditions by number of occurrences %s.</info>',
+            $sortDirection
         ));
-        $sortedConditions = $countedConditionsList->getCountedConditionsSorted($maximumEntries);
+
+        $calculatedFirstResult = null;
+        $calculatedMaxResults = null;
+        if (null !== $maximumEntries) {
+            if ('desc' === strtolower($sortDirection)) {
+                $calculatedMaxResults = $maximumEntries;
+            } else {
+                $calculatedFirstResult = $countedConditions->count() - $maximumEntries;
+            }
+        }
+
+        $sortConfiguration = $this->sortConfigurationBuilder
+            ->setMaximumEntries($calculatedMaxResults)
+            ->setFirstResult($calculatedFirstResult)
+            ->addSortField('count', $sortDirection)
+            ->addSortField('condition', 'ASC')
+            ->getSortConfiguration();
+
+        $sortedConditions = $this->sortService->sortArrayCollection($countedConditions, $sortConfiguration);
 
         $hideOccurrences = $input->getOption('hide-occurrences');
         $maximumOccurrences = $input->getOption('max-occurrences');
@@ -266,6 +297,12 @@ class MostUsedConditionsCommand extends Command
             $output->writeln(sprintf(
                 '<info>Just showing conditions with at least %d occurrences</info>',
                 $minOccurrences
+            ));
+        }
+        if (null !== $maximumEntries) {
+            $output->writeln(sprintf(
+                '<info>Just showing maximum %d conditions.</info>',
+                $maximumEntries
             ));
         }
         if (null !== $maximumOccurrences) {
@@ -279,10 +316,8 @@ class MostUsedConditionsCommand extends Command
             'count',
         ]);
 
-        $conditionKeys = array_keys($sortedConditions);
-        $lastKey = end($conditionKeys);
         /** @var CountedCondition $countedCondition */
-        foreach ($sortedConditions as $key => $countedCondition) {
+        foreach ($sortedConditions as $countedCondition) {
             if (null !== $minOccurrences && $minOccurrences > $countedCondition->getCount()) {
                 continue;
             }
@@ -318,9 +353,7 @@ class MostUsedConditionsCommand extends Command
                 ]);
                 $counter++;
             }
-            if ($key < $lastKey) {
-                $table->addRow([new TableSeparator(), new TableSeparator()]);
-            }
+            $table->addRow([new TableSeparator(), new TableSeparator()]);
         }
 
         $table->render();
@@ -388,14 +421,16 @@ class MostUsedConditionsCommand extends Command
                 'visitors',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of visitors which should check the source code to find conditions (on wrong input you can see a list of possible visitors)',
-                'If,Ternary'
+                'Comma-separated string of visitors which should check the source code to 
+                 find conditions (on wrong input you can see a list of possible visitors)',
+                'If,ElseIf,Ternary'
             )
             ->addOption(
                 'processors',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of processors which should transform the conditions (on wrong input you can see a list of possible processor)',
+                'Comma-separated string of processors which should transform the conditions
+                  (on wrong input you can see a list of possible processor)',
                 ''
             )
             ->addOption(
@@ -406,7 +441,7 @@ class MostUsedConditionsCommand extends Command
                 'asc'
             )
             ->addOption(
-                'max',
+                'max-entries',
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'maximum entries'
@@ -424,19 +459,17 @@ class MostUsedConditionsCommand extends Command
                 'minimum occurrences'
             )
             ->addOption(
-                'flipchecking',
+                'with-flip-check',
                 null,
                 InputOption::VALUE_NONE,
                 'flip checking conditions'
             )
             ->addOption(
-                'hide-occurrences',
+                'without-occurrences',
                 null,
                 InputOption::VALUE_NONE,
                 'hide occurrences'
-            )
-            ;
-
+            );
     }
 
     /**
@@ -455,13 +488,12 @@ class MostUsedConditionsCommand extends Command
     }
 
     /**
-     * @param $class
+     * @param string $classname
      *
      * @return string
      */
-    private function getClassnameWithoutNamespace($class): string
+    private function getClassnameWithoutNamespace(string $classname): string
     {
-        $classname = get_class($class);
         $classWithNamespaces = explode('\\', $classname);
 
         return end($classWithNamespaces);
@@ -470,7 +502,6 @@ class MostUsedConditionsCommand extends Command
     /**
      * @param OutputInterface $output
      * @param string          $format
-     *
      * @param int             $max
      *
      * @return ProgressBar
@@ -502,17 +533,9 @@ class MostUsedConditionsCommand extends Command
      *
      * @return string
      */
-    private function getSortdirection(InputInterface $input): string
+    private function getSort(InputInterface $input): string
     {
-        $sortDirection = strtolower($input->getOption('sort'));
-        if (strtolower(CountedConditionList::SORT_DESC) !== $sortDirection &&
-            strtolower(CountedConditionList::SORT_ASC) !== $sortDirection
-        ) {
-            throw new \RuntimeException('sort must be asc or desc');
-        }
-        $sortDirection = ucfirst($sortDirection);
-
-        return $sortDirection;
+        return $input->getOption('sort');
     }
 
     /**
@@ -523,6 +546,8 @@ class MostUsedConditionsCommand extends Command
      */
     private function processFinder(Finder $finder, ProgressBar $progressBar): array
     {
+        $files = [];
+
         /** @var SplFileInfo $file */
         foreach ($progressBar->iterate($finder->getIterator()) as $file) {
             $files[] = $file;
@@ -544,6 +569,7 @@ class MostUsedConditionsCommand extends Command
         if (null !== $maximumEntries) {
             $maximumEntries = (int) $maximumEntries;
         }
+
         return $maximumEntries;
     }
 }

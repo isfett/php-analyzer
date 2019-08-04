@@ -3,20 +3,28 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\DAO;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Class ConditionList
  */
 class ConditionList
 {
-    /**
-     * @var array<Condition>
-     */
-    protected $conditions = [];
+    /** @var ArrayCollection<Condition> */
+    private $conditions;
 
     /**
-     * @return array<Condition>
+     * ConditionList constructor.
      */
-    public function getConditions(): array
+    public function __construct()
+    {
+        $this->conditions = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection<Condition>
+     */
+    public function getConditions(): ArrayCollection
     {
         return $this->conditions;
     }
@@ -28,6 +36,6 @@ class ConditionList
      */
     public function addCondition(Condition $condition): void
     {
-        $this->conditions[] = $condition;
+        $this->conditions->add($condition);
     }
 }

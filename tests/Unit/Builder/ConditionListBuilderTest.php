@@ -5,7 +5,7 @@ namespace Isfett\PhpAnalyzer\Tests\Unit\Builder;
 
 use Isfett\PhpAnalyzer\Builder\ConditionListBuilder;
 use Isfett\PhpAnalyzer\DAO\ConditionList;
-use Isfett\PhpAnalyzer\DAO\FlipCheckingConditionList;
+use Isfett\PhpAnalyzer\Node\ConditionList\FlipChecking;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,6 +47,6 @@ class ConditionListBuilderTest extends TestCase
             ->setIsFlipCheckingAware(true)
             ->getConditionList();
 
-        $this->assertInstanceOf(FlipCheckingConditionList::class, $conditionList);
+        $this->assertInstanceOf(FlipChecking::class, $conditionList);
     }
 }

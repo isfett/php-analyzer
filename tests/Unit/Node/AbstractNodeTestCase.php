@@ -21,7 +21,21 @@ abstract class AbstractNodeTestCase extends TestCase
      */
     protected function createOccurrence(Node $node): Occurrence
     {
+        /** @var SplFileInfo|MockObject $splFileInfo */
         $splFileInfo = $this->createSplFileInfoMock();
+
+        return new Occurrence($node, $splFileInfo);
+    }
+
+    /**
+     * @return Occurrence
+     */
+    protected function createFakeOccurrence(): Occurrence
+    {
+        /** @var SplFileInfo|MockObject $splFileInfo */
+        $splFileInfo = $this->createSplFileInfoMock();
+
+        $node = $this->createMock(Node::class);
 
         return new Occurrence($node, $splFileInfo);
     }

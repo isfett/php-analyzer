@@ -48,7 +48,6 @@ class Finder extends SymfonyFinder
             }
         }
 
-
         foreach ($excludePaths as $notPath) {
             $this->notPath($notPath);
         }

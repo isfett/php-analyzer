@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 
 /**
@@ -25,11 +25,11 @@ class ProcessorRunner implements ProcessorRunnerInterface
     }
 
     /**
-     * @param NodeOccurrenceList $nodeOccurrenceList
+     * @param OccurrenceList $nodeOccurrenceList
      *
      * @return \Generator
      */
-    public function process(NodeOccurrenceList $nodeOccurrenceList): \Generator
+    public function process(OccurrenceList $nodeOccurrenceList): \Generator
     {
         /** @var Processor\ProcessorInterface $processor */
         foreach ($this->processors as $counter => $processor) {

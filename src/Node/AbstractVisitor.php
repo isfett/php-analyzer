@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node;
 
-use Isfett\PhpAnalyzer\DAO\NodeOccurrenceList;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Node\Visitor\VisitorInterface;
 use PhpParser\Node;
@@ -18,7 +18,7 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
     /** @var SplFileInfo */
     private $file;
 
-    /** @var NodeOccurrenceList */
+    /** @var OccurrenceList */
     private $nodeOccurrenceList;
 
     /**
@@ -26,13 +26,13 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
      */
     public function __construct()
     {
-        $this->nodeOccurrenceList = new NodeOccurrenceList();
+        $this->nodeOccurrenceList = new OccurrenceList();
     }
 
     /**
-     * @return NodeOccurrenceList
+     * @return OccurrenceList
      */
-    public function getNodeOccurrenceList(): NodeOccurrenceList
+    public function getNodeOccurrenceList(): OccurrenceList
     {
         return $this->nodeOccurrenceList;
     }

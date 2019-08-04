@@ -11,6 +11,18 @@ use PhpParser\Node\Expr\BinaryOp\BooleanOr;
  */
 class BinaryOp extends AbstractRepresentation
 {
+    /** @var string */
+    public const OPERATOR_SIGN_IDENTICAL = '===';
+
+    /** @var string */
+    public const OPERATOR_SIGN_NOT_IDENTICAL = '!==';
+
+    /** @var string */
+    public const OPERATOR_SIGN_EQUAL = '==';
+
+    /** @var string */
+    public const OPERATOR_SIGN_NOT_EQUAL = '!=';
+
     /**
      * @return string
      */

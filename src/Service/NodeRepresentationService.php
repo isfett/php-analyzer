@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Isfett\PhpAnalyzer\Service;
 
 use Isfett\PhpAnalyzer\Exception\NodeRepresentationClassDoesNotExistException;
-use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
 use Isfett\PhpAnalyzer\Node\Representation\RepresentationInterface;
 use PhpParser\Node;
 
