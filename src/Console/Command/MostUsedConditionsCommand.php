@@ -281,7 +281,7 @@ class MostUsedConditionsCommand extends Command
         }
 
         $sortConfiguration = $this->sortConfigurationBuilder
-            ->setMaximumEntries($calculatedMaxResults)
+            ->setMaxResults($calculatedMaxResults)
             ->setFirstResult($calculatedFirstResult)
             ->addSortField('count', $sortDirection)
             ->addSortField('condition', 'ASC')
@@ -289,7 +289,7 @@ class MostUsedConditionsCommand extends Command
 
         $sortedConditions = $this->sortService->sortArrayCollection($countedConditions, $sortConfiguration);
 
-        $hideOccurrences = $input->getOption('hide-occurrences');
+        $hideOccurrences = $input->getOption('without-occurrences');
         $maximumOccurrences = $input->getOption('max-occurrences');
         $minOccurrences = $input->getOption('min-occurrences');
         if (null !== $minOccurrences) {
@@ -316,8 +316,10 @@ class MostUsedConditionsCommand extends Command
             'count',
         ]);
 
+        $conditionCounter = 0;
         /** @var CountedCondition $countedCondition */
         foreach ($sortedConditions as $countedCondition) {
+            $conditionCounter++;
             if (null !== $minOccurrences && $minOccurrences > $countedCondition->getCount()) {
                 continue;
             }
@@ -325,35 +327,36 @@ class MostUsedConditionsCommand extends Command
                 sprintf('<focus>%s</focus>', $countedCondition->getCondition()),
                 $countedCondition->getCount(),
             ]);
-            if ($hideOccurrences) {
-                continue;
+            if (!$hideOccurrences) {
+                /** @var Occurrence $occurrence */
+                $counter = 1;
+                foreach ($countedCondition->getOccurrences() as $occurrence) {
+                    if (null !== $maximumOccurrences && $counter > $maximumOccurrences) {
+                        break;
+                    }
+                    $line = $occurrence->getNode()->getStartLine();
+                    if ($occurrence->getNode()->getStartLine() !== $occurrence->getNode()->getEndLine()) {
+                        $line .= sprintf('-%s', $occurrence->getNode()->getEndLine());
+                    }
+                    $flags = [];
+                    if ($occurrence->isFlipped()) {
+                        $flags[] = 'flipped';
+                    }
+                    $table->addRow([
+                        sprintf(
+                            '%s:%s <flag>%s</flag>',
+                            $occurrence->getFile()->getRelativePathname(),
+                            $line,
+                            0 === count($flags) ? '' : '(' . implode(',', $flags) . ')'
+                        ),
+                        '',
+                    ]);
+                    $counter++;
+                }
             }
-            /** @var Occurrence $occurrence */
-            $counter = 1;
-            foreach ($countedCondition->getOccurrences() as $occurrence) {
-                if (null !== $maximumOccurrences && $counter > $maximumOccurrences) {
-                    break;
-                }
-                $line = $occurrence->getNode()->getStartLine();
-                if ($occurrence->getNode()->getStartLine() !== $occurrence->getNode()->getEndLine()) {
-                    $line .= sprintf('-%s', $occurrence->getNode()->getEndLine());
-                }
-                $flags = [];
-                if ($occurrence->isFlipped()) {
-                    $flags[] = 'flipped';
-                }
-                $table->addRow([
-                    sprintf(
-                        '%s:%s <flag>%s</flag>',
-                        $occurrence->getFile()->getRelativePathname(),
-                        $line,
-                        0 === count($flags) ? '' : '(' . implode(',', $flags) . ')'
-                    ),
-                    '',
-                ]);
-                $counter++;
+            if (null === $maximumEntries || $conditionCounter < $maximumEntries) {
+                $table->addRow([new TableSeparator(), new TableSeparator()]);
             }
-            $table->addRow([new TableSeparator(), new TableSeparator()]);
         }
 
         $table->render();
@@ -565,7 +568,7 @@ class MostUsedConditionsCommand extends Command
      */
     private function getMaximumEntries(InputInterface $input): ?int
     {
-        $maximumEntries = $input->getOption('max');
+        $maximumEntries = $input->getOption('max-entries');
         if (null !== $maximumEntries) {
             $maximumEntries = (int) $maximumEntries;
         }
