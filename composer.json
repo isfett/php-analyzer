@@ -13,7 +13,7 @@
     },
     "bin": ["bin/php-analyzer", "bin/php-analyzer.bat", "bin/php-analyzer.php"],
     "require": {
-        "php": "^7.1",
+        "php": "^7.1 | ^8",
         "symfony/console": "^4.0",
         "symfony/finder": "^4.0",
         "nikic/php-parser": "^4.2",
