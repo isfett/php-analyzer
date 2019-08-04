@@ -86,7 +86,7 @@ class ApplicationTest extends TestCase
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testApplicationVerswion(): void
+    public function testApplicationVersion(): void
     {
         $input = new ArrayInput([
             '--version' => true,
