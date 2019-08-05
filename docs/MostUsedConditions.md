@@ -1,6 +1,8 @@
 # Most Used Conditions
 
-This command is inspired by Kent Beck's Medium-Articel [Conditions Are Power-Law Distributed: An Example](https://medium.com/@kentbeck_7670/conditions-are-power-law-distributed-an-example-61fa4e0d3500). By trying to get all if's in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control.
+This command is inspired by Kent Beck's Medium-Articel [Conditions Are Power-Law Distributed: An Example](https://medium.com/@kentbeck_7670/conditions-are-power-law-distributed-an-example-61fa4e0d3500).
+
+By trying to get all if's in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control.
 <img src="./images/MostUsedConditions/demo.png" height="800">
 
 ### With this command you can:
@@ -46,6 +48,10 @@ if(date('Y') === 2019) {
     echo '2017!!!';
 }
 
+if(   date("Y") === 2019) {
+    // do something
+}
+
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 $page = $_GET['page'] ?? 1;
@@ -56,17 +62,19 @@ function isAnonymous(?User $user): bool
 }
 ```
 The following visitors are available:
-- `If`: Will add all conditions inside if-statements, here it will just add `date('Y') === 2019`
+- `If`: Will add all conditions inside if-statements, here it will just add `date('Y') === 2019` twice
 - `ElseIf`: Will add all conditions inside elseif-statements, here it will add `date('Y') === 2018` and <br/>`date('Y') === 2017`
 - `Ternary`: This visitor will add all conditions on the left side of a ternary, here it will add `isset($_GET['page'])`
 - `Coalesce`: Like Ternary, left side will be added, here `$_GET['page']`
 - `BooleanReturn`: (experimental) Will add the return statements without `return` in methods that have :bool as return type (not docblock), here `null === $user`
 
+**Important:** This tool uses a php-parser, and ignore different code-styles. So it's no matter if using single- or double-quotes, add different types or amount of whitespaces etc.
+
 You can combine visitors, use all or just one with a comma-separated list, like `--visitors=If,ElseIf`.
 
 If you mistype a name of a visitor, you will raise an Exception including all possible names (case-sensitive).
 
-<img src="./images/MostUsedConditions/visitorexception.png" height="140">
+<img src="./images/MostUsedConditions/visitorexception.png">
 
 ### Processors
 
@@ -74,7 +82,7 @@ You can combine processors, just add them to a comma-seperated list, like `--pro
 
 If you mistype a name of a processor, you will raise an Exception including all possible names (case-sensitive).
 
-<img src="./images/MostUsedConditions/processorexception.png" height="170">
+<img src="./images/MostUsedConditions/processorexception.png">
 
 #### SplitIsset
 This processor will split your isset conditions if there is more than one parameter inside. See [this](examples/MostUsedConditions/splitissetprocessor.php) source-code:

@@ -8,6 +8,10 @@ if(date('Y') === 2019) {
     echo '2017!!!';
 }
 
+if(   date("Y") === 2019) {
+    // do something
+}
+
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 $page = $_GET['page'] ?? 1;
