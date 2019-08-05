@@ -79,7 +79,9 @@ If you mistype a name of a visitor, you will raise an Exception including all po
 
 ### Processors
 
-You can combine processors, just add them to a comma-seperated list, like `--processors=SplitIsset,SplitLogicalOperator`. You also can use none of them (default).
+You can combine processors, just add them to a comma-seperated list, like <br>`--processors=SplitIsset,SplitLogicalOperator`. The order of processors is important, in the current case it will start with the SplitIsset and then the SplitLogicalOperator. Maybe your results will change if you change the order of the processors.
+
+You also can use none of the processors (default).
 
 If you mistype a name of a processor, you will raise an Exception including all possible names (case-sensitive).
 
