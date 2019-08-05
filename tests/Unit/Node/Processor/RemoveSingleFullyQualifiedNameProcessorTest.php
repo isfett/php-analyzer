@@ -5,7 +5,7 @@ namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
-use Isfett\PhpAnalyzer\Node\Processor\RemoveSingleFullyQualifiedNamesProcessor;
+use Isfett\PhpAnalyzer\Node\Processor\RemoveSingleFullyQualifiedNameProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -15,11 +15,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 
 /**
- * Class RemoveSingleFullyQualifiedNamesProcessorTest
+ * Class RemoveSingleFullyQualifiedNameProcessorTest
  */
-class RemoveSingleFullyQualifiedNamesProcessorTest extends AbstractNodeTestCase
+class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
 {
-    /** @var RemoveSingleFullyQualifiedNamesProcessor */
+    /** @var RemoveSingleFullyQualifiedNameProcessor */
     private $processor;
 
     /**
@@ -29,7 +29,7 @@ class RemoveSingleFullyQualifiedNamesProcessorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->processor = new RemoveSingleFullyQualifiedNamesProcessor();
+        $this->processor = new RemoveSingleFullyQualifiedNameProcessor();
     }
 
     /**

@@ -8,9 +8,9 @@ use Isfett\PhpAnalyzer\Node\AbstractProcessor;
 use PhpParser\Node;
 
 /**
- * Class RemoveSingleFullyQualifiedNamesProcessor
+ * Class RemoveSingleFullyQualifiedNameProcessor
  */
-class RemoveSingleFullyQualifiedNamesProcessor extends AbstractProcessor
+class RemoveSingleFullyQualifiedNameProcessor extends AbstractProcessor
 {
     /**
      * @param Occurrence $occurrence

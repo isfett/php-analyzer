@@ -312,8 +312,8 @@ class MostUsedConditionsCommand extends Command
         $table = new Table($output);
         $table->setColumnMaxWidth(0, 100);
         $table->setHeaders([
-            'condition',
-            'count',
+            'Condition',
+            'Count',
         ]);
 
         $conditionCounter = 0;
