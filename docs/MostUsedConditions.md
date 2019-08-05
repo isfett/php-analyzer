@@ -73,7 +73,7 @@ if (isset($_GET['user'], $_GET['user']['name'])) {
 ```
 The SplitIsset-Processor will create two new conditions and delete the old one. The new conditions will look like `isset($_GET['user']` and `isset($_GET['user']['name'])` and count both as 1.
 
-<img src="./images/MostUsedConditions/splitissetprocessor.png" width="100" height="100">
+<img src="./images/MostUsedConditions/splitissetprocessor.png" height="200">
 
 #### SplitLogicalOperator
 This processor will split your conditions by logical operators, to be exact: `&&`, `||`, `and` and `or`. If there is a `!` outside, this will be added to both parts of the condition. See [this](examples/MostUsedConditions/splitlogicaloperatorprocessor.php) source-code:
@@ -91,7 +91,7 @@ if (!(13 === $a && 15 === $a)) {
 The SplitLogicalOperator-Processor will split the first if to `13 === $a` and `14 === $a`.
 The second if will be split to `!13 === $a` and `!15 === $a`.
 
-<img src="./images/MostUsedConditions/splitlogicaloperatorprocessor.png" width="100" height="100">
+<img src="./images/MostUsedConditions/splitlogicaloperatorprocessor.png" height="200">
 
 #### NegateBooleanNot
 This processor will negate all comparison operators when it's negated from outside. See [this](examples/MostUsedConditions/negatebooleannotprocessor.php) source-code:
@@ -108,7 +108,7 @@ if (!($a < 13)) {
 ```
 The NegateBooleanNot-Processor will change the first if to `$a !== 13` and the second to `$a > 13`. This processor is very nice in combination with [SplitLogicalOperator](#splitlogicaloperator) from above, but make sure to add this processor in the list after the SplitLogicalOperator
 
-<img src="./images/MostUsedConditions/negatebooleannotprocessor.png" width="100" height="100">
+<img src="./images/MostUsedConditions/negatebooleannotprocessor.png" height="200">
 
 #### RemoveAssignment
 This processor will remove assignments in your conditions. See [this](examples/MostUsedConditions/removeassignmentprocessor.php) source-code:
@@ -124,7 +124,7 @@ if ($user = $this->getUser()) {
 ```
 You want to know that the condition from $this->getUser() is used twice, but normally it would be counted as one plus one. This processor will remove `$user = ` from the second condition and will count 2 for `$this->getUser()`.
 
-<img src="./images/MostUsedConditions/removeassignmentprocessor.png" width="100" height="100">
+<img src="./images/MostUsedConditions/removeassignmentprocessor.png" height="200">
 
 #### RemoveDuplicateBooleanNot
 This processor removes duplicate negations. So if you have an complex condition, and split it off, it could be possible in the printed condition is something like `!!$user`. You can achieve this with [this](examples/MostUsedConditions/removeduplicatebooleannotprocessor.php) source-code and the [SplitLogicalOperator-Processor](#splitlogicaloperator) and [NegateBooleanNot-Processor](#negatebooleannot) together
@@ -151,7 +151,7 @@ if (\strtolower('Chris') === 'chris') {
 ```
 The RemoveSingleFullyQualifiedName-Processor will count the condition as 2, without the processor it will count both as single condition.
 
-<img src="./images/MostUsedConditions/removesinglefullyqualifiednameprocessor.png" width="100" height="100">
+<img src="./images/MostUsedConditions/removesinglefullyqualifiednameprocessor.png" height="200">
 
 ### Flip-Check
 - with `--with-flip-check` the command will try to swap both sides of `==`, `!=`, `===` and `!==` and check if it already exists. If yes it will mark it with an `(flipped)`-flag. See [this](examples/MostUsedConditions/flipcheck.php) source-code:
@@ -167,4 +167,4 @@ if (2019 === date('Y')) {
 ```
 Normally the command will count both conditions as found once, with the option `--with-flip-check` it will be count as twice and flip the second condition.
 
-<img src="./images/MostUsedConditions/flipcheck.png" width="100" height="100">
+<img src="./images/MostUsedConditions/flipcheck.png" height="200">
