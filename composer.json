@@ -37,6 +37,5 @@
         "psr-4": {
             "Isfett\\PhpAnalyzer\\Tests\\": "tests/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }

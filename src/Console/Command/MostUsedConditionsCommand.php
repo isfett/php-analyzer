@@ -170,6 +170,11 @@ class MostUsedConditionsCommand extends Command
             ));
         }
 
+        $traverserProgressBar->setMessage(sprintf(
+            'Visitors checked conditions in %d files. Condition count: %d',
+            count($files),
+            $traverser->getNodeOccurrencesCount()
+        ));
         $this->finishProgressBar($traverserProgressBar, $output);
 
         $occurrenceList = new OccurrenceList();
@@ -203,6 +208,10 @@ class MostUsedConditionsCommand extends Command
                 ));
             }
 
+            $processorsProgressBar->setMessage(sprintf(
+                'Processors processed conditions. Condition count: %d',
+                count($occurrenceList->getOccurrences())
+            ));
             $this->finishProgressBar($processorsProgressBar, $output);
         }
 
@@ -260,7 +269,7 @@ class MostUsedConditionsCommand extends Command
 
         $this->finishProgressBar($countedListProgressBar, $output);
 
-        $maximumEntries = $this->getMaximumEntries($input);
+        $maxEntries = $this->getMaxEntries($input);
         $sortDirection = $this->getSort($input);
 
         $countedConditions = $countedConditionsList->getCountedConditions();
@@ -272,11 +281,11 @@ class MostUsedConditionsCommand extends Command
 
         $calculatedFirstResult = null;
         $calculatedMaxResults = null;
-        if (null !== $maximumEntries) {
+        if (null !== $maxEntries) {
             if ('desc' === strtolower($sortDirection)) {
-                $calculatedMaxResults = $maximumEntries;
+                $calculatedMaxResults = $maxEntries;
             } else {
-                $calculatedFirstResult = $countedConditions->count() - $maximumEntries;
+                $calculatedFirstResult = $countedConditions->count() - $maxEntries;
             }
         }
 
@@ -299,10 +308,10 @@ class MostUsedConditionsCommand extends Command
                 $minOccurrences
             ));
         }
-        if (null !== $maximumEntries) {
+        if (null !== $maxEntries) {
             $output->writeln(sprintf(
                 '<info>Just showing maximum %d conditions.</info>',
-                $maximumEntries
+                $maxEntries
             ));
         }
         if (null !== $maximumOccurrences) {
@@ -354,8 +363,8 @@ class MostUsedConditionsCommand extends Command
                     $counter++;
                 }
             }
-            if ((null === $maximumEntries && $conditionCounter < $countedConditions->count()) ||
-                $conditionCounter < $maximumEntries
+            if ((null === $maxEntries && $conditionCounter < $countedConditions->count()) ||
+                $conditionCounter < $maxEntries
             ) {
                 $table->addRow([new TableSeparator(), new TableSeparator()]);
             }
@@ -448,7 +457,7 @@ class MostUsedConditionsCommand extends Command
             ->addOption(
                 'max-entries',
                 null,
-                InputOption::VALUE_OPTIONAL,
+                InputOption::VALUE_REQUIRED,
                 'maximum entries'
             )
             ->addOption(
@@ -568,7 +577,7 @@ class MostUsedConditionsCommand extends Command
      *
      * @return int|null
      */
-    private function getMaximumEntries(InputInterface $input): ?int
+    private function getMaxEntries(InputInterface $input): ?int
     {
         $maximumEntries = $input->getOption('max-entries');
         if (null !== $maximumEntries) {

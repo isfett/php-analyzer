@@ -10,6 +10,7 @@
 - tbd
 
 ## Contributing
-tbd
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+
 ## License
-tbd
+The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
