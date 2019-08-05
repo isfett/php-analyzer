@@ -55,15 +55,27 @@ function isAnonymous(?User $user): bool
     return null === $user;
 }
 ```
+The following visitors are available:
 - `If`: Will add all conditions inside if-statements, here it will just add `date('Y') === 2019`
 - `ElseIf`: Will add all conditions inside elseif-statements, here it will add `date('Y') === 2018` and <br/>`date('Y') === 2017`
 - `Ternary`: This visitor will add all conditions on the left side of a ternary, here it will add `isset($_GET['page'])`
 - `Coalesce`: Like Ternary, left side will be added, here `$_GET['page']`
 - `BooleanReturn`: (experimental) Will add the return statements without `return` in methods that have :bool as return type (not docblock), here `null === $user`
 
-If you mistype a name of a visitor, you will raise an Exception including all possible names (case-sensitive)
+You can combine visitors, use all or just one with a comma-separated list, like `--visitors=If,ElseIf`.
+
+If you mistype a name of a visitor, you will raise an Exception including all possible names (case-sensitive).
+
+<img src="./images/MostUsedConditions/visitorexception.png" height="140">
 
 ### Processors
+
+You can combine processors, just add them to a comma-seperated list, like `--processors=SplitIsset,SplitLogicalOperator`. You also can use none of them (default).
+
+If you mistype a name of a processor, you will raise an Exception including all possible names (case-sensitive).
+
+<img src="./images/MostUsedConditions/processorexception.png" height="170">
+
 #### SplitIsset
 This processor will split your isset conditions if there is more than one parameter inside. See [this](examples/MostUsedConditions/splitissetprocessor.php) source-code:
 ```php
