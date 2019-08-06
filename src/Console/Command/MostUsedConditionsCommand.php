@@ -36,6 +36,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class MostUsedConditionsCommand
@@ -318,6 +320,11 @@ class MostUsedConditionsCommand extends Command
             $maximumOccurrences = (int) $maximumOccurrences;
         }
 
+
+        $csvExport = $input->getOption('with-csv');
+        $csvExportData = [];
+
+
         $table = new Table($output);
         $table->setColumnMaxWidth(0, 100);
         $table->setHeaders([
@@ -336,6 +343,9 @@ class MostUsedConditionsCommand extends Command
                 sprintf('<focus>%s</focus>', $countedCondition->getCondition()),
                 $countedCondition->getCount(),
             ]);
+            if ($csvExport) {
+                $csvExportData[] = [$countedCondition->getCondition(), $countedCondition->getCount()];
+            }
             if (!$hideOccurrences) {
                 /** @var Occurrence $occurrence */
                 $counter = 1;
@@ -373,6 +383,21 @@ class MostUsedConditionsCommand extends Command
         $table->render();
 
         $output->write(PHP_EOL);
+
+        if ($csvExport) {
+            $serializer = new Serializer([], [new CsvEncoder()]);
+            $csvDelimiter = $input->getOption('csv-delimiter-semicolon') ? ';' : ',';
+            $csvExportOptions = [
+                CsvEncoder::NO_HEADERS_KEY => true,
+                CsvEncoder::DELIMITER_KEY => $csvDelimiter,
+            ];
+            file_put_contents($csvExport,  $serializer->encode($csvExportData, 'csv', $csvExportOptions));
+            $output->writeln(sprintf(
+                '<info>Exported conditions with delimiter "%s" to %s</info>',
+                $csvDelimiter,
+                realpath($csvExport)
+            ) . PHP_EOL);
+        }
 
         return Application::EXIT_CODE_SUCCESS;
     }
@@ -483,6 +508,19 @@ class MostUsedConditionsCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'hide occurrences'
+            )
+            ->addOption(
+                'with-csv',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'enable csv export to filepath',
+                null
+            )
+            ->addOption(
+                'csv-delimiter-semicolon',
+                null,
+                InputOption::VALUE_NONE,
+                'change the csv delimiter to ;'
             );
     }
 

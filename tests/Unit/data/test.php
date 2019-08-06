@@ -1,13 +1,15 @@
 <?php
 declare(strict_types = 1);
 
+$test = 'f';
+if ((bool) $test) {}
+
 if ($a === 3) {
 
 } elseif ($b === 4) {
 
 } elseif ($c === 5) {}
 
-/*
 if (!($a === $b && !($b !== $a))) {}
 
 if ($x = in_array('test', ['test'])) {} return;
@@ -66,4 +68,3 @@ if(exit) {}
 if($d = clone $x) {}
 
 if($a = eval('return 1337;')) {}
-*/

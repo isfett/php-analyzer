@@ -22,7 +22,8 @@
         "symfony/http-kernel": "^4.3",
         "symfony/yaml": "^4.3",
         "doctrine/collections": "^1.6",
-        "symfony/event-dispatcher": "^4.3"
+        "symfony/event-dispatcher": "^4.3",
+        "symfony/serializer": "4.4.x-dev"
     },
     "require-dev": {
         "isfett/coding-standard": "^1.0",
