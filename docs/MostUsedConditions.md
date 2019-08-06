@@ -126,13 +126,17 @@ if (!($a === 13)) {
     // do something
 }
 
+if (!($a !== 14)) {
+    // do something else
+}
+
 if (!($a < 13)) {
     // do something else
 }
 ```
-The NegateBooleanNot-Processor will change the first if to `$a !== 13` and the second to `$a > 13`. This processor is very nice in combination with [SplitLogicalOperator](#splitlogicaloperator) from above, but make sure to add this processor in the list after the SplitLogicalOperator
+The NegateBooleanNot-Processor will change the first if to `$a !== 13`, the second to `$a === 14` and the last to `$a > 13`. This processor is very nice in combination with [SplitLogicalOperator](#splitlogicaloperator) from above, but make sure to add this processor in the list after the SplitLogicalOperator
 
-<img src="./images/MostUsedConditions/negatebooleannotprocessor.png" height="200">
+<img src="./images/MostUsedConditions/negatebooleannotprocessor.png" height="240">
 
 #### RemoveAssignment
 This processor will remove assignments in your conditions. See [this](examples/MostUsedConditions/removeassignmentprocessor.php) source-code:
