@@ -365,7 +365,7 @@ class MostUsedConditionsCommand extends Command
                         sprintf(
                             '%s <flag>%s</flag>',
                             sprintf(
-                                '<href=file:///%s>%s:%s</>',
+                                '<href=file://%s>%s:%s</>',
                                 $occurrence->getFile()->getPathname(),
                                 $occurrence->getFile()->getRelativePathname(),
                                 $line
