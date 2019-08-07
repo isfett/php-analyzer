@@ -4,7 +4,7 @@ This command is inspired by Kent Beck's Medium-Articel [Conditions Are Power-Law
 
 By trying to get all if's in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control.
 
-<img src="./images/MostUsedConditions/demo.gif" height="800">
+<img src="./images/MostUsedConditions/demo.gif">
 
 ### With this command you can:
 - Declare which directory (recursive) you want to inspect
@@ -54,7 +54,7 @@ if(date('Y') === 2019) {
 if(   date("Y") === 2019) {
     // do something
 }
-
+x
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 $page = $_GET['page'] ?? 1;
