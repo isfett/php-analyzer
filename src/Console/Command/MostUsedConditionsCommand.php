@@ -363,9 +363,13 @@ class MostUsedConditionsCommand extends Command
                     }
                     $table->addRow([
                         sprintf(
-                            '%s:%s <flag>%s</flag>',
-                            $occurrence->getFile()->getRelativePathname(),
-                            $line,
+                            '%s <flag>%s</flag>',
+                            sprintf(
+                                '<href=file:///%s>%s:%s</>',
+                                $occurrence->getFile()->getPathname(),
+                                $occurrence->getFile()->getRelativePathname(),
+                                $line
+                            ),
                             0 === count($flags) ? '' : '(' . implode(',', $flags) . ')'
                         ),
                         '',
