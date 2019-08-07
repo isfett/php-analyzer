@@ -4,7 +4,7 @@ This command is inspired by Kent Beck's Medium-Articel [Conditions Are Power-Law
 
 By trying to get all if's in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control.
 
-<img src="./images/MostUsedConditions/demo.png" height="800">
+<img src="./images/MostUsedConditions/demo.gif" height="800">
 
 ### With this command you can:
 - Declare which directory (recursive) you want to inspect
@@ -15,7 +15,7 @@ By trying to get all if's in different projects my command ended up like `grep -
 - Post-process conditions (like split issets or by logical operators, remove assignments, see [Processors](#processors))
 - Activate Flip-Checking
 - Exclude conditions with less than n occurrences
-- generate a csv (to plot graphs in excel or smth) (not yet implemented, but done before this will be merged in master)
+- generate a csv (to plot graphs in excel or gplot)
 
 ### Syntax
 `bin/php-analyzer most-used-conditions [--options] directory`
@@ -35,6 +35,8 @@ If you miss directory it will use the current working directory.
 - `--min-occurrences` for limiting the number of conditions and just show conditions with more occurrences in source-code than treshold. For example `--min-occurrences=5` just will ignore all conditions with four or less times in your source code
 - `--with-flip-check` enables flip check, see [Flip-Check](#flip-check)
 - `--without-occurrences` will hide all occurrences of the conditions and just print the table without any
+- `--with-csv` will export the result table to a csv (comma-separated). Add a filepath as value (absolute or relative) and make sure you have write rights with the current user. Example `--with-csv=output.csv` will create a output.csv file in the current working directory
+- `--csv-delimiter-semicolon` will change the delimiter from the csv to semicolon (;)
 
 
 ### Visitors
@@ -181,6 +183,20 @@ The RemoveSingleFullyQualifiedName-Processor will count the condition as 2, with
 
 <img src="./images/MostUsedConditions/removesinglefullyqualifiednameprocessor.png" height="140">
 
+#### RemoveCast
+This processor will any (cast)-casts (like `(int)`). I saw this in some legacy applications. See [this](examples/MostUsedConditions/removecastprocessor.php) source-code:
+```php
+<?php
+
+$someReturnValue = '123';
+if ((int) $foo === 123) {
+    // found numeric 123
+}
+```
+The RemoveCast-Processor will count the condition as 1, but without (int).
+
+<img src="./images/MostUsedConditions/removecastprocessor.png" height="140">
+
 ### Flip-Check
 - with `--with-flip-check` the command will try to swap both sides of `==`, `!=`, `===` and `!==` and check if it already exists. If yes it will mark it with an `(flipped)`-flag. See [this](examples/MostUsedConditions/flipcheck.php) source-code:
 ```php
@@ -196,3 +212,17 @@ if (2019 === date('Y')) {
 Normally the command will count both conditions as found once, with the option `--with-flip-check` it will be count as twice and flip the second condition.
 
 <img src="./images/MostUsedConditions/flipcheck.png" height="200">
+
+### Create a log(10) graph in Excel
+- Open the csv and save it to xlsx
+- Select rows A and B and insert a `Scatter (XY)`-Graph
+
+Your graph should look similar to:
+<img src="./images/MostUsedConditions/graph.png">
+
+- Left-Click on x-axis to select the axis, then right-click and select `format axis`.
+- Select in the sidebar `logarithmic scale` and select `10`
+- Repeat for y-axis
+
+Your log(10) graph should look similar to:
+<img src="./images/MostUsedConditions/graphlog.png">

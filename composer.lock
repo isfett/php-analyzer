@@ -1588,16 +1588,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/isfett/coding-standard.git",
-                "reference": "4dbb7e4cd0480d592c7619ccc9233d626c5a421e"
+                "reference": "c9d00340d41b0f358f5fdd5346d5596625320f61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/isfett/coding-standard/zipball/4dbb7e4cd0480d592c7619ccc9233d626c5a421e",
-                "reference": "4dbb7e4cd0480d592c7619ccc9233d626c5a421e",
+                "url": "https://api.github.com/repos/isfett/coding-standard/zipball/c9d00340d41b0f358f5fdd5346d5596625320f61",
+                "reference": "c9d00340d41b0f358f5fdd5346d5596625320f61",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1",
+                "php": "^7 | ^8",
                 "phpmd/phpmd": "*",
                 "slevomat/coding-standard": "~5",
                 "squizlabs/php_codesniffer": "*"
@@ -1614,7 +1614,7 @@
                 }
             ],
             "description": "Coding-Standard for PHP",
-            "time": "2019-07-16T17:04:48+00:00"
+            "time": "2019-08-04T13:43:16+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2280,8 +2280,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Simple template engine.",
@@ -3031,8 +3031,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",

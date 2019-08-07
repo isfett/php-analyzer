@@ -10,8 +10,5 @@ services:
     resource: '../src/DAO'
     autowire: false
 
-  Isfett\PhpAnalyzer\Kernel:
-    autowire: false
-
   Isfett\PhpAnalyzer\Console\Application:
     public: true

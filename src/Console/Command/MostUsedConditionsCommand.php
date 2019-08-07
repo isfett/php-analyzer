@@ -391,7 +391,13 @@ class MostUsedConditionsCommand extends Command
                 CsvEncoder::NO_HEADERS_KEY => true,
                 CsvEncoder::DELIMITER_KEY => $csvDelimiter,
             ];
-            file_put_contents($csvExport,  $serializer->encode($csvExportData, 'csv', $csvExportOptions));
+            $csvDelimiterReplace = ',' === $csvDelimiter ? '[comma]' : '[semicolon]';
+            array_walk($csvExportData, function (&$data) use ($csvDelimiter, $csvDelimiterReplace) {
+                $data[0] = str_replace($csvDelimiter, $csvDelimiterReplace, $data[0]);
+
+                return $data;
+            });
+            file_put_contents($csvExport, $serializer->encode($csvExportData, 'csv', $csvExportOptions));
             $output->writeln(sprintf(
                 '<info>Exported conditions with delimiter "%s" to %s</info>',
                 $csvDelimiter,
