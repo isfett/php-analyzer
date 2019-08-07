@@ -5,7 +5,7 @@ This command is inspired by Kent Beck's Medium-Articel [Conditions Are Power-Law
 ## Story
 I wanted to inspect the conditions in our project, checking for magic numbers and magic strings, maybe inconsistency of equal (`==`) and identical (`===`) and different types (for example `!$user` instead of `null === $user`)
  
-By trying to get all if's in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control.
+By trying to get all if's in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control. You can also check ternaries, null-coalesce and bool-returning functions.
 
 By writing this command I found out that I don't want to check the original conditions on some time. I wanted to know each part in an isset itself, later I wanted to split `&&` conditions. While adding more and more post-processors and checking the conditions I decided to remove some parts, like casts or assignments. And here we are now.
 
