@@ -1,1 +1,0 @@
-"preg_match('/[{semicolon}\"\s]{1}'.$key.'[\s]:[\s]([^{semicolon}\"]*)/si', $attribs['style'], $attrval) and isset($attrval[1])";1
