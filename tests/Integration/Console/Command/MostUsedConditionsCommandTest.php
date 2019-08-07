@@ -14,7 +14,7 @@ use Isfett\PhpAnalyzer\Node\ProcessorRunner;
 use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
 use PHPUnit\Framework\TestCase;
-+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
