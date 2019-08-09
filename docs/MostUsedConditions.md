@@ -225,7 +225,7 @@ The RemoveCast-Processor will count the condition as 1, but without (int).
 <img src="./images/MostUsedConditions/removecastprocessor.png" height="140">
 
 ### Flip-Check
-- with `--with-flip-check` the command will try to swap both sides of `==`, `!=`, `===` and `!==` and check if it already exists. If yes it will mark it with an `flipped`-flag. See [this](examples/MostUsedConditions/flipcheck.php) source-code:
+- with `--with-flip-check` the command will try to swap both sides of `==`, `!=`, `===` and `!==` and check if it already exists. If yes it will mark it with a `flipped`-flag. See [this](examples/MostUsedConditions/flipcheck.php) source-code:
 ```php
 <?php
 if(date('Y') === 2019) {
