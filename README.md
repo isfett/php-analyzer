@@ -5,7 +5,9 @@
 [![Total Downloads](https://poser.pugx.org/isfett/php-analyzer/downloads)](https://packagist.org/packages/isfett/php-analyzer)
 # PHP-Analyzer
 
-`php-analyzer` is a tool that aims to help you for different tasks. Mostly I found that I want to resolve them while doing my job. For details check the documented commands below.
+`php-analyzer` is a tool that aims to help you for different tasks.
+
+Mostly I found that I want to resolve them while doing my job. For details check the documented commands below.
 
 ## Installation
 Run
