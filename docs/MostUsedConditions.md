@@ -191,7 +191,7 @@ If you add the RemoveDuplicateBooleanNot-Processor, it will print `null === $use
 `php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=SplitLogicalOperator,RemoveDuplicateBooleanNot --include-files=removeduplicatebooleannotprocessor.php`
 
 #### RemoveSingleFullyQualifiedName
-This processor will ignore backslashes from fully qualified name functions or class name (e.g. new \DateTime), because maybe you don't use them or import an class. Codestyle can change often. See [this](examples/MostUsedConditions/removesinglefullyqualifiednameprocessor.php) source-code:
+This processor will ignore backslashes from fully qualified name functions or class names (e.g. new \DateTime), because maybe you don't use them or import a class. Codestyle can change often. See [this](examples/MostUsedConditions/removesinglefullyqualifiednameprocessor.php) source-code:
 ```php
 <?php
 if (strtolower('Chris') === 'chris') {
