@@ -15,7 +15,10 @@ $ composer global require isfett/php-analyzer
 or download the latest phar from [this repository](https://github.com/isfett/php-analyzer/releases).
 
 ## Usage
-For usages of the commands, check the documentation of each command
+For usages of the commands, check the documentation of each command.
+
+## Information
+This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser), ignoring different code-style or whitespaces. 
 
 ## Commands
 - [Most used conditions](docs/MostUsedConditions.md) Helps to check which conditions are used the most in your project. Just want to check if's? Or ternaries? No Problem! You can also split by logical operators, or split isset functions for each parameter. Including post-processing your conditions, flip-checking etc. You can find many examples within the link.
