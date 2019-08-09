@@ -236,7 +236,7 @@ if (2019 === date('Y')) {
     echo '2019!!!';
 }
 ```
-Normally the command will count both conditions as found once, with the option `--with-flip-check` it will be count as twice and flip the second condition.
+Normally the command will count both conditions as found once, with the option `--with-flip-check` it will be counted twice and flip the second condition.
 
 You can see the `flipped`-flag after the 2nd occurrence. If you want to hide that info add the option `--without-flags`
 
