@@ -23,6 +23,7 @@ class RemoveDuplicateBooleanNotProcessor extends AbstractProcessor
         $node = $occurrence->getNode();
         if ($node instanceof Node\Expr\BooleanNot && $node->expr instanceof Node\Expr\BooleanNot) {
             $occurrence->setNode($node->expr->expr);
+            $this->markOccurrenceAsAffected($occurrence);
         }
     }
 }

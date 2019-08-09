@@ -20,6 +20,9 @@ class Occurrence
     /** @var bool */
     private $isFlipped = false;
 
+    /** @var array */
+    private $affectedByProcessors = [];
+
     /**
      * Condition constructor.
      *
@@ -70,5 +73,25 @@ class Occurrence
     public function setIsFlipped(bool $isFlipped): void
     {
         $this->isFlipped = $isFlipped;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAffectedByProcessors(): array
+    {
+        return $this->affectedByProcessors;
+    }
+
+    /**
+     * @param string $processorName
+     *
+     * @return void
+     */
+    public function addAffectedByProcessor(string $processorName): void
+    {
+        if (!in_array($processorName, $this->affectedByProcessors, true)) {
+            $this->affectedByProcessors[] = $processorName;
+        }
     }
 }

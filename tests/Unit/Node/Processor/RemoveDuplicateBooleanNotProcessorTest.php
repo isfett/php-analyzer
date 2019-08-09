@@ -54,6 +54,7 @@ class RemoveDuplicateBooleanNotProcessorTest extends AbstractNodeTestCase
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
         $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
 
         $this->processor->process($occurrence);
 
@@ -63,5 +64,58 @@ class RemoveDuplicateBooleanNotProcessorTest extends AbstractNodeTestCase
         $occurrence = $nodeOccurrenceList->getOccurrences()->first();
 
         $this->assertInstanceOf(Identical::class, $occurrence->getNode());
+        $this->assertContains('RemoveDuplicateBooleanNot', $occurrence->getAffectedByProcessors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessWillNotAffectedWrongNodes(): void
+    {
+        $node = $this->createVariableNode('a');
+        $occurrence = $this->createOccurrence($node);
+
+        $nodeOccurrenceList = new OccurrenceList();
+        $nodeOccurrenceList->addOccurrence($occurrence);
+        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+
+        $this->processor->process($occurrence);
+
+        /** @var Occurrence $occurrence */
+        $occurrence = $nodeOccurrenceList->getOccurrences()->first();
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessWillNotAffectedWrongNodesWithBinaryOp(): void
+    {
+        $node = new Identical(
+            $this->createVariableNode('a'),
+            $this->createVariableNode('b'),
+            $this->getNodeAttributes()
+        );
+        $occurrence = $this->createOccurrence($node);
+
+        $nodeOccurrenceList = new OccurrenceList();
+        $nodeOccurrenceList->addOccurrence($occurrence);
+        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+
+        $this->processor->process($occurrence);
+
+        /** @var Occurrence $occurrence */
+        $occurrence = $nodeOccurrenceList->getOccurrences()->first();
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
     }
 }

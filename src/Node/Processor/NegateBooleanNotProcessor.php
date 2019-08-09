@@ -28,10 +28,7 @@ class NegateBooleanNotProcessor extends AbstractProcessor
             /** @var BinaryOp $expression */
             $expression = $node->expr;
 
-            $negatedNode = $this->processBinaryOp($expression);
-            if (null !== $negatedNode) {
-                $occurrence->setNode($negatedNode);
-            }
+            $occurrence->setNode($negatedNode = $this->processBinaryOp($expression, $occurrence));
         }
     }
 
@@ -68,40 +65,44 @@ class NegateBooleanNotProcessor extends AbstractProcessor
     }
 
     /**
-     * @param BinaryOp $node
+     * @param BinaryOp   $node
+     * @param Occurrence $occurrence
      *
      * @return BinaryOp
      */
-    private function processBinaryOp(BinaryOp $node): BinaryOp
+    private function processBinaryOp(BinaryOp $node, Occurrence $occurrence): BinaryOp
     {
         $negationClassname = $this->transformClassname(get_class($node));
 
         if (class_exists($negationClassname)) {
+            $this->markOccurrenceAsAffected($occurrence);
+
             /** @var NegationInterface $negationClass */
             $negationClass = new $negationClassname();
 
             return $negationClass->negate($node);
         }
 
-        $node = $this->processLogicalOp($node);
+        $node = $this->processLogicalOp($node, $occurrence);
 
         return $node;
     }
 
     /**
-     * @param BinaryOp $node
+     * @param BinaryOp   $node
+     * @param Occurrence $occurrence
      *
      * @return BinaryOp
      */
-    private function processLogicalOp(BinaryOp $node): BinaryOp
+    private function processLogicalOp(BinaryOp $node, Occurrence $occurrence): BinaryOp
     {
         foreach (['left', 'right'] as $binaryOpSide) {
             if ($this->isBooleanNotAndHasBinaryOpExpression($node->$binaryOpSide)) {
-                $node->$binaryOpSide = $this->processBinaryOp($node->$binaryOpSide->expr);
+                $node->$binaryOpSide = $this->processBinaryOp($node->$binaryOpSide->expr, $occurrence);
             }
 
             if ($node->$binaryOpSide instanceof BinaryOp) {
-                $node->$binaryOpSide = $this->processBinaryOp($node->$binaryOpSide);
+                $node->$binaryOpSide = $this->processBinaryOp($node->$binaryOpSide, $occurrence);
             }
         }
 

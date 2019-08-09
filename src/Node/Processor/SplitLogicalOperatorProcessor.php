@@ -111,7 +111,9 @@ class SplitLogicalOperatorProcessor extends AbstractProcessor
             $sideNode = $originalNode->$operatorSide;
 
             $node = $this->createNewLogicalOperatorNode($sideNode, $isBooleanNot);
-            $occurrence = new Occurrence($node, $originalOccurrence->getFile());
+            $occurrence = clone $originalOccurrence;
+            $occurrence->setNode($node);
+            $this->markOccurrenceAsAffected($occurrence);
             $this->nodeOccurrenceList->addOccurrence($occurrence);
 
             $this->process($occurrence);

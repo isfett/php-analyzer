@@ -21,23 +21,26 @@ class RemoveCastProcessor extends AbstractProcessor
     {
         /** @var Node $node */
         $node = $occurrence->getNode();
+
         if ($node instanceof Node\Expr\BinaryOp) {
-            $node = $this->replaceCastInBinaryOp($node);
+            $node = $this->replaceCastInBinaryOp($node, $occurrence);
         } else {
-            $node = $this->replaceCast($node);
+            $node = $this->replaceCast($node, $occurrence);
         }
         $occurrence->setNode($node);
     }
 
     /**
-     * @param Node $node
+     * @param Node       $node
+     * @param Occurrence $occurrence
      *
      * @return Node
      */
-    private function replaceCast(Node $node): Node
+    private function replaceCast(Node $node, Occurrence $occurrence): Node
     {
         if ($node instanceof Node\Expr\Cast) {
             $node = $node->expr;
+            $this->markOccurrenceAsAffected($occurrence);
         }
 
         return $node;
@@ -45,16 +48,17 @@ class RemoveCastProcessor extends AbstractProcessor
 
     /**
      * @param Node\Expr\BinaryOp $node
+     * @param Occurrence         $occurrence
      *
      * @return Node\Expr\BinaryOp
      */
-    private function replaceCastInBinaryOp(Node\Expr\BinaryOp $node): Node\Expr\BinaryOp
+    private function replaceCastInBinaryOp(Node\Expr\BinaryOp $node, Occurrence $occurrence): Node\Expr\BinaryOp
     {
         foreach (['left', 'right'] as $binaryOpSide) {
             if ($node->$binaryOpSide instanceof Node\Expr\BinaryOp) {
-                $node->$binaryOpSide = $this->replaceCastInBinaryOp($node->$binaryOpSide);
+                $node->$binaryOpSide = $this->replaceCastInBinaryOp($node->$binaryOpSide, $occurrence);
             }
-            $node->$binaryOpSide = $this->replaceCast($node->$binaryOpSide);
+            $node->$binaryOpSide = $this->replaceCast($node->$binaryOpSide, $occurrence);
         }
 
         return $node;

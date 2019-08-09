@@ -107,7 +107,11 @@ class Application extends BaseApplication
         );
         $outputFormatter->setStyle(
             'flag',
-            new OutputFormatterStyle('yellow', 'black')
+            new OutputFormatterStyle('yellow', 'black', ['bold'])
+        );
+        $outputFormatter->setStyle(
+            'special-info',
+            new OutputFormatterStyle('magenta', 'black')
         );
 
         ProgressBar::setFormatDefinition(

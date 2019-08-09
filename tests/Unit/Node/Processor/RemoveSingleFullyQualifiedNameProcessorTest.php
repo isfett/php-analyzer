@@ -62,6 +62,7 @@ class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
         $this->assertInstanceOf(ConstFetch::class, $occurrence->getNode());
         $this->assertInstanceOf(Name::class, $occurrence->getNode()->name);
         $this->assertEquals('test', (string) $occurrence->getNode()->name);
+        $this->assertContains('RemoveSingleFullyQualifiedName', $occurrence->getAffectedByProcessors());
     }
 
     /**
@@ -103,6 +104,7 @@ class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
         $this->assertInstanceOf(ConstFetch::class, $occurrence->getNode()->left);
         $this->assertInstanceOf(Name::class, $occurrence->getNode()->left->name);
         $this->assertEquals('test', (string) $occurrence->getNode()->left->name);
+        $this->assertContains('RemoveSingleFullyQualifiedName', $occurrence->getAffectedByProcessors());
     }
 
     /**
@@ -146,6 +148,7 @@ class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
         $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
 
         $this->processor->process($occurrence);
 
@@ -159,5 +162,58 @@ class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
         $this->assertInstanceOf(ConstFetch::class, $occurrence->getNode()->left->left);
         $this->assertInstanceOf(Name::class, $occurrence->getNode()->left->left->name);
         $this->assertEquals('test', (string) $occurrence->getNode()->left->left->name);
+        $this->assertContains('RemoveSingleFullyQualifiedName', $occurrence->getAffectedByProcessors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessWillNotAffectedWrongNodes(): void
+    {
+        $node = $this->createVariableNode('a');
+        $occurrence = $this->createOccurrence($node);
+
+        $nodeOccurrenceList = new OccurrenceList();
+        $nodeOccurrenceList->addOccurrence($occurrence);
+        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+
+        $this->processor->process($occurrence);
+
+        /** @var Occurrence $occurrence */
+        $occurrence = $nodeOccurrenceList->getOccurrences()->first();
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessWillNotAffectedWrongNodesWithBinaryOp(): void
+    {
+        $node = new Identical(
+            $this->createVariableNode('a'),
+            $this->createVariableNode('b'),
+            $this->getNodeAttributes()
+        );
+        $occurrence = $this->createOccurrence($node);
+
+        $nodeOccurrenceList = new OccurrenceList();
+        $nodeOccurrenceList->addOccurrence($occurrence);
+        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+
+        $this->processor->process($occurrence);
+
+        /** @var Occurrence $occurrence */
+        $occurrence = $nodeOccurrenceList->getOccurrences()->first();
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
     }
 }

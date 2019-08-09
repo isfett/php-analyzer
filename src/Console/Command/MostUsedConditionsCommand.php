@@ -301,6 +301,8 @@ class MostUsedConditionsCommand extends Command
         $sortedConditions = $this->sortService->sortArrayCollection($countedConditions, $sortConfiguration);
 
         $hideOccurrences = $input->getOption('without-occurrences');
+        $hideFlags = $input->getOption('without-flags');
+        $hideAffectedByProcessors = $input->getOption('without-affected-by-processors');
         $maximumOccurrences = $input->getOption('max-occurrences');
         $minOccurrences = $input->getOption('min-occurrences');
         if (null !== $minOccurrences) {
@@ -320,10 +322,8 @@ class MostUsedConditionsCommand extends Command
             $maximumOccurrences = (int) $maximumOccurrences;
         }
 
-
         $csvExport = $input->getOption('with-csv');
         $csvExportData = [];
-
 
         $table = new Table($output);
         $table->setColumnMaxWidth(0, 100);
@@ -361,16 +361,22 @@ class MostUsedConditionsCommand extends Command
                     if ($occurrence->isFlipped()) {
                         $flags[] = 'flipped';
                     }
+                    $affectedByProcessors = $occurrence->getAffectedByProcessors();
+
+                    $showFlags = !$hideFlags && count($flags);
+                    $showAffectedByProcessors = !$hideAffectedByProcessors && count($affectedByProcessors);
+
                     $table->addRow([
                         sprintf(
-                            '%s <flag>%s</flag>',
+                            '%s <flag>%s</flag><special-info>%s</special-info>',
                             sprintf(
                                 '<href=file://%s>%s:%s</>',
                                 $occurrence->getFile()->getPathname(),
                                 $occurrence->getFile()->getRelativePathname(),
                                 $line
                             ),
-                            0 === count($flags) ? '' : '(' . implode(',', $flags) . ')'
+                            $showFlags ? '(' . implode(', ', $flags) . ') ' : '',
+                            $showAffectedByProcessors ? '(' . implode(', ', $affectedByProcessors) . ')' : ''
                         ),
                         '',
                     ]);
@@ -518,6 +524,18 @@ class MostUsedConditionsCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'hide occurrences'
+            )
+            ->addOption(
+                'without-flags',
+                null,
+                InputOption::VALUE_NONE,
+                'hide flags (like flipped)'
+            )
+            ->addOption(
+                'without-affected-by-processors',
+                null,
+                InputOption::VALUE_NONE,
+                'hide processors who affected a condition'
             )
             ->addOption(
                 'with-csv',

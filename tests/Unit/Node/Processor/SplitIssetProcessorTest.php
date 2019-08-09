@@ -3,9 +3,11 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor;
 
+use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\Node\Processor\SplitIssetProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Isset_;
 
@@ -45,6 +47,7 @@ class SplitIssetProcessorTest extends AbstractNodeTestCase
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
         $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
 
         $this->processor->process($occurrence);
 
@@ -54,6 +57,7 @@ class SplitIssetProcessorTest extends AbstractNodeTestCase
             $this->assertInstanceOf(Isset_::class, $occurrence->getNode());
             $this->assertCount(1, $occurrence->getNode()->vars);
             $this->assertEquals($childNodes[$key], $occurrence->getNode()->vars[0]);
+            $this->assertContains('SplitIsset', $occurrence->getAffectedByProcessors());
         }
     }
 
@@ -75,6 +79,7 @@ class SplitIssetProcessorTest extends AbstractNodeTestCase
         $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
 
         $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
 
         $this->processor->process($occurrence);
 
@@ -85,6 +90,59 @@ class SplitIssetProcessorTest extends AbstractNodeTestCase
             $this->assertInstanceOf(Isset_::class, $occurrence->getNode()->expr);
             $this->assertCount(1, $occurrence->getNode()->expr->vars);
             $this->assertEquals($childNodes[$key], $occurrence->getNode()->expr->vars[0]);
+            $this->assertContains('SplitIsset', $occurrence->getAffectedByProcessors());
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessWillNotAffectedWrongNodes(): void
+    {
+        $node = $this->createVariableNode('a');
+        $occurrence = $this->createOccurrence($node);
+
+        $nodeOccurrenceList = new OccurrenceList();
+        $nodeOccurrenceList->addOccurrence($occurrence);
+        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+
+        $this->processor->process($occurrence);
+
+        /** @var Occurrence $occurrence */
+        $occurrence = $nodeOccurrenceList->getOccurrences()->first();
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessWillNotAffectedWrongNodesWithBinaryOp(): void
+    {
+        $node = new Identical(
+            $this->createVariableNode('a'),
+            $this->createVariableNode('b'),
+            $this->getNodeAttributes()
+        );
+        $occurrence = $this->createOccurrence($node);
+
+        $nodeOccurrenceList = new OccurrenceList();
+        $nodeOccurrenceList->addOccurrence($occurrence);
+        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+
+        $this->processor->process($occurrence);
+
+        /** @var Occurrence $occurrence */
+        $occurrence = $nodeOccurrenceList->getOccurrences()->first();
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
     }
 }

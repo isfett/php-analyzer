@@ -86,15 +86,17 @@ class SplitIssetProcessor extends AbstractProcessor
      * @return void
      */
     private function createIssetOccurrences(
-        Occurrence $occurrence,
+        Occurrence $originalOccurrence,
         iterable $arguments,
-        Isset_ $node,
+        Isset_ $originalNode,
         bool $isBooleanNot
     ): void {
         foreach ($arguments as $argument) {
-            $newNode = $this->createNewIssetNode($node, $argument, $isBooleanNot);
-            $newOccurrence = new Occurrence($newNode, $occurrence->getFile());
-            $this->nodeOccurrenceList->addOccurrence($newOccurrence);
+            $node = $this->createNewIssetNode($originalNode, $argument, $isBooleanNot);
+            $occurrence = clone $originalOccurrence;
+            $occurrence->setNode($node);
+            $this->markOccurrenceAsAffected($occurrence);
+            $this->nodeOccurrenceList->addOccurrence($occurrence);
         }
     }
 }

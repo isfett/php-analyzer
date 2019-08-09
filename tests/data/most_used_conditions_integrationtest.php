@@ -12,6 +12,8 @@ if ((bool) $someVar) {} elseif ((int) $someVar !== 0)
 
 if (!($i < 3)) {}
 
+if (!($i <= 13)) {}
+
 if (!(30 === date('d') && !(null === $user))) {}
 
 if (\strtolower('Chris') === 'chris') {}
