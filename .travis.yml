@@ -1,0 +1,21 @@
+language: php
+
+php:
+  - '7.1'
+  - '7.2'
+  - '7.3'
+  - '7.4snapshot' # beta1
+  #- nightly #8 (symfony does not support php 8 yet)
+
+before_install:
+  - travis_retry composer install --no-interaction --prefer-source --dev
+
+script:
+  - vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=coverage.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email:
+    - chris@isfett.com

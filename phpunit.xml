@@ -4,11 +4,17 @@
          backupGlobals="false"
          colors="true"
          bootstrap="vendor/autoload.php"
+         defaultTestSuite="unit"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
 >
 
     <testsuites>
-        <testsuite name="PHP-Analyzer Test Suite">
-            <directory>tests/</directory>
+        <testsuite name="unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
     </testsuites>
 
@@ -16,14 +22,18 @@
         <whitelist>
             <directory>src/</directory>
             <exclude>
+                <directory>src/Console/</directory>
+                <directory>src/DAO/</directory>
+                <directory>src/DependencyInjection/</directory>
                 <directory>vendor/</directory>
+                <file>src/Kernel.php</file>
             </exclude>
         </whitelist>
     </filter>
 
     <logging>
         <log type="coverage-html" target="codecoverage/html" lowUpperBound="50" highLowerBound="80" showUncoveredFiles="false" />
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>
         <log type="coverage-clover" target="codecoverage/xml/coverage.xml" />
     </logging>
 

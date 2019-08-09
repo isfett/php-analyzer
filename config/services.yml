@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    public: false
+
+  Isfett\PhpAnalyzer\:
+    resource: '../src'
+
+  Isfett\PhpAnalyzer\DAO\:
+    resource: '../src/DAO'
+    autowire: false
+
+  Isfett\PhpAnalyzer\Console\Application:
+    public: true
