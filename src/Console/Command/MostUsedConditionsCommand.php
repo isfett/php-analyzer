@@ -383,8 +383,8 @@ class MostUsedConditionsCommand extends Command
                     $counter++;
                 }
             }
-            if ((null === $maxEntries && $conditionCounter < $countedConditions->count()) ||
-                $conditionCounter < $maxEntries
+            if ($conditionCounter < $maxEntries ||
+                (null === $maxEntries && $conditionCounter < $countedConditions->count())
             ) {
                 $table->addRow([new TableSeparator(), new TableSeparator()]);
             }
@@ -402,7 +402,7 @@ class MostUsedConditionsCommand extends Command
                 CsvEncoder::DELIMITER_KEY => $csvDelimiter,
             ];
             $csvDelimiterReplace = ',' === $csvDelimiter ? '[comma]' : '[semicolon]';
-            array_walk($csvExportData, function (&$data) use ($csvDelimiter, $csvDelimiterReplace) {
+            array_walk($csvExportData, static function (&$data) use ($csvDelimiter, $csvDelimiterReplace) {
                 $data[0] = str_replace($csvDelimiter, $csvDelimiterReplace, $data[0]);
 
                 return $data;

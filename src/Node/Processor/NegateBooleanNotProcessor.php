@@ -28,7 +28,7 @@ class NegateBooleanNotProcessor extends AbstractProcessor
             /** @var BinaryOp $expression */
             $expression = $node->expr;
 
-            $occurrence->setNode($negatedNode = $this->processBinaryOp($expression, $occurrence));
+            $occurrence->setNode($this->processBinaryOp($expression, $occurrence));
         }
     }
 

@@ -78,9 +78,9 @@ class SplitIssetProcessor extends AbstractProcessor
     }
 
     /**
-     * @param Occurrence $occurrence
+     * @param Occurrence $originalOccurrence
      * @param iterable   $arguments
-     * @param Isset_     $node
+     * @param Isset_     $originalNode
      * @param bool       $isBooleanNot
      *
      * @return void

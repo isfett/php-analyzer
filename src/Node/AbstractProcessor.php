@@ -41,7 +41,7 @@ abstract class AbstractProcessor implements Processor\ProcessorInterface
      */
     protected function markOccurrenceAsAffected(Occurrence $occurrence): void
     {
-        $occurrence->addAffectedByProcessor($this->getProcessorName(get_called_class()));
+        $occurrence->addAffectedByProcessor($this->getProcessorName(static::class));
     }
 
     /**

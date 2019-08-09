@@ -12,16 +12,11 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class Traverser extends NodeTraverser
 {
-    /** @var SplFileInfo|null */
-    private $file;
-
     /**
      * @param SplFileInfo $file
      */
     public function setFile(SplFileInfo $file): void
     {
-        $this->file = $file;
-
         $this->updateFileInVisitors($file);
     }
 

@@ -57,8 +57,10 @@ class RemoveSingleFullyQualifiedNameProcessor extends AbstractProcessor
      *
      * @return Node\Expr\BinaryOp
      */
-    private function replaceFullyQualifiedNameInBinaryOp(Node\Expr\BinaryOp $node, Occurrence $occurrence): Node\Expr\BinaryOp
-    {
+    private function replaceFullyQualifiedNameInBinaryOp(
+        Node\Expr\BinaryOp $node,
+        Occurrence $occurrence
+    ): Node\Expr\BinaryOp {
         foreach (['left', 'right'] as $binaryOpSide) {
             if ($node->$binaryOpSide instanceof Node\Expr\BinaryOp) {
                 $node->$binaryOpSide = $this->replaceFullyQualifiedNameInBinaryOp($node->$binaryOpSide, $occurrence);
