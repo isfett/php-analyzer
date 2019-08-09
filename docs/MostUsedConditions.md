@@ -49,7 +49,7 @@ If you omit the directory it will use the current working directory. You can use
 - `--without-occurrences` will hide all occurrences of the conditions and just print the table without any
 - `--without-flags` will hide the "flags" like `flipped` when `--with-flip-check` is enabled
 - `--without-affected-by-processor` will hide the information which processors post-processed a conditions
-- `--with-csv` will export the result table to a csv (comma-separated). Add a filepath as value (absolute or relative) and make sure you have write rights with the current user. Example `--with-csv=output.csv` will create a output.csv file in the current working directory
+- `--with-csv` will export the result table to a csv (comma-separated). Add a filepath as value (absolute or relative) and make sure you have writing permission with the current user. Example `--with-csv=output.csv` will create a output.csv file in the current working directory
 - `--csv-delimiter-semicolon` will change the delimiter from the csv to semicolon (;)
 
 ### Visitors
