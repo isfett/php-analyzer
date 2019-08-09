@@ -178,7 +178,7 @@ You want to know that the condition from $this->getUser() is used twice, but nor
 <img src="./images/MostUsedConditions/removeassignmentprocessor.png" height="200">
 
 #### RemoveDuplicateBooleanNot
-This processor removes duplicate negations. So if you have an complex condition, and split it off, it could be possible in the printed condition is something like `!!$user`. You can achieve this with [this](examples/MostUsedConditions/removeduplicatebooleannotprocessor.php) source-code and the processors [SplitLogicalOperator](#splitlogicaloperator) and [NegateBooleanNot](#negatebooleannot) together:
+This processor removes duplicate negations. So if you have a complex condition, and split it off, it could be possible for the printed condition to be something like `!!$user`. You can achieve this with [this](examples/MostUsedConditions/removeduplicatebooleannotprocessor.php) source-code and the processors [SplitLogicalOperator](#splitlogicaloperator) and [NegateBooleanNot](#negatebooleannot) together:
 ```php
 <?php
 $user = null;
