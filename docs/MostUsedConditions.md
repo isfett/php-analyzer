@@ -3,11 +3,11 @@
 This command is inspired by Kent Beck's Medium-Articel [Conditions Are Power-Law Distributed: An Example](https://medium.com/@kentbeck_7670/conditions-are-power-law-distributed-an-example-61fa4e0d3500).
 
 ## Story
-I wanted to inspect the conditions in our project, checking for magic numbers and magic strings, maybe inconsistency of equal (`==`) and identical (`===`) and different types (for example `!$user` instead of `null === $user`)
+I wanted to inspect the conditions in our project, checking for magic numbers and magic strings, maybe inconsistency of equal (`==`) and identical (`===`) and different types (for example `!$user` instead of `null === $user`).
  
-By trying to get all if's in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control. You can also check ternaries, null-coalesce and bool-returning functions.
+By trying to get all `if`, `elseif` and `else if` conditions in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control. You can also check ternaries, null-coalesce and bool-returning functions.
 
-By writing this command I found out that I don't want to check the original conditions on some time. I wanted to know each part in an isset itself, later I wanted to split `&&` conditions. While adding more and more post-processors and checking the conditions I decided to remove some parts, like casts or assignments. And here we are now.
+By writing this command I found out that I don't only want to check the original conditions on some time. I wanted to know each part in an isset itself, later I wanted to split conditions by `&&` and `||`. While adding more and more post-processors and checking the conditions I decided to remove some parts, like casts or assignments. And here we are now.
 
 <img src="./images/MostUsedConditions/demo.gif">
 
@@ -15,12 +15,12 @@ By writing this command I found out that I don't want to check the original cond
 - Declare which directory (recursive) you want to inspect
 - Change the suffixes (default is just *.php)
 - Exclude dirs/files/patterns
-- Whitelist patterns (if you just want to check one file)
-- Declare which conditions are interesting (like: If or If and ElseIf, see [Visitors](#visitors))
-- Post-process conditions (like split issets or by logical operators, remove assignments, see [Processors](#processors))
-- Activate Flip-Checking
+- Whitelist patterns (if you just want to check one/some file/s)
+- Declare which conditions are interesting (like: only If or If and ElseIf, just ElseIf, just Ternary or Coalesce, see [Visitors](#visitors))
+- Post-process conditions (like split isset or by logical operators, remove assignments, see [Processors](#processors))
+- Activate Flip-Checking (maybe you want to check which conditions are not well written in yoda)
 - Exclude conditions with less than n occurrences
-- generate a csv (to plot graphs in excel or gplot)
+- generate a csv (to plot graphs in [Excel](#create-a-log10-graph-in-excel) or gplot)
 
 ### Syntax
 ```shell script
@@ -51,7 +51,6 @@ If you miss directory it will use the current working directory. You can use abs
 - `--without-affected-by-processor` will hide the information which processors post-processed a conditions
 - `--with-csv` will export the result table to a csv (comma-separated). Add a filepath as value (absolute or relative) and make sure you have write rights with the current user. Example `--with-csv=output.csv` will create a output.csv file in the current working directory
 - `--csv-delimiter-semicolon` will change the delimiter from the csv to semicolon (;)
-
 
 ### Visitors
 For example we have some code like [this](examples/MostUsedConditions/visitors.php):
@@ -85,9 +84,9 @@ The following visitors are available:
 - `Coalesce`: Like Ternary, left side will be added, here `$_GET['page']`
 - `BooleanReturn`: (experimental) Will add the return statements without `return` in methods that have :bool as return type (not docblock), here `null === $user`
 
-**Important:** This tool uses a php-parser, and ignore different code-styles. So it's no matter if using single- or double-quotes, add different types or amount of whitespaces etc.
+**Important:** This tool uses a php-parser, and ignore different code-styles. So it's no matter if you are using single-quotes or double-quotes, add different types or amount of whitespaces and so on.
 
-You can combine visitors, use all or just one with a comma-separated list, like `--visitors=If,ElseIf`.
+You can combine visitors, use all or just one with a comma-separated list, like `--visitors=If,ElseIf,Ternary` or `--visitors=Coalesce`.
 
 If you mistype a name of a visitor, you will raise an Exception including all possible names (case-sensitive).
 
@@ -226,7 +225,7 @@ The RemoveCast-Processor will count the condition as 1, but without (int).
 <img src="./images/MostUsedConditions/removecastprocessor.png" height="140">
 
 ### Flip-Check
-- with `--with-flip-check` the command will try to swap both sides of `==`, `!=`, `===` and `!==` and check if it already exists. If yes it will mark it with an `(flipped)`-flag. See [this](examples/MostUsedConditions/flipcheck.php) source-code:
+- with `--with-flip-check` the command will try to swap both sides of `==`, `!=`, `===` and `!==` and check if it already exists. If yes it will mark it with an `flipped`-flag. See [this](examples/MostUsedConditions/flipcheck.php) source-code:
 ```php
 <?php
 if(date('Y') === 2019) {
@@ -239,7 +238,7 @@ if (2019 === date('Y')) {
 ```
 Normally the command will count both conditions as found once, with the option `--with-flip-check` it will be count as twice and flip the second condition.
 
-You can see the `flipped`-flag after the 2nd occurrence. If you want to hide that info, combine it with `--without-flags`
+You can see the `flipped`-flag after the 2nd occurrence. If you want to hide that info add the option `--without-flags`
 
 `php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --with-flip-check --include-files=flipcheck.php`
 
