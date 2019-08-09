@@ -12,7 +12,6 @@ before_install:
 
 script:
   - vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=coverage.xml
-  - bin/php-analyzer most-used-conditions tests/data
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
