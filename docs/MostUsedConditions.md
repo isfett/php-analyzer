@@ -7,7 +7,7 @@ I wanted to inspect the conditions in our project, checking for magic numbers an
  
 By trying to get all `if`, `elseif` and `else if` conditions in different projects my command ended up like `grep -R --include='*.php' --exclude-dir=vendor --exclude-dir=.idea 'if' . | perl -nle 'print $2 if /. (else)*?\s?if\s?\((.*)\)(.*){/,' | sort | uniq -c | sort -rn | sed --expression="s/ [0-9]\+ /&;/g" > ~/conditions.csv`. I realized that just looking for if's and elseif's is not everything I'm interested in, so I wrote an PHP-Implementation which gives you much more control. You can also check ternaries, null-coalesce and bool-returning functions.
 
-By writing this command I found out that I don't only want to check the original conditions on some time. I wanted to know each part in an isset itself, later I wanted to split conditions by `&&` and `||`. While adding more and more post-processors and checking the conditions I decided to remove some parts, like casts or assignments. And here we are now.
+While writing this command I found out that I did not only want to check the original conditions, but I wanted to know each part of an isset itself. Later I wanted to split conditions by `&&` and `||`. While adding more and more post-processors and checking the conditions I decided to remove some parts, like casts or assignments. And here we are now.
 
 <img src="./images/MostUsedConditions/demo.gif">
 
