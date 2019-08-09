@@ -88,7 +88,7 @@ The following visitors are available:
 
 You can combine visitors, use all or just one with a comma-separated list, like `--visitors=If,ElseIf,Ternary` or `--visitors=Coalesce`.
 
-If you mistype a name of a visitor, you will raise an Exception including all possible names (case-sensitive).
+If you mistype the name of a visitor, you will raise an Exception including all possible names (case-sensitive).
 
 <img src="./images/MostUsedConditions/visitorexception.png">
 
