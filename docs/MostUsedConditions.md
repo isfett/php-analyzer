@@ -98,7 +98,7 @@ You can combine processors. Just add them to a comma-seperated list, like <br>`-
 
 You also can use none of the processors (default).
 
-If you mistype a name of a processor, you will raise an Exception including all possible names (case-sensitive).
+If you mistype the name of a processor, you will raise an Exception including all possible names (case-sensitive).
 
 <img src="./images/MostUsedConditions/processorexception.png">
 
