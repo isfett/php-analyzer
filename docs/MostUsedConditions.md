@@ -1,6 +1,6 @@
 # Most Used Conditions
 
-This command is inspired by Kent Beck's Medium-Articel [Conditions Are Power-Law Distributed: An Example](https://medium.com/@kentbeck_7670/conditions-are-power-law-distributed-an-example-61fa4e0d3500).
+This command is inspired by Kent Beck's Medium-Article [Conditions Are Power-Law Distributed: An Example](https://medium.com/@kentbeck_7670/conditions-are-power-law-distributed-an-example-61fa4e0d3500).
 
 ## Story
 I wanted to inspect the conditions in our project, checking for magic numbers and magic strings, maybe inconsistency of equal (`==`) and identical (`===`) and different types (for example `!$user` instead of `null === $user`).
