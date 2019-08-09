@@ -84,7 +84,7 @@ The following visitors are available:
 - `Coalesce`: Like Ternary, left side will be added, here `$_GET['page']`
 - `BooleanReturn`: (experimental) Will add the return statements without `return` in methods that have :bool as return type (not docblock), here `null === $user`
 
-**Important:** This tool uses a php-parser, and ignore different code-styles. So it's no matter if you are using single-quotes or double-quotes, add different types or amount of whitespaces and so on.
+**Important:** This tool uses a php-parser, and ignores different code-styles. So it doesn't matter if you are using single-quotes or double-quotes, add different types or amount of whitespaces and so on.
 
 You can combine visitors, use all or just one with a comma-separated list, like `--visitors=If,ElseIf,Ternary` or `--visitors=Coalesce`.
 
