@@ -627,12 +627,13 @@ class MostUsedConditionsCommand extends Command
     private function processFinder(Finder $finder, ProgressBar $progressBar): array
     {
         $files = [];
+        $progressBar->setMessage('Looking for files');
 
         /** @var SplFileInfo $file */
         foreach ($progressBar->iterate($finder->getIterator()) as $file) {
             $files[] = $file;
             $progressBar->setMessage(sprintf('(%s)', $file->getRelativePathname()), 'filename');
-            $progressBar->setMessage(sprintf('Looking for Files. File count: %d', count($files)));
+            $progressBar->setMessage(sprintf('Looking for files. File count: %d', count($files)));
         }
 
         return $files;

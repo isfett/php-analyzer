@@ -1,4 +1,4 @@
-
+<?php
 
 if ($this->getUser()) {
     // do something

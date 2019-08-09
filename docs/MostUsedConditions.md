@@ -47,6 +47,8 @@ If you miss directory it will use the current working directory. You can use abs
 - `--min-occurrences` for limiting the number of conditions and just show conditions with more occurrences in source-code than treshold. For example `--min-occurrences=5` just will ignore all conditions with four or less times in your source code
 - `--with-flip-check` enables flip check, see [Flip-Check](#flip-check)
 - `--without-occurrences` will hide all occurrences of the conditions and just print the table without any
+- `--without-flags` will hide the "flags" like `flipped` when `--with-flip-check` is enabled
+- `--without-affected-by-processor` will hide the information which processors post-processed a conditions
 - `--with-csv` will export the result table to a csv (comma-separated). Add a filepath as value (absolute or relative) and make sure you have write rights with the current user. Example `--with-csv=output.csv` will create a output.csv file in the current working directory
 - `--csv-delimiter-semicolon` will change the delimiter from the csv to semicolon (;)
 
@@ -66,7 +68,7 @@ if(date('Y') === 2019) {
 if(   date("Y") === 2019) {
     // do something
 }
-x
+
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 $page = $_GET['page'] ?? 1;
@@ -111,6 +113,8 @@ if (isset($_GET['user'], $_GET['user']['name'])) {
 ```
 The SplitIsset-Processor will create two new conditions and delete the old one. The new conditions will look like `isset($_GET['user']` and `isset($_GET['user']['name'])` and count both as 1.
 
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=SplitIsset --include-files=splitissetprocessor.php`
+
 <img src="./images/MostUsedConditions/splitissetprocessor.png" height="200">
 
 #### SplitLogicalOperator
@@ -128,6 +132,8 @@ if (!(13 === $a && 15 === $a)) {
 ```
 The SplitLogicalOperator-Processor will split the first if to `13 === $a` and `14 === $a`.
 The second if will be split to `!13 === $a` and `!15 === $a`.
+
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=SplitLogicalOperator --include-files=splitlogicaloperatorprocessor.php`
 
 <img src="./images/MostUsedConditions/splitlogicaloperatorprocessor.png" height="200">
 
@@ -150,6 +156,8 @@ if (!($a < 13)) {
 ```
 The NegateBooleanNot-Processor will change the first if to `$a !== 13`, the second to `$a === 14` and the last to `$a > 13`. This processor is very nice in combination with [SplitLogicalOperator](#splitlogicaloperator) from above, but make sure to add this processor in the list after the SplitLogicalOperator
 
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=NegateBooleanNot --include-files=negatebooleannotprocessor.php`
+
 <img src="./images/MostUsedConditions/negatebooleannotprocessor.png" height="240">
 
 #### RemoveAssignment
@@ -166,10 +174,12 @@ if ($user = $this->getUser()) {
 ```
 You want to know that the condition from $this->getUser() is used twice, but normally it would be counted as one plus one. This processor will remove `$user = ` from the second condition and will count 2 for `$this->getUser()`.
 
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=RemoveAssignment --include-files=removeassignmentprocessor.php`
+
 <img src="./images/MostUsedConditions/removeassignmentprocessor.png" height="200">
 
 #### RemoveDuplicateBooleanNot
-This processor removes duplicate negations. So if you have an complex condition, and split it off, it could be possible in the printed condition is something like `!!$user`. You can achieve this with [this](examples/MostUsedConditions/removeduplicatebooleannotprocessor.php) source-code and the [SplitLogicalOperator-Processor](#splitlogicaloperator) and [NegateBooleanNot-Processor](#negatebooleannot) together
+This processor removes duplicate negations. So if you have an complex condition, and split it off, it could be possible in the printed condition is something like `!!$user`. You can achieve this with [this](examples/MostUsedConditions/removeduplicatebooleannotprocessor.php) source-code and the processors [SplitLogicalOperator](#splitlogicaloperator) and [NegateBooleanNot](#negatebooleannot) together:
 ```php
 <?php
 $user = null;
@@ -178,6 +188,8 @@ if (!(30 === date('d') && !(null === $user))) {
 }
 ```
 If you add the RemoveDuplicateBooleanNot-Processor, it will print `null === $user` and removes the `!!`.
+
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=SplitLogicalOperator,RemoveDuplicateBooleanNot --include-files=removeduplicatebooleannotprocessor.php`
 
 #### RemoveSingleFullyQualifiedName
 This processor will ignore backslashes from fully qualified name functions or class name (e.g. new \DateTime), because maybe you don't use them or import an class. Codestyle can change often. See [this](examples/MostUsedConditions/removesinglefullyqualifiednameprocessor.php) source-code:
@@ -193,6 +205,8 @@ if (\strtolower('Chris') === 'chris') {
 ```
 The RemoveSingleFullyQualifiedName-Processor will count the condition as 2, without the processor it will count both as single condition.
 
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=RemoveSingleFullyQualifiedName --include-files=removesinglefullyqualifiednameprocessor.php`
+
 <img src="./images/MostUsedConditions/removesinglefullyqualifiednameprocessor.png" height="140">
 
 #### RemoveCast
@@ -206,6 +220,8 @@ if ((int) $foo === 123) {
 }
 ```
 The RemoveCast-Processor will count the condition as 1, but without (int).
+
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --processors=RemoveCast --include-files=removecastprocessor.php`
 
 <img src="./images/MostUsedConditions/removecastprocessor.png" height="140">
 
@@ -222,6 +238,10 @@ if (2019 === date('Y')) {
 }
 ```
 Normally the command will count both conditions as found once, with the option `--with-flip-check` it will be count as twice and flip the second condition.
+
+You can see the `flipped`-flag after the 2nd occurrence. If you want to hide that info, combine it with `--without-flags`
+
+`php bin/php-analyzer most-used-conditions --without-affected-by-processors --visitors=If --with-flip-check --include-files=flipcheck.php`
 
 <img src="./images/MostUsedConditions/flipcheck.png" height="200">
 
