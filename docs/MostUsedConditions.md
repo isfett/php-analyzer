@@ -31,7 +31,7 @@ bin/php-analyzer most-used-conditions [--options] directory
 php-analyzer.phar most-used-conditions [--options] directory
 ```
 
-If you miss directory it will use the current working directory. You can use absolute or relative paths.
+If you omit the directory it will use the current working directory. You can use absolute or relative paths.
 
 ### Options
 - `--excludes` for excluding directories. Must be relative to source. Comma-separated list, for example: `--excludes=vendor,var`
