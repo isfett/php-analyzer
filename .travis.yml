@@ -8,11 +8,14 @@ php:
   #- nightly #8 (symfony does not support php 8 yet)
 
 before_install:
-  - composer update
+  - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
-  - vendor/bin/phpunit --testdox --testsuite=unit,integration
+  - vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=coverage.xml
   - bin/php-analyzer most-used-conditions tests/data
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:
