@@ -5,9 +5,9 @@
 [![Total Downloads](https://poser.pugx.org/isfett/php-analyzer/downloads)](https://packagist.org/packages/isfett/php-analyzer)
 # PHP-Analyzer
 
-`php-analyzer` is a tool that aims to help you for different tasks.
+`php-analyzer` is a tool designed to help you with different problems.
 
-Mostly I found that I want to resolve them while doing my job. For details check the documented commands below.
+Mostly I found that I wanted to resolve them while doing my job. For details check the documented commands below.
 
 ## Installation
 Run
@@ -17,18 +17,18 @@ $ composer global require isfett/php-analyzer
 or download the latest phar from [this repository](https://github.com/isfett/php-analyzer/releases).
 
 ## Usage
-For usages of the commands, check the documentation of each command.
+Each command has its own documentation; you can find those in the 'docs' subfolder.
 
 ## Information
 This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser), ignoring different code-style or whitespaces. 
 
 ## Commands
-- [Most used conditions](docs/MostUsedConditions.md) Helps to check which conditions are used the most in your project. Just want to check if's? Or ternaries? No Problem! You can also split by logical operators, or split isset functions for each parameter. Including post-processing your conditions, flip-checking etc. You can find many examples within the link.
+- [Most Used Conditions](docs/MostUsedConditions.md) This command helps to check which conditions are used the most in your project. Just want to check if's? Or ternaries? No problem! You can also use the command to split by logical operators, or split isset functions for each parameter, including post-processing your conditions, flip-checking, etc. You can find many examples in the linked command documentation.
 
 ## Planned
 - Magic Number Detector
 - Magic String Detector
-- Find duplicate code (ignoring codestyle, just checking statements)
+- Find Duplicate Code (ignoring codestyle, just checking statements)
 
 ## Contributing
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
