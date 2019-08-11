@@ -61,6 +61,16 @@ abstract class AbstractNodeTestCase extends TestCase
     }
 
     /**
+     * @param int $value
+     *
+     * @return Node\Scalar\LNumber
+     */
+    protected function createLNumberNode(int $value): Node\Scalar\LNumber
+    {
+        return new Node\Scalar\LNumber($value, $this->getNodeAttributes());
+    }
+
+    /**
      * @param string $name
      *
      * @return Node\Name
@@ -101,16 +111,23 @@ abstract class AbstractNodeTestCase extends TestCase
     }
 
     /**
-     * @param int $startLine
-     * @param int $endLine
+     * @param int       $startLine
+     * @param int       $endLine
+     * @param Node|null $parent
      *
      * @return array
      */
-    protected function getNodeAttributes(int $startLine = 1, int $endLine = 1): array
+    protected function getNodeAttributes(int $startLine = 1, int $endLine = 1, ?Node $parent = null): array
     {
-        return [
+        $attributes = [
             'startLine' => $startLine,
             'endLine' => $endLine,
         ];
+
+        if (null !== $parent) {
+            $attributes['parent'] = $parent;
+        }
+
+        return $attributes;
     }
 }

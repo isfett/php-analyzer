@@ -15,6 +15,9 @@ class VisitorBuilder implements VisitorBuilderInterface
     /** @var array */
     private $names = [];
 
+    /** @var string */
+    private $prefix = '';
+
     /**
      * @return ArrayCollection<VisitorInterface>
      */
@@ -23,10 +26,10 @@ class VisitorBuilder implements VisitorBuilderInterface
         $visitors = new ArrayCollection();
 
         foreach ($this->names as $name) {
-            $classname = sprintf('Isfett\\PhpAnalyzer\\Node\\Visitor\\%sConditionVisitor', $name);
+            $classname = sprintf('Isfett\\PhpAnalyzer\\Node\\Visitor\\%s\\%sVisitor', $this->prefix, $name);
 
             if (!class_exists($classname)) {
-                throw new InvalidVisitorNameException($name);
+                throw new InvalidVisitorNameException($name, $this->prefix);
             }
 
             $visitors->add(new $classname());
@@ -47,6 +50,18 @@ class VisitorBuilder implements VisitorBuilderInterface
         } else {
             $this->names = explode(',', str_replace(', ', ',', $names));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return VisitorBuilderInterface
+     */
+    public function setPrefix(string $prefix): VisitorBuilderInterface
+    {
+        $this->prefix = $prefix;
 
         return $this;
     }

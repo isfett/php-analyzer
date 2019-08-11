@@ -22,4 +22,11 @@ interface ProcessorBuilderInterface
      * @return self
      */
     public function setNames(string $names): self;
+
+    /**
+     * @param string $prefix
+     *
+     * @return self
+     */
+    public function setPrefix(string $prefix): self;
 }

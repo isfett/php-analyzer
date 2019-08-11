@@ -16,7 +16,7 @@ use Symfony\Component\Finder\SplFileInfo;
 abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInterface
 {
     /** @var SplFileInfo */
-    private $file;
+    protected $file;
 
     /** @var OccurrenceList */
     private $nodeOccurrenceList;
@@ -54,5 +54,16 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
     {
         $occurrence = new Occurrence($node, $this->file);
         $this->nodeOccurrenceList->addOccurrence($occurrence);
+    }
+
+
+    /**
+     * @param Node $node
+     *
+     * @return bool
+     */
+    protected function isNumber(Node $node): bool
+    {
+        return $node instanceof Node\Scalar\LNumber || $node instanceof Node\Scalar\DNumber;
     }
 }
