@@ -65,8 +65,10 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
      */
     protected function isNumber(Node $node): bool
     {
-        return $node instanceof Node\Scalar\LNumber || $node instanceof Node\Scalar\DNumber ||
-            $node instanceof Node\Expr\UnaryMinus || $node instanceof Node\Expr\UnaryPlus;
+        if ($node instanceof Node\Expr\UnaryMinus || $node instanceof Node\Expr\UnaryPlus) {
+            $node = $node->expr;
+        }
+        return $node instanceof Node\Scalar\LNumber || $node instanceof Node\Scalar\DNumber;
     }
 
     /**
@@ -74,7 +76,7 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
      *
      * @return Node
      */
-    private function replaceUnaryNumbers(Node $node): Node
+    protected function replaceUnaryNumbers(Node $node): Node
     {
         if ($node instanceof Node\Expr\UnaryPlus || $node instanceof Node\Expr\UnaryMinus) {
             $node = $node->expr;

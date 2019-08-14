@@ -75,49 +75,49 @@ class MagicNumberDetectorCommandTest extends TestCase
         );
 
         $expectedOutput = <<<EOT
-+----------------------------------------------+----------------------------------------------+
-| Number                                       | Occurrence                                   |
-+----------------------------------------------+----------------------------------------------+
-| '<focus>1234</focus>' => <focus>1234</focus> | magic_number_detector_integrationtest.php:34 |
-|----------------------------------------------|----------------------------------------------|
-| 123 => <focus>1234</focus>                   | magic_number_detector_integrationtest.php:33 |
-|----------------------------------------------|----------------------------------------------|
-| \$a[<focus>1234</focus>]                      | magic_number_detector_integrationtest.php:65 |
-|----------------------------------------------|----------------------------------------------|
-| <focus>100</focus>                           | magic_number_detector_integrationtest.php:57 |
-|----------------------------------------------|----------------------------------------------|
-| 20 * <focus>21</focus>                       | magic_number_detector_integrationtest.php:44 |
-|----------------------------------------------|----------------------------------------------|
-| <focus>20</focus> * 21                       | magic_number_detector_integrationtest.php:44 |
-|----------------------------------------------|----------------------------------------------|
-| \$input > <focus>18</focus>                   | magic_number_detector_integrationtest.php:31 |
-|----------------------------------------------|----------------------------------------------|
-| <focus>18</focus>                            | magic_number_detector_integrationtest.php:32 |
-|----------------------------------------------|----------------------------------------------|
-| \$input * <focus>15</focus>                   | magic_number_detector_integrationtest.php:41 |
-|----------------------------------------------|----------------------------------------------|
-| return <focus>15</focus>                     | magic_number_detector_integrationtest.php:15 |
-|----------------------------------------------|----------------------------------------------|
-| 'age' => <focus>13</focus>                   | magic_number_detector_integrationtest.php:30 |
-|----------------------------------------------|----------------------------------------------|
-| \$input > <focus>7</focus>                    | magic_number_detector_integrationtest.php:26 |
-|----------------------------------------------|----------------------------------------------|
-| \$variable = <focus>6</focus>                 | magic_number_detector_integrationtest.php:11 |
-|----------------------------------------------|----------------------------------------------|
-| case <focus>5</focus>:                       | magic_number_detector_integrationtest.php:20 |
-|----------------------------------------------|----------------------------------------------|
-| \$input = <focus>4</focus>                    | magic_number_detector_integrationtest.php:13 |
-|----------------------------------------------|----------------------------------------------|
-| <focus>4</focus>                             | magic_number_detector_integrationtest.php:25 |
-|----------------------------------------------|----------------------------------------------|
-| <focus>3.14</focus>                          | magic_number_detector_integrationtest.php:58 |
-|----------------------------------------------|----------------------------------------------|
-| \$input > <focus>2</focus>                    | magic_number_detector_integrationtest.php:14 |
-|----------------------------------------------|----------------------------------------------|
-| \$input === <focus>-1</focus>                 | magic_number_detector_integrationtest.php:38 |
-|----------------------------------------------|----------------------------------------------|
-| return <focus>-1</focus>                     | magic_number_detector_integrationtest.php:51 |
-+----------------------------------------------+----------------------------------------------+
++-------------------------------+----------------------------------------------+
+| Number                        | Occurrence                                   |
++-------------------------------+----------------------------------------------+
+| '1234' => <focus>1234</focus> | magic_number_detector_integrationtest.php:34 |
+|-------------------------------|----------------------------------------------|
+| 123 => <focus>1234</focus>    | magic_number_detector_integrationtest.php:33 |
+|-------------------------------|----------------------------------------------|
+| \$a[<focus>1234</focus>]       | magic_number_detector_integrationtest.php:65 |
+|-------------------------------|----------------------------------------------|
+| <focus>100</focus>            | magic_number_detector_integrationtest.php:57 |
+|-------------------------------|----------------------------------------------|
+| 20 * <focus>21</focus>        | magic_number_detector_integrationtest.php:44 |
+|-------------------------------|----------------------------------------------|
+| <focus>20</focus> * 21        | magic_number_detector_integrationtest.php:44 |
+|-------------------------------|----------------------------------------------|
+| \$input > <focus>18</focus>    | magic_number_detector_integrationtest.php:31 |
+|-------------------------------|----------------------------------------------|
+| <focus>18</focus>             | magic_number_detector_integrationtest.php:32 |
+|-------------------------------|----------------------------------------------|
+| \$input * <focus>15</focus>    | magic_number_detector_integrationtest.php:41 |
+|-------------------------------|----------------------------------------------|
+| return <focus>15</focus>      | magic_number_detector_integrationtest.php:15 |
+|-------------------------------|----------------------------------------------|
+| 'age' => <focus>13</focus>    | magic_number_detector_integrationtest.php:30 |
+|-------------------------------|----------------------------------------------|
+| \$input > <focus>7</focus>     | magic_number_detector_integrationtest.php:26 |
+|-------------------------------|----------------------------------------------|
+| \$variable = <focus>6</focus>  | magic_number_detector_integrationtest.php:11 |
+|-------------------------------|----------------------------------------------|
+| case <focus>5</focus>:        | magic_number_detector_integrationtest.php:20 |
+|-------------------------------|----------------------------------------------|
+| \$input = <focus>4</focus>     | magic_number_detector_integrationtest.php:13 |
+|-------------------------------|----------------------------------------------|
+| <focus>4</focus>              | magic_number_detector_integrationtest.php:25 |
+|-------------------------------|----------------------------------------------|
+| <focus>3.14</focus>           | magic_number_detector_integrationtest.php:58 |
+|-------------------------------|----------------------------------------------|
+| \$input > <focus>2</focus>     | magic_number_detector_integrationtest.php:14 |
+|-------------------------------|----------------------------------------------|
+| return <focus>-1</focus>      | magic_number_detector_integrationtest.php:51 |
+|-------------------------------|----------------------------------------------|
+| \$input === <focus>-5</focus>  | magic_number_detector_integrationtest.php:38 |
++-------------------------------+----------------------------------------------+
 EOT;
         $this->assertStringContainsString($expectedOutput, $outputText);
     }

@@ -35,7 +35,7 @@ class MagicNumberTestClass
         ];
 
         if ($input > 1);
-        if ($input === -1);
+        if ($input === -5);
         if (PHP_VERSION_ID < 50600);
 
         $value = $input * 15;

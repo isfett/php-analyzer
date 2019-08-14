@@ -8,6 +8,7 @@ use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -122,6 +123,32 @@ class ArrayVisitorTest extends AbstractNodeTestCase
                     $this->createLNumberNode(1)
                 )
             )
+        );
+        $this->visitor->enterNode($node);
+        $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
+        $this->assertEquals(1337, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEnterNodeUnaryMinusArrayItemWithIntegerArrayKey(): void
+    {
+        $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
+
+        $node = new UnaryMinus(
+            new LNumber(1337),
+            $this->getNodeAttributes(1, 1, new LNumber(
+                1337,
+                $this->getNodeAttributes(
+                    1,
+                    1,
+                    new ArrayItem(
+                        new UnaryMinus($this->createLNumberNode(1337)),
+                        $this->createLNumberNode(1)
+                    )
+                )
+            ))
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());

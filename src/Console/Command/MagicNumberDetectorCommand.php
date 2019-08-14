@@ -277,8 +277,8 @@ class MagicNumberDetectorCommand extends Command
             if ($isMinus) {
                 $value = '-'.$value;
             }
-            $representation = str_replace(
-                $value,
+            $representation = $this->lreplace(
+                (string) $value,
                 '<focus>' . $value . '</focus>',
                 $representation
             );
@@ -515,5 +515,22 @@ class MagicNumberDetectorCommand extends Command
         $classWithNamespaces = explode('\\', $classname);
 
         return end($classWithNamespaces);
+    }
+
+    /**
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     *
+     * @return string
+     */
+    private function lreplace(string $search, string $replace, string $subject): string
+    {
+        $pos = strrpos($subject, $search);
+        if (false !== $pos){
+            $subject = substr_replace($subject, $replace, $pos, strlen($search));
+        }
+
+        return $subject;
     }
 }

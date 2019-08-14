@@ -35,10 +35,14 @@ class ArrayVisitor extends AbstractVisitor
         /** @var Node $parent */
         $parentNode = $node->getAttribute('parent');
 
+        if ($parentNode instanceof Node\Scalar\LNumber | $parentNode instanceof Node\Scalar\DNumber) {
+            $parentNode = $parentNode->getAttribute('parent');
+        }
+
         if ($parentNode instanceof Node\Expr\ArrayItem) {
             if (null !== $parentNode->key &&
                 $this->isNumber($parentNode->key) &&
-                $node->value === $parentNode->key->value
+                $this->nodeValue($node) === $this->nodeValue($parentNode->key)
             ) {
                 return false;
             }
@@ -47,5 +51,19 @@ class ArrayVisitor extends AbstractVisitor
         }
 
         return $parentNode instanceof Node\Expr\ArrayDimFetch;
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return int|float
+     */
+    private function nodeValue(Node $node)
+    {
+        if ($node instanceof Node\Expr\UnaryMinus || $node instanceof Node\Expr\UnaryPlus) {
+            return $node->expr->value;
+        }
+
+        return $node->value;
     }
 }
