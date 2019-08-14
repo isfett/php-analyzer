@@ -5,6 +5,7 @@ namespace Isfett\PhpAnalyzer\Node;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
+use Isfett\PhpAnalyzer\Node\Representation\Expr\UnaryPlus;
 use Isfett\PhpAnalyzer\Node\Visitor\VisitorInterface;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -52,10 +53,10 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
      */
     protected function addNodeOccurrence(Node $node): void
     {
+        $node = $this->replaceUnaryNumbers($node);
         $occurrence = new Occurrence($node, $this->file);
         $this->nodeOccurrenceList->addOccurrence($occurrence);
     }
-
 
     /**
      * @param Node $node
@@ -64,6 +65,21 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
      */
     protected function isNumber(Node $node): bool
     {
-        return $node instanceof Node\Scalar\LNumber || $node instanceof Node\Scalar\DNumber;
+        return $node instanceof Node\Scalar\LNumber || $node instanceof Node\Scalar\DNumber ||
+            $node instanceof Node\Expr\UnaryMinus || $node instanceof Node\Expr\UnaryPlus;
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return Node
+     */
+    private function replaceUnaryNumbers(Node $node): Node
+    {
+        if ($node instanceof Node\Expr\UnaryPlus || $node instanceof Node\Expr\UnaryMinus) {
+            $node = $node->expr;
+        }
+
+        return $node;
     }
 }

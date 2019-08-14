@@ -27,6 +27,8 @@ use Isfett\PhpAnalyzer\Node\VisitorConnector\ParentConnector;
 use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Error;
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -76,8 +78,8 @@ class MagicNumberDetectorCommand extends Command
      * @param FinderBuilderInterface            $finderBuilder
      * @param VisitorBuilderInterface           $visitorBuilder
      * @param ProcessorBuilderInterface         $processorBuilder
-     * @param ProcessorRunnerInterface          $processorRunner
      * @param SortConfigurationBuilderInterface $sortConfigurationBuilder
+     * @param ProcessorRunnerInterface          $processorRunner
      * @param NodeRepresentationService         $nodeRepresentationService
      * @param SortService                       $sortService
      */
@@ -85,8 +87,8 @@ class MagicNumberDetectorCommand extends Command
         FinderBuilderInterface $finderBuilder,
         VisitorBuilderInterface $visitorBuilder,
         ProcessorBuilderInterface $processorBuilder,
-        ProcessorRunnerInterface $processorRunner,
         SortConfigurationBuilderInterface $sortConfigurationBuilder,
+        ProcessorRunnerInterface $processorRunner,
         NodeRepresentationService $nodeRepresentationService,
         SortService $sortService
     ) {
@@ -258,15 +260,26 @@ class MagicNumberDetectorCommand extends Command
         foreach ($sortedOccurrences as $occurrence) {
             $occurrenceCounter++;
             $line = $occurrence->getNode()->getStartLine();
+            $node = $occurrence->getNode();
+            $parent = $node->getAttribute('parent');
+            $isMinus = false;
+            if ($parent instanceof UnaryMinus) {
+                $isMinus = true;
+                $parent = $parent->getAttribute('parent');
+            }
             if ($occurrence->getNode()->getStartLine() !== $occurrence->getNode()->getEndLine()) {
                 $line .= sprintf('-%s', $occurrence->getNode()->getEndLine());
             }
             $representation = $this->nodeRepresentationService->representationForNode(
-                $occurrence->getNode()->getAttribute('parent')
+                $parent
             );
+            $value = $node->value;
+            if ($isMinus) {
+                $value = '-'.$value;
+            }
             $representation = str_replace(
-                $occurrence->getNode()->value,
-                '<focus>' . $occurrence->getNode()->value . '</focus>',
+                $value,
+                '<focus>' . $value . '</focus>',
                 $representation
             );
             $table->addRow([
@@ -290,7 +303,7 @@ class MagicNumberDetectorCommand extends Command
 
         $output->write(PHP_EOL);
 
-        return Application::EXIT_CODE_SUCCESS;
+        return Application::EXIT_CODE_FAILURE;
     }
 
     /**
@@ -353,7 +366,7 @@ class MagicNumberDetectorCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Comma-separated string of visitors which should check the source code to 
                  find conditions (on wrong input you can see a list of possible visitors)',
-                'If,ElseIf,Ternary'
+                'Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase'
             )
             ->addOption(
                 'processors',

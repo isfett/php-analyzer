@@ -4,18 +4,18 @@ declare(strict_types = 1);
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicNumber;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
-use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\RemoveOneProcessor;
+use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\RemoveMinusOneProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 
 /**
- * Class RemoveOneProcessorTest
+ * Class RemoveMinusOneProcessorTest
  */
-class RemoveOneProcessorTest extends AbstractNodeTestCase
+class RemoveMinusOneProcessorTest extends AbstractNodeTestCase
 {
-    /** @var RemoveOneProcessor */
+    /** @var RemoveMinusOneProcessor */
     private $processor;
 
     /**
@@ -25,7 +25,7 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->processor = new RemoveOneProcessor();
+        $this->processor = new RemoveMinusOneProcessor();
     }
 
     /**
@@ -33,7 +33,7 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
      */
     public function testProcessOnInt(): void
     {
-        $node = new LNumber(1);
+        $node = new LNumber(1, ['parent' => new UnaryMinus(new LNumber(1))]);
 
         $occurrence = $this->createOccurrence($node);
 
@@ -54,7 +54,7 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
      */
     public function testProcessOnDecimal(): void
     {
-        $node = new DNumber(1.00);
+        $node = new DNumber(1.00, ['parent' => new UnaryMinus(new DNumber(1.00))]);
 
         $occurrence = $this->createOccurrence($node);
 
@@ -75,7 +75,7 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
      */
     public function testProcessOnIntGreaterOneWillNotRemoveOccurrence(): void
     {
-        $node = new LNumber(2);
+        $node = new LNumber(2, ['parent' => new UnaryMinus(new LNumber(2))]);
 
         $occurrence = $this->createOccurrence($node);
 
@@ -96,7 +96,7 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
      */
     public function testProcessOnDecimalGreaterOneWillNotRemoveOccurrence(): void
     {
-        $node = new DNumber(1.05);
+        $node = new DNumber(1.05, ['parent' => new UnaryMinus(new DNumber(1.05))]);
 
         $occurrence = $this->createOccurrence($node);
 
@@ -115,9 +115,9 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testProcessOnMinusValuesWillNotRemoveOccurrence(): void
+    public function testProcessOnPositiveIntWillNotRemoveOccurrence(): void
     {
-        $node = new LNumber(1, ['parent' => new UnaryMinus(new LNumber(1))]);
+        $node = new LNumber(1);
 
         $occurrence = $this->createOccurrence($node);
 

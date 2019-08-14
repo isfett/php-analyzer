@@ -35,8 +35,7 @@ class ParentConnector extends AbstractVisitor
     {
         if (!empty($this->stack)) {
             /** @var Node $parent */
-            $parent = clone $this->stack[count($this->stack)-1];
-            $parent->setAttributes([]);
+            $parent = $this->stack[count($this->stack)-1];
             $node->setAttribute('parent', $parent);
         }
         $this->stack[] = $node;
