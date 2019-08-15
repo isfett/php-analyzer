@@ -31,6 +31,7 @@ class ProcessorBuilderTest extends TestCase
     public function testBuilder(): void
     {
         $processors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('SplitIsset')
             ->getProcessors();
 
@@ -43,6 +44,7 @@ class ProcessorBuilderTest extends TestCase
     public function testBuilderMultiple(): void
     {
         $visitors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('SplitIsset,NegateBooleanNot')
             ->getProcessors();
 
@@ -55,6 +57,7 @@ class ProcessorBuilderTest extends TestCase
     public function testBuilderMultipleWithSpace(): void
     {
         $visitors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('SplitIsset, NegateBooleanNot')
             ->getProcessors();
 
@@ -68,10 +71,11 @@ class ProcessorBuilderTest extends TestCase
     {
         $this->expectException(InvalidProcessorNameException::class);
         $this->expectExceptionMessage(
-            'Processor with name ThisNameWillNeverExist does not exist. Possible processor-names are: '
+            'Processor with name ThisNameWillNeverExist does not exist. Possible Processors are: '
         );
 
         $this->builder
+            ->setPrefix('Condition')
             ->setNames('SplitIsset, NegateBooleanNot, ThisNameWillNeverExist')
             ->getProcessors();
     }
@@ -82,6 +86,7 @@ class ProcessorBuilderTest extends TestCase
     public function testBuilderWithEmptyName(): void
     {
         $visitors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('')
             ->getProcessors();
 

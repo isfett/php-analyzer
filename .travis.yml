@@ -4,7 +4,7 @@ php:
   - '7.1'
   - '7.2'
   - '7.3'
-  - '7.4snapshot' # beta1
+  - '7.4snapshot' # beta2
   #- nightly #8 (symfony does not support php 8 yet)
 
 before_install:
@@ -12,6 +12,7 @@ before_install:
 
 script:
   - vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=coverage.xml
+  - bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --processors=RemoveOne,RemoveZero,RemoveMinusOne,IgnoreDefineFunction,IgnoreForLoop --excludes=vendor,var,tests,docs
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

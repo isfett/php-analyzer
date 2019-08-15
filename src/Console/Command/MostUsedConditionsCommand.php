@@ -147,13 +147,19 @@ class MostUsedConditionsCommand extends Command
         }
 
         $traverser = new Traverser();
-        $visitors = $this->visitorBuilder->setNames($input->getOption('visitors'))->getVisitors();
+        $visitors = $this->visitorBuilder
+            ->setPrefix('Condition')
+            ->setNames($input->getOption('visitors'))->getVisitors();
         foreach ($visitors as $visitor) {
             $output->writeln('Adding '.$this->getClassnameWithoutNamespace(get_class($visitor)).' Visitor');
             $traverser->addVisitor($visitor);
         }
 
-        $traverserProgressBar = $this->createProgressBar($output, 'customBar', 100);
+        $traverserProgressBar = $this->createProgressBar(
+            $output,
+            'customBar',
+            Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+        );
         $traverserProgressBar->setMaxSteps(count($files));
 
         foreach ($files as $file) {
@@ -189,7 +195,10 @@ class MostUsedConditionsCommand extends Command
             }
         }
 
-        $processors = $this->processorBuilder->setNames($input->getOption('processors'))->getProcessors();
+        $processors = $this->processorBuilder
+            ->setPrefix('Condition')
+            ->setNames($input->getOption('processors'))
+            ->getProcessors();
 
         if (count($processors)) {
             foreach ($processors as $processor) {
@@ -197,7 +206,11 @@ class MostUsedConditionsCommand extends Command
                 $this->processorRunner->addProcessor($processor);
             }
 
-            $processorsProgressBar = $this->createProgressBar($output, 'customBar', 100);
+            $processorsProgressBar = $this->createProgressBar(
+                $output,
+                'customBar',
+                Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+            );
 
             foreach ($processorsProgressBar->iterate(
                 $this->processorRunner->process($occurrenceList),
@@ -218,7 +231,11 @@ class MostUsedConditionsCommand extends Command
         }
 
         $flipChecking = $input->getOption('with-flip-check');
-        $conditionListProgressBar = $this->createProgressBar($output, 'customBar', 100);
+        $conditionListProgressBar = $this->createProgressBar(
+            $output,
+            'customBar',
+            Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+        );
         $conditionListProgressBar->setMaxSteps(count($occurrenceList->getOccurrences()));
         $conditionListProgressBar->setMessage(sprintf(
             'Create ConditionList (print ast nodes). Flip-Check: %s',
@@ -255,7 +272,11 @@ class MostUsedConditionsCommand extends Command
         $rawConditions = $conditionList->getConditions();
         $countedConditionsList = new Countable();
 
-        $countedListProgressBar = $this->createProgressBar($output, 'customBar', 100);
+        $countedListProgressBar = $this->createProgressBar(
+            $output,
+            'customBar',
+            Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+        );
         $countedListProgressBar->setMaxSteps(count($rawConditions));
         $countedListProgressBar->setMessage('Check for multiple conditions');
 
@@ -326,7 +347,7 @@ class MostUsedConditionsCommand extends Command
         $csvExportData = [];
 
         $table = new Table($output);
-        $table->setColumnMaxWidth(0, 100);
+        $table->setColumnMaxWidth(0, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
         $table->setHeaders([
             'Condition',
             'Count',

@@ -31,6 +31,7 @@ class VisitorBuilderTest extends TestCase
     public function testBuilder(): void
     {
         $visitors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('If')
             ->getVisitors();
 
@@ -43,6 +44,7 @@ class VisitorBuilderTest extends TestCase
     public function testBuilderMultiple(): void
     {
         $visitors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('If,Ternary')
             ->getVisitors();
 
@@ -55,6 +57,7 @@ class VisitorBuilderTest extends TestCase
     public function testBuilderMultipleWithSpace(): void
     {
         $visitors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('If, Ternary')
             ->getVisitors();
 
@@ -68,10 +71,11 @@ class VisitorBuilderTest extends TestCase
     {
         $this->expectException(InvalidVisitorNameException::class);
         $this->expectExceptionMessage(
-            'Visitor with name ThisNameWillNeverExist does not exist. Possible visitor-names are: '
+            'Visitor with name ThisNameWillNeverExist does not exist. Possible Visitors are: '
         );
 
         $this->builder
+            ->setPrefix('Condition')
             ->setNames('If, Ternary, ThisNameWillNeverExist')
             ->getVisitors();
     }
@@ -82,6 +86,7 @@ class VisitorBuilderTest extends TestCase
     public function testBuilderWithEmptyName(): void
     {
         $visitors = $this->builder
+            ->setPrefix('Condition')
             ->setNames('')
             ->getVisitors();
 

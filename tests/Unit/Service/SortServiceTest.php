@@ -6,8 +6,10 @@ namespace Isfett\PhpAnalyzer\Tests\Unit\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use Isfett\PhpAnalyzer\DAO\Configuration\Sort;
 use Isfett\PhpAnalyzer\DAO\Configuration\SortField;
+use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Service\SortService;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
+use PhpParser\Node;
 
 /**
  * Class SortServiceTest
@@ -166,5 +168,66 @@ class SortServiceTest extends AbstractNodeTestCase
                 'count' => 5,
             ],
         ], $sortedCollection->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortByNodeValueASC(): void
+    {
+        $sortConfiguration = new Sort(new ArrayCollection([
+            new SortField('value', 'ASC'),
+        ]), 2, 3);
+
+        $nodes = new ArrayCollection([
+            $this->createOccurrence(new Node\Scalar\LNumber(13)),
+            $this->createOccurrence(new Node\Scalar\LNumber(15)),
+            $this->createOccurrence(new Node\Scalar\LNumber(11)),
+            $this->createOccurrence(new Node\Scalar\LNumber(5)),
+            $this->createOccurrence(new Node\Scalar\LNumber(2)),
+            $this->createOccurrence(new Node\Scalar\LNumber(99)),
+            $this->createOccurrence(new Node\Scalar\LNumber(77)),
+        ]);
+
+        $sortedNodes = $this->sortService->sortOccurrenceCollectionByNodeValues($nodes, $sortConfiguration);
+
+        $expectedValues = [5, 11, 13];
+        $this->assertCount(3, $sortedNodes);
+        /** @var Occurrence $occurrence */
+        foreach ($sortedNodes as $key => $occurrence) {
+            $node = $occurrence->getNode();
+            $this->assertEquals($expectedValues[$key], $node->value);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortByNodeValueDESC(): void
+    {
+        $sortConfiguration = new Sort(new ArrayCollection([
+            new SortField('value', 'DESC'),
+        ]), 2, 2);
+
+        $nodes = new ArrayCollection([
+            $this->createOccurrence(new Node\Scalar\LNumber(13)),
+            $this->createOccurrence(new Node\Scalar\LNumber(15)),
+            $this->createOccurrence(new Node\Scalar\LNumber(11)),
+            $this->createOccurrence(new Node\Scalar\LNumber(5)),
+            $this->createOccurrence(new Node\Scalar\LNumber(2)),
+            $this->createOccurrence(new Node\Scalar\LNumber(99)),
+            $this->createOccurrence(new Node\Scalar\LNumber(77)),
+            $this->createOccurrence(new Node\Scalar\LNumber(77)),
+        ]);
+
+        $sortedNodes = $this->sortService->sortOccurrenceCollectionByNodeValues($nodes, $sortConfiguration);
+
+        $expectedValues = [77, 77];
+        $this->assertCount(2, $sortedNodes);
+        /** @var Occurrence $occurrence */
+        foreach ($sortedNodes as $key => $occurrence) {
+            $node = $occurrence->getNode();
+            $this->assertEquals($expectedValues[$key], $node->value);
+        }
     }
 }

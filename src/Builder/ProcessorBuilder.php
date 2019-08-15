@@ -15,6 +15,9 @@ class ProcessorBuilder implements ProcessorBuilderInterface
     /** @var array */
     private $names = [];
 
+    /** @var string */
+    private $prefix = '';
+
     /**
      * @return ArrayCollection<ProcessorInterface>
      */
@@ -23,10 +26,10 @@ class ProcessorBuilder implements ProcessorBuilderInterface
         $visitors = new ArrayCollection();
 
         foreach ($this->names as $name) {
-            $classname = sprintf('Isfett\\PhpAnalyzer\\Node\\Processor\\%sProcessor', $name);
+            $classname = sprintf('Isfett\\PhpAnalyzer\\Node\\Processor\\%s\\%sProcessor', $this->prefix, $name);
 
             if (!class_exists($classname)) {
-                throw new InvalidProcessorNameException($name);
+                throw new InvalidProcessorNameException($name, $this->prefix);
             }
 
             $visitors->add(new $classname());
@@ -47,6 +50,18 @@ class ProcessorBuilder implements ProcessorBuilderInterface
         } else {
             $this->names = explode(',', str_replace(', ', ',', $names));
         }
+
+        return $this;
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return VisitorBuilderInterface
+     */
+    public function setPrefix(string $prefix): ProcessorBuilderInterface
+    {
+        $this->prefix = $prefix;
 
         return $this;
     }
