@@ -24,11 +24,12 @@ This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser
 
 ## Commands
 - [Most Used Conditions](docs/MostUsedConditions.md) This command helps to check which conditions are used the most in your project. Just want to check if's? Or ternaries? No problem! You can also use the command to split by logical operators, or split isset functions for each parameter, including post-processing your conditions, flip-checking, etc. You can find many examples in the linked command documentation.
+- [Magic Number Detector](docs/MagicNumberDetector.md) This command helps to find Magic Numbers in your source code. You can also specify to check only case's inside switch's or default parameter values. You can find many examples in the linked command documentation.
 
 ## Planned
-- Magic Number Detector
 - Magic String Detector
 - Find Duplicate Code (ignoring codestyle, just checking statements)
+- highest cyclomatic complexity
 
 ## Contributing
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.

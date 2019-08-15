@@ -1,3 +1,0 @@
-<?php
-
-$assignment = 26;

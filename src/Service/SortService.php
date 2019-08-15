@@ -73,7 +73,7 @@ class SortService
                 if ('value' === $field) {
                     $result = $valueA <=> $valueB;
                 }
-                if ('DESC' === $sortField->getDirection()) {
+                if (Criteria::DESC === $sortField->getDirection()) {
                     $result *= -1;
                 }
                 if (0 !== $result) {

@@ -238,15 +238,13 @@ class MagicNumberDetectorCommand extends Command
         $sortConfiguration = $this->sortConfigurationBuilder
             ->setMaxResults(null)
             ->setFirstResult(null)
-            ->addSortField('value', 'desc')
+            ->addSortField('value', $this->getSort($input))
             ->getSortConfiguration();
 
         $sortedOccurrences = $this->sortService->sortOccurrenceCollectionByNodeValues(
             $occurrenceList->getOccurrences(),
             $sortConfiguration
         );
-
-        $hideOccurrences = $input->getOption('without-occurrences');
 
         $table = new Table($output);
         $table->setColumnMaxWidth(0, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
@@ -285,13 +283,10 @@ class MagicNumberDetectorCommand extends Command
             $table->addRow([
                 sprintf('%s', $representation),
                 sprintf(
-                    '%s',
-                    $hideOccurrences ? '' : sprintf(
-                        '<href=file://%s>%s:%s</>',
-                        $occurrence->getFile()->getPathname(),
-                        $occurrence->getFile()->getRelativePathname(),
-                        $line
-                    )
+                    '<href=file://%s>%s:%s</>',
+                    $occurrence->getFile()->getPathname(),
+                    $occurrence->getFile()->getRelativePathname(),
+                    $line
                 ),
             ]);
             if ($occurrenceCounter < $occurrenceList->count()) {
@@ -382,61 +377,6 @@ class MagicNumberDetectorCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'sort direction of conditions, desc or asc',
                 'asc'
-            )
-            ->addOption(
-                'max-entries',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'maximum entries'
-            )
-            ->addOption(
-                'max-occurrences',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'maximum occurrences'
-            )
-            ->addOption(
-                'min-occurrences',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'minimum occurrences'
-            )
-            ->addOption(
-                'with-flip-check',
-                null,
-                InputOption::VALUE_NONE,
-                'flip checking conditions'
-            )
-            ->addOption(
-                'without-occurrences',
-                null,
-                InputOption::VALUE_NONE,
-                'hide occurrences'
-            )
-            ->addOption(
-                'without-flags',
-                null,
-                InputOption::VALUE_NONE,
-                'hide flags (like flipped)'
-            )
-            ->addOption(
-                'without-affected-by-processors',
-                null,
-                InputOption::VALUE_NONE,
-                'hide processors who affected a condition'
-            )
-            ->addOption(
-                'with-csv',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'enable csv export to filepath',
-                null
-            )
-            ->addOption(
-                'csv-delimiter-semicolon',
-                null,
-                InputOption::VALUE_NONE,
-                'change the csv delimiter to ;'
             );
     }
 
@@ -527,10 +467,20 @@ class MagicNumberDetectorCommand extends Command
     private function lreplace(string $search, string $replace, string $subject): string
     {
         $pos = strrpos($subject, $search);
-        if (false !== $pos){
+        if (false !== $pos) {
             $subject = substr_replace($subject, $replace, $pos, strlen($search));
         }
 
         return $subject;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return string
+     */
+    private function getSort(InputInterface $input): string
+    {
+        return $input->getOption('sort');
     }
 }
