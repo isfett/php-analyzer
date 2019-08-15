@@ -27,6 +27,7 @@ use Isfett\PhpAnalyzer\Node\VisitorConnector\ParentConnector;
 use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Error;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\ParserFactory;
@@ -263,6 +264,9 @@ class MagicNumberDetectorCommand extends Command
             $isMinus = false;
             if ($parent instanceof UnaryMinus) {
                 $isMinus = true;
+                $parent = $parent->getAttribute('parent');
+            }
+            if ($parent instanceof Arg) {
                 $parent = $parent->getAttribute('parent');
             }
             if ($occurrence->getNode()->getStartLine() !== $occurrence->getNode()->getEndLine()) {

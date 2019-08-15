@@ -2,7 +2,7 @@
 
 This Command help to find Magic Numbers in your code or in specific php language constructs (like just checking switch cases etc.). It can also ignore `1`, `0` and `-1` (if you want to). 
 
-It can also be used on your deploying pipeline and cancel the build if Magic Numbers occur, see [Exit-Code](#exit-code)
+It can also be used on your deploying pipeline and cancel the build if Magic Numbers occur, see [Exit-Code](#exit-code).
 
 ### With this command you can:
 
@@ -84,6 +84,8 @@ The following Visitors are available:
 - `Property`: This Visitor will collect all Magic Numbers in class , here `6`
 - `Return`: This Visitor will collect all Magic Numbers within return statements, here `5` and `15`
 - `SwitchCase`: This Visitor will collect all Magic Numbers in switch cases, here `8`
+
+`php bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --include-files=visitors.php docs/examples/MagicNumberDetector/`
 
 <img src="./images/MagicNumberDetector/demo.png">
 
