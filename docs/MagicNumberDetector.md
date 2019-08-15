@@ -89,7 +89,7 @@ The following Visitors are available:
 
 <img src="./images/MagicNumberDetector/demo.png">
 
-**Important:** This tool uses a php-parser and ignores different code-styles, so it doesn't matter if you are using single-quotes or double-quotes, add different types or amount of whitespaces and so on. The printed representation may be diff from the real source code.
+**Important:** This tool uses a php-parser and ignores different code-styles, so it doesn't matter if you are using single-quotes or double-quotes, add different types or amount of whitespaces and so on. The printed representation may be different from the real source code.
 
 You can combine Visitors, use all or just one with a comma-separated list, like `--visitors=DefaultParamter,Return` or `--visitors=SwitchCase`.
 
