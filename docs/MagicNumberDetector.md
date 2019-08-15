@@ -1,6 +1,6 @@
 # Magic Number Detector
 
-This Command help to find Magic Numbers in your code or in specific php language constructs (like just checking switch cases etc.). It can also ignore `1`, `0` and `-1` (if you want to). 
+This command helps to find Magic Numbers in your code or in specific php language constructs (like just checking switch cases etc.). It can also ignore `1`, `0` and `-1` (if you want to). 
 
 It can also be used on your deploying pipeline and cancel the build if Magic Numbers occur, see [Exit-Code](#exit-code).
 
