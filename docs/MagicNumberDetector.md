@@ -116,7 +116,7 @@ The following Processors are available:
 - `RemoveZero`: This Processor will remove all 0 (int) or 0.00 (float) values. We need them often in built-in php functions
 - `RemoveMinusZero`: This Processor will remove all -1 (int) or -1.00 (float) values. We need them often in built-in php functions
 - `IgnoreDefineFunction`: This Processor will remove all Magic Numbers within the `define()` function
-- `IgnoreForLoop`: This Processor ignore every Magic Number within a for loop head (like $i = 3; $i <= 10; $i++)
+- `IgnoreForLoop`: This Processor ignores every Magic Number within a for loop head (like $i = 3; $i <= 10; $i++)
 
 ## Exit-Code
 If at least one Magic Number was found the exit-code will be `1`. If no Magic Numbers were found, the exit-code will be `0`. So you can use it in your deployment/build script very easy.
