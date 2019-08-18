@@ -120,4 +120,4 @@ The following Processors are available:
 - `IgnoreForLoop`: This Processor ignores every Magic Number within a for loop head (like $i = 3; $i <= 10; $i++)
 
 ## Exit-Code
-If at least one Magic Number was found the exit-code will be `1`. If no Magic Numbers were found, the exit-code will be `0`. So you can use it in your deployment/build script very easy.
+If at least one Magic Number was found the exit-code will be `1`. If no Magic Numbers were found, the exit-code will be `0`. So you can use it in your deployment/build script very easyly.
