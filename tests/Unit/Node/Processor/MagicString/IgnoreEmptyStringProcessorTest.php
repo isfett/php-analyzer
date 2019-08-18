@@ -1,22 +1,19 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicString;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
-use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\IgnoreDefineFunctionProcessor;
+use Isfett\PhpAnalyzer\Node\Processor\MagicString\IgnoreEmptyStringProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 
 /**
- * Class IgnoreDefineFunctionProcessorTest
+ * Class IgnoreEmptyStringProcessorTest
  */
-class IgnoreDefineFunctionProcessorTest extends AbstractNodeTestCase
+class IgnoreEmptyStringProcessorTest extends AbstractNodeTestCase
 {
-    /** @var IgnoreDefineFunctionProcessor */
+    /** @var IgnoreEmptyStringProcessor */
     private $processor;
 
     /**
@@ -26,22 +23,15 @@ class IgnoreDefineFunctionProcessorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->processor = new IgnoreDefineFunctionProcessor();
+        $this->processor = new IgnoreEmptyStringProcessor();
     }
 
     /**
      * @return void
      */
-    public function testProcessWillRemoveOccurrencesForDefineFunctions(): void
+    public function testProcess(): void
     {
-        $node = new LNumber(3, [
-            'parent' => new Arg(
-                new LNumber(3),
-                false,
-                false,
-                ['parent'  => new FuncCall(new Name('define'))]
-            ),
-        ]);
+        $node = new String_('');
 
         $occurrence = $this->createOccurrence($node);
 
@@ -60,16 +50,9 @@ class IgnoreDefineFunctionProcessorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testProcessWillNotRemoveOtherFunctionCalls(): void
+    public function testProcessOnNonEmptyStringWillNotRemoveOccurrence(): void
     {
-        $node = new LNumber(3, [
-            'parent' => new Arg(
-                new LNumber(3),
-                false,
-                false,
-                ['parent'  => new FuncCall(new Name('someotherfunctionname'))]
-            ),
-        ]);
+        $node = new String_('foo');
 
         $occurrence = $this->createOccurrence($node);
 

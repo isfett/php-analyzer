@@ -4,18 +4,17 @@ declare(strict_types = 1);
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicNumber;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
-use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\RemoveOneProcessor;
+use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\IgnoreArrayKeyProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
-use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\LNumber;
 
 /**
- * Class RemoveOneProcessorTest
+ * Class IgnoreArrayKeyProcessorTest
  */
-class RemoveOneProcessorTest extends AbstractNodeTestCase
+class IgnoreArrayKeyProcessorTest extends AbstractNodeTestCase
 {
-    /** @var RemoveOneProcessor */
+    /** @var IgnoreArrayKeyProcessor */
     private $processor;
 
     /**
@@ -25,15 +24,20 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->processor = new RemoveOneProcessor();
+        $this->processor = new IgnoreArrayKeyProcessor();
     }
 
     /**
      * @return void
      */
-    public function testProcessOnInt(): void
+    public function testProcessWillRemoveOccurrencesForArrayKeys(): void
     {
-        $node = new LNumber(1);
+        $node = new LNumber(3);
+        $node->setAttribute('parent', new ArrayItem(
+            new LNumber(36),
+            $node,
+            false
+        ));
 
         $occurrence = $this->createOccurrence($node);
 
@@ -52,30 +56,14 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testProcessOnDecimal(): void
+    public function testProcessWillNotRemoveNullKeys(): void
     {
-        $node = new DNumber(1.00);
-
-        $occurrence = $this->createOccurrence($node);
-
-        $nodeOccurrenceList = new OccurrenceList();
-        $nodeOccurrenceList->addOccurrence($occurrence);
-        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
-
-        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
-        $this->assertEmpty($occurrence->getAffectedByProcessors());
-
-        $this->processor->process($occurrence);
-
-        $this->assertCount(0, $nodeOccurrenceList->getOccurrences());
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessOnIntGreaterOneWillNotRemoveOccurrence(): void
-    {
-        $node = new LNumber(2);
+        $node = new LNumber(36);
+        $node->setAttribute('parent', new ArrayItem(
+            new LNumber(36),
+            null,
+            false
+        ));
 
         $occurrence = $this->createOccurrence($node);
 
@@ -94,30 +82,14 @@ class RemoveOneProcessorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testProcessOnDecimalGreaterOneWillNotRemoveOccurrence(): void
+    public function testProcessWillNotRemoveOtherValues(): void
     {
-        $node = new DNumber(1.05);
-
-        $occurrence = $this->createOccurrence($node);
-
-        $nodeOccurrenceList = new OccurrenceList();
-        $nodeOccurrenceList->addOccurrence($occurrence);
-        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
-
-        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
-        $this->assertEmpty($occurrence->getAffectedByProcessors());
-
-        $this->processor->process($occurrence);
-
-        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessOnMinusValuesWillNotRemoveOccurrence(): void
-    {
-        $node = new LNumber(1, ['parent' => new UnaryMinus(new LNumber(1))]);
+        $node = new LNumber(36);
+        $node->setAttribute('parent', new ArrayItem(
+            new LNumber(36),
+            new LNumber(3),
+            false
+        ));
 
         $occurrence = $this->createOccurrence($node);
 

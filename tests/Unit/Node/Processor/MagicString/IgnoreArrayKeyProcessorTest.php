@@ -1,20 +1,21 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicString;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
-use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\RemoveZeroProcessor;
+use Isfett\PhpAnalyzer\Node\Processor\MagicString\IgnoreArrayKeyProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
-use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 
 /**
- * Class RemoveZeroProcessorTest
+ * Class IgnoreArrayKeyProcessorTest
  */
-class RemoveZeroProcessorTest extends AbstractNodeTestCase
+class IgnoreArrayKeyProcessorTest extends AbstractNodeTestCase
 {
-    /** @var RemoveZeroProcessor */
+    /** @var IgnoreArrayKeyProcessor */
     private $processor;
 
     /**
@@ -24,15 +25,20 @@ class RemoveZeroProcessorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->processor = new RemoveZeroProcessor();
+        $this->processor = new IgnoreArrayKeyProcessor();
     }
 
     /**
      * @return void
      */
-    public function testProcessOnInt(): void
+    public function testProcessWillRemoveOccurrencesForArrayKeys(): void
     {
-        $node = new LNumber(0);
+        $node = new String_('test');
+        $node->setAttribute('parent', new ArrayItem(
+            new String_('test2'),
+            $node,
+            false
+        ));
 
         $occurrence = $this->createOccurrence($node);
 
@@ -51,30 +57,14 @@ class RemoveZeroProcessorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testProcessOnDecimal(): void
+    public function testProcessWillNotRemoveNullKeys(): void
     {
-        $node = new DNumber(0.00);
-
-        $occurrence = $this->createOccurrence($node);
-
-        $nodeOccurrenceList = new OccurrenceList();
-        $nodeOccurrenceList->addOccurrence($occurrence);
-        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
-
-        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
-        $this->assertEmpty($occurrence->getAffectedByProcessors());
-
-        $this->processor->process($occurrence);
-
-        $this->assertCount(0, $nodeOccurrenceList->getOccurrences());
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessOnIntGreaterZeroWillNotRemoveOccurrence(): void
-    {
-        $node = new LNumber(1);
+        $node = new String_('test');
+        $node->setAttribute('parent', new ArrayItem(
+            new String_('test'),
+            null,
+            false
+        ));
 
         $occurrence = $this->createOccurrence($node);
 
@@ -93,9 +83,14 @@ class RemoveZeroProcessorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testProcessOnDecimalGreaterZeroWillNotRemoveOccurrence(): void
+    public function testProcessWillNotRemoveOtherValues(): void
     {
-        $node = new DNumber(0.05);
+        $node = new String_('test');
+        $node->setAttribute('parent', new ArrayItem(
+            new String_('test'),
+            new String_('test2'),
+            false
+        ));
 
         $occurrence = $this->createOccurrence($node);
 

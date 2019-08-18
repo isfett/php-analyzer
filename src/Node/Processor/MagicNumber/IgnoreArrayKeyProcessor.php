@@ -8,9 +8,9 @@ use Isfett\PhpAnalyzer\Node\AbstractProcessor;
 use PhpParser\Node;
 
 /**
- * Class RemoveMinusOneProcessor
+ * Class IgnoreArrayKeyProcessor
  */
-class RemoveMinusOneProcessor extends AbstractProcessor
+class IgnoreArrayKeyProcessor extends AbstractProcessor
 {
     /**
      * @param Occurrence $occurrence
@@ -22,12 +22,11 @@ class RemoveMinusOneProcessor extends AbstractProcessor
         /** @var Node\Scalar\LNumber|Node\Scalar\DNumber $node */
         $node = $occurrence->getNode();
 
-        if ($node->getAttribute('parent') instanceof Node\Expr\UnaryMinus && (
-                1 === $node->value ||
-                1.00 === $node->value
-            )
-        ) {
-            $this->nodeOccurrenceList->removeOccurrence($occurrence);
+        if ($node->getAttribute('parent') instanceof Node\Expr\ArrayItem) {
+            $key = $node->getAttribute('parent')->key;
+            if (null !== $key && $key === $node) {
+                $this->nodeOccurrenceList->removeOccurrence($occurrence);
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ before_install:
 
 script:
   - vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=coverage.xml
-  - bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --processors=RemoveOne,RemoveZero,RemoveMinusOne,IgnoreDefineFunction,IgnoreForLoop --excludes=vendor,var,tests,docs
+  - bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --processors=IgnoreArrayKey,IgnoreOne,IgnoreZero,IgnoreMinusOne,IgnoreDefineFunction,IgnoreForLoop --excludes=vendor,var,tests,docs
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

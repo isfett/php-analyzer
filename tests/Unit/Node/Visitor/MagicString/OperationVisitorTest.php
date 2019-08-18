@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicString;
 
-use Isfett\PhpAnalyzer\Node\Visitor\MagicNumber\OperationVisitor;
+use Isfett\PhpAnalyzer\Node\Visitor\MagicString\OperationVisitor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
-use PhpParser\Node\Expr\BinaryOp\Mul;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Case_;
@@ -42,20 +42,20 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
-                new Mul(
-                    $this->createLNumberNode(1),
-                    $this->createVariableNode('x')
+                new Concat(
+                    $this->createScalarStringNode('test'),
+                    $this->createScalarStringNode('test2')
                 )
             )
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**
@@ -65,12 +65,12 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1337,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
-                new Case_(new LNumber(1337))
+                new Case_(new String_('test'))
             )
         );
         $this->visitor->enterNode($node);
@@ -80,18 +80,18 @@ class OperationVisitorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testEnterNodeWillNotAddNonNumbers(): void
+    public function testEnterNodeWillNotAddNonStrings(): void
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new String_(
-            'foo',
+        $node = new LNumber(
+            1,
             $this->getNodeAttributes(
                 1,
                 1,
-                new Mul(
+                new Concat(
                     $this->createScalarStringNode('foo'),
-                    $this->createScalarStringNode('bar')
+                    $this->createLNumberNode(1)
                 )
             )
         );

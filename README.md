@@ -23,13 +23,13 @@ Each command has its own documentation; you can find those in the 'docs' subfold
 This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser), ignoring different code-style or whitespaces. 
 
 ## Commands
-- [Most Used Conditions](docs/MostUsedConditions.md) This command helps to check which conditions are used the most in your project. Just want to check if's? Or ternaries? No problem! You can also use the command to split by logical operators, or split isset functions for each parameter, including post-processing your conditions, flip-checking, etc. You can find many examples in the linked command documentation.
 - [Magic Number Detector](docs/MagicNumberDetector.md) This command helps to find Magic Numbers in your source code. You can also specify to check only case's inside switch's or default parameter values. You can find many examples in the linked command documentation.
+- [Magic String Detector](docs/MagicStringDetector.md) This command helps to find Magic Strings in your source code. You can find many examples in the linked command documentation.
+- [Most Used Conditions](docs/MostUsedConditions.md) This command helps to check which conditions are used the most in your project. Just want to check if's? Or ternaries? No problem! You can also use the command to split by logical operators, or split isset functions for each parameter, including post-processing your conditions, flip-checking, etc. You can find many examples in the linked command documentation.
 
 ## Planned
-- Magic String Detector
 - Find Duplicate Code (ignoring codestyle, just checking statements)
-- highest cyclomatic complexity
+- Find Classes/Functions with the highest cyclomatic complexity
 
 ## Contributing
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.

@@ -5,7 +5,6 @@ namespace Isfett\PhpAnalyzer\Node;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
-use Isfett\PhpAnalyzer\Node\Representation\Expr\UnaryPlus;
 use Isfett\PhpAnalyzer\Node\Visitor\VisitorInterface;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -68,7 +67,18 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
         if ($node instanceof Node\Expr\UnaryMinus || $node instanceof Node\Expr\UnaryPlus) {
             $node = $node->expr;
         }
+
         return $node instanceof Node\Scalar\LNumber || $node instanceof Node\Scalar\DNumber;
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return bool
+     */
+    protected function isString(Node $node): bool
+    {
+        return $node instanceof Node\Scalar\String_;
     }
 
     /**

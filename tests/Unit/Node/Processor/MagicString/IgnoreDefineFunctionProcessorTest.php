@@ -1,15 +1,15 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicString;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
-use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\IgnoreDefineFunctionProcessor;
+use Isfett\PhpAnalyzer\Node\Processor\MagicString\IgnoreDefineFunctionProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 
 /**
  * Class IgnoreDefineFunctionProcessorTest
@@ -34,9 +34,9 @@ class IgnoreDefineFunctionProcessorTest extends AbstractNodeTestCase
      */
     public function testProcessWillRemoveOccurrencesForDefineFunctions(): void
     {
-        $node = new LNumber(3, [
+        $node = new String_('test', [
             'parent' => new Arg(
-                new LNumber(3),
+                new String_('test'),
                 false,
                 false,
                 ['parent'  => new FuncCall(new Name('define'))]
@@ -62,9 +62,9 @@ class IgnoreDefineFunctionProcessorTest extends AbstractNodeTestCase
      */
     public function testProcessWillNotRemoveOtherFunctionCalls(): void
     {
-        $node = new LNumber(3, [
+        $node = new String_('test', [
             'parent' => new Arg(
-                new LNumber(3),
+                new String_('test'),
                 false,
                 false,
                 ['parent'  => new FuncCall(new Name('someotherfunctionname'))]

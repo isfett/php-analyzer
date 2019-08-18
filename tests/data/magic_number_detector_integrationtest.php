@@ -51,7 +51,7 @@ class MagicNumberTestClass
         return -1;
     }
 
-    public function ignoreValues()
+    public function functionCalls()
     {
         return [
             intval(100),

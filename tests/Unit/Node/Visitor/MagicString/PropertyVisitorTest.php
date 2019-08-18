@@ -1,23 +1,23 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicString;
 
-use Isfett\PhpAnalyzer\Node\Visitor\MagicNumber\OperationVisitor;
+use Isfett\PhpAnalyzer\Node\Visitor\MagicString\PropertyVisitor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
-use PhpParser\Node\Expr\BinaryOp\Mul;
+use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * Class OperationVisitorTest
+ * Class PropertyVisitorTest
  */
-class OperationVisitorTest extends AbstractNodeTestCase
+class PropertyVisitorTest extends AbstractNodeTestCase
 {
-    /** @var OperationVisitor */
+    /** @var PropertyVisitor */
     private $visitor;
 
     /**
@@ -27,7 +27,7 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->visitor = new OperationVisitor();
+        $this->visitor = new PropertyVisitor();
 
         /** @var MockObject|SplFileInfo $file */
         $file = $this->createSplFileInfoMock();
@@ -42,20 +42,19 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
-                new Mul(
-                    $this->createLNumberNode(1),
-                    $this->createVariableNode('x')
+                new PropertyProperty(
+                    $this->createScalarStringNode('test')
                 )
             )
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**
@@ -65,12 +64,15 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1337,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
-                new Case_(new LNumber(1337))
+                new Smaller(
+                    $this->createScalarStringNode('test'),
+                    $this->createScalarStringNode('test2')
+                )
             )
         );
         $this->visitor->enterNode($node);
@@ -80,18 +82,17 @@ class OperationVisitorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testEnterNodeWillNotAddNonNumbers(): void
+    public function testEnterNodeWillNotAddNonStrings(): void
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new String_(
-            'foo',
+        $node = new LNumber(
+            1,
             $this->getNodeAttributes(
                 1,
                 1,
-                new Mul(
-                    $this->createScalarStringNode('foo'),
-                    $this->createScalarStringNode('bar')
+                new PropertyProperty(
+                    $this->createLNumberNode(1)
                 )
             )
         );

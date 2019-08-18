@@ -4,18 +4,18 @@ declare(strict_types = 1);
 namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Processor\MagicNumber;
 
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
-use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\RemoveMinusOneProcessor;
+use Isfett\PhpAnalyzer\Node\Processor\MagicNumber\IgnoreMinusOneProcessor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 
 /**
- * Class RemoveMinusOneProcessorTest
+ * Class IgnoreMinusOneProcessorTest
  */
-class RemoveMinusOneProcessorTest extends AbstractNodeTestCase
+class IgnoreMinusOneProcessorTest extends AbstractNodeTestCase
 {
-    /** @var RemoveMinusOneProcessor */
+    /** @var IgnoreMinusOneProcessor */
     private $processor;
 
     /**
@@ -25,7 +25,7 @@ class RemoveMinusOneProcessorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->processor = new RemoveMinusOneProcessor();
+        $this->processor = new IgnoreMinusOneProcessor();
     }
 
     /**
