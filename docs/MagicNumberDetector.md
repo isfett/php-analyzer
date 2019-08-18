@@ -10,7 +10,7 @@ It can also be used on your deploying pipeline and cancel the build if Magic Num
 - change the suffixes (default is just *.php)
 - exclude directories/files/patterns
 - whitelist patterns (if you just want to check one/some file/s)
-- declare where you want Magic Numbers, for example just default parameters in functions or switch cases, see [Visitors](#visitors))
+- declare where you want to check for Magic Numbers, for example just default parameters in functions or switch cases, see [Visitors](#visitors))
 - post-process Magic Numbers (ignore `-1`,`0` or `1`, ignore define functions or assignments in for loops, see [Processors](#processors))
 
 ### Syntax
@@ -33,7 +33,7 @@ If you omit the directory it will use the current working directory. You can use
 - `--include-files` to include only specific files. This option expects a comma-separated list. The list items could be a regexp, a [glob](https://www.php.net/glob) or string. This is useful if you just want to inspect one to n files, for example `--include-files=test.php`
 - `--suffixes` to change the suffixes of files getting inspected. The default is `php`, but maybe you want to add `phtml`, with: `--suffixes=php,phtml`
 - `--visitors` to choose which Magic Numbers should be considered, see [Visitors](#visitors). The default is `Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase`. If you just want to find Magic Numbers from switch cases, you can use easily `--visitors=SwitchCase`
-- `--processors` to select how to post-process discovered Magic Numbers, see [Processors](#processors). The default is none, i.e. your Magic Numbers will be added in the form they appear in your source-code.
+- `--processors` to select how to post-process discovered Magic Numbers, see [Processors](#processors). The default is none
 - `--sort` to determine the sorting direction. The list is sorted by the value of the Magic Number in the source code. The default sorting direction is `asc`. Change it to descending with `--sort=desc`
 
 ### Visitors
@@ -76,12 +76,12 @@ class MagicNumberTestClass
 
 The following Visitors are available:
 - `Argument`: This Visitor will collect all Magic Numbers inside arguments. In the above example, it would just add `17` once (argument from round)
-- `Array`: This Visitor will collect all Magic Numbers inside arrays. In the above example, it would add `12` once (value from an array). The visitor will also report specific keys like in `$a[1234] = $user` (1234 is a Magic Number here)
+- `Array`: This Visitor will collect all Magic Numbers inside arrays. In the above example, it would add `12` once (value from an array). The visitor will also report specific keys like in `$a[1234] = $user` (1234 is a Magic Number here). The Processor would also add numeric array keys, you can ignore them with the `IgnoreArrayKey-Processor`, see [Processors](#processors) 
 - `Assign`: This Visitor will collect all Magic Numbers from assignments, here `26` 
 - `Condition`: This Visitor will collect all Magic Numbers within conditions, here `0` (0 === $input) and `2` ($input > 2)
-- `DefaultParameter`: This Visitor will collect all Magic Numbers from default parameters, here `4`
+- `DefaultParameter`: This Visitor will collect all Magic Numbers from default parameters, here `4` (public function test($input = 4))
 - `Operation`: This Visitor will collect all Magic Numbers within arithmetical operations. For example from `$seconds = 60*60*24` it will collect two times `60` and one time `24`
-- `Property`: This Visitor will collect all Magic Numbers in class , here `6`
+- `Property`: This Visitor will collect all Magic Numbers in class-member-variables, here `6`
 - `Return`: This Visitor will collect all Magic Numbers within return statements, here `5` and `15`
 - `SwitchCase`: This Visitor will collect all Magic Numbers in switch cases, here `8`
 
@@ -101,7 +101,7 @@ If you mistype the name of a Visitor, you will raise an Exception which will lis
 
 ### Processors
 
-You can combine Processors. Just add them to a comma-seperated list, like <br>`--processors=RemoveZero,RemoveOne,RemoveMinusOne`. The order of Processors is important. Using the provided example, processing would start with the SplitIsset and then execute SplitLogicalOperator. Your results might change if you change the order of the Processors.
+You can combine Processors. Just add them to a comma-seperated list, like <br>`--processors=IgnoreZero,IgnoreOne,IgnoreMinusOne`.
 
 You also can use none of the Processors (default).
 
@@ -112,9 +112,10 @@ If you mistype the name of a Processor, you will raise an Exception which will l
 (example from the [Most Used Conditions Command](/docs/MostUsedConditions.md), but will be the same with the Processors of this command)
 
 The following Processors are available:
-- `RemoveOne`: This Processor will remove all 1 (int) or 1.00 (float) values. We need them often in built-in php functions
-- `RemoveZero`: This Processor will remove all 0 (int) or 0.00 (float) values. We need them often in built-in php functions
-- `RemoveMinusZero`: This Processor will remove all -1 (int) or -1.00 (float) values. We need them often in built-in php functions
+- `IgnoreOne`: This Processor will remove all 1 (int) or 1.00 (float) values. We need them often in built-in php functions
+- `IgnoreZero`: This Processor will remove all 0 (int) or 0.00 (float) values. We need them often in built-in php functions
+- `IgnoreMinusOne`: This Processor will remove all -1 (int) or -1.00 (float) values. We need them often in built-in php functions
+- `IgnoreArrayKey`: This Processor ignores every Magic Number when it's the key in an array (like $arr = [5 => 2], the 5 will be ignored)
 - `IgnoreDefineFunction`: This Processor will remove all Magic Numbers within the `define()` function
 - `IgnoreForLoop`: This Processor ignores every Magic Number within a for loop head (like $i = 3; $i <= 10; $i++)
 

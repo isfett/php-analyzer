@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends BaseApplication
 {
     /** @var string */
-    private const APPLICATION_VERSION = '1.1.0';
+    private const APPLICATION_VERSION = '1.2.0';
 
     /** @var string */
     private const APPLICATION_NAME = 'php-analyzer';

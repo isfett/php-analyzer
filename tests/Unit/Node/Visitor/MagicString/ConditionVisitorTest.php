@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicString;
 
-use Isfett\PhpAnalyzer\Node\Visitor\MagicNumber\OperationVisitor;
+use Isfett\PhpAnalyzer\Node\Visitor\MagicString\ConditionVisitor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
-use PhpParser\Node\Expr\BinaryOp\Mul;
+use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Case_;
@@ -13,11 +14,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * Class OperationVisitorTest
+ * Class ConditionVisitorTest
  */
-class OperationVisitorTest extends AbstractNodeTestCase
+class ConditionVisitorTest extends AbstractNodeTestCase
 {
-    /** @var OperationVisitor */
+    /** @var ConditionVisitor */
     private $visitor;
 
     /**
@@ -27,7 +28,7 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         parent::setUp();
 
-        $this->visitor = new OperationVisitor();
+        $this->visitor = new ConditionVisitor();
 
         /** @var MockObject|SplFileInfo $file */
         $file = $this->createSplFileInfoMock();
@@ -42,20 +43,20 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
-                new Mul(
-                    $this->createLNumberNode(1),
-                    $this->createVariableNode('x')
+                new SmallerOrEqual(
+                    $this->createScalarStringNode('test'),
+                    $this->createScalarStringNode('test2')
                 )
             )
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**
@@ -65,12 +66,12 @@ class OperationVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1337,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
-                new Case_(new LNumber(1337))
+                new Case_(new String_('test'))
             )
         );
         $this->visitor->enterNode($node);
@@ -80,18 +81,38 @@ class OperationVisitorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testEnterNodeWillNotAddNonNumbers(): void
+    public function testEnterNodeWillNotAddNonStrings(): void
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new String_(
-            'foo',
+        $node = new LNumber(
+            1,
             $this->getNodeAttributes(
                 1,
                 1,
-                new Mul(
-                    $this->createScalarStringNode('foo'),
-                    $this->createScalarStringNode('bar')
+                new SmallerOrEqual(
+                    $this->createLNumberNode(1),
+                    $this->createLNumberNode(2)
+                )
+            )
+        );
+        $this->visitor->enterNode($node);
+        $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
+    }
+
+    /**
+     * @return void
+     */
+    public function testEnterNodeWillNotAddNodesWhenComparingAgainstPhpDefinedConstants(): void
+    {
+        $node = new String_(
+            'test',
+            $this->getNodeAttributes(
+                1,
+                1,
+                new SmallerOrEqual(
+                    $this->createScalarStringNode('test'),
+                    new ConstFetch($this->createNameNode('PHP_EXTRA_VERSION'))
                 )
             )
         );

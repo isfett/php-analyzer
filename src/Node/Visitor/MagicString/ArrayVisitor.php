@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Node\Visitor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Node\Visitor\MagicString;
 
 use Isfett\PhpAnalyzer\Node\AbstractVisitor;
 use PhpParser\Node;
@@ -18,7 +18,7 @@ class ArrayVisitor extends AbstractVisitor
      */
     public function enterNode(Node $node): ?int
     {
-        if ($this->isNumber($node) && $this->isArray($node)) {
+        if ($this->isString($node) && $this->isArray($node)) {
             $this->addNodeOccurrence($node);
         }
 
@@ -34,10 +34,6 @@ class ArrayVisitor extends AbstractVisitor
     {
         /** @var Node $parent */
         $parentNode = $node->getAttribute('parent');
-
-        if ($parentNode instanceof Node\Scalar\LNumber || $parentNode instanceof Node\Scalar\DNumber) {
-            $parentNode = $parentNode->getAttribute('parent');
-        }
 
         return $parentNode instanceof Node\Expr\ArrayDimFetch || $parentNode instanceof Node\Expr\ArrayItem;
     }

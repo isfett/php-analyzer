@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicNumber;
+namespace Isfett\PhpAnalyzer\Tests\Unit\Node\Visitor\MagicString;
 
-use Isfett\PhpAnalyzer\Node\Visitor\MagicNumber\ArrayVisitor;
+use Isfett\PhpAnalyzer\Node\Visitor\MagicString\ArrayVisitor;
 use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
@@ -44,20 +44,20 @@ class ArrayVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1337,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
                 new ArrayDimFetch(
-                    $this->createVariableNode('x'),
-                    $this->createLNumberNode(1337)
+                    $this->createLNumberNode(1),
+                    $this->createVariableNode('test')
                 )
             )
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1337, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**
@@ -67,43 +67,43 @@ class ArrayVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1337,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
                 new ArrayItem(
-                    $this->createLNumberNode(1337),
+                    $this->createScalarStringNode('test'),
                     null
                 )
             )
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1337, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**
      * @return void
      */
-    public function testEnterNodeArrayItemWithStringArrayKey(): void
+    public function testEnterNodeArrayItemWithNumberArrayKey(): void
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1337,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
                 new ArrayItem(
-                    $this->createLNumberNode(1337),
-                    $this->createScalarStringNode('foo')
+                    $this->createScalarStringNode('test'),
+                    $this->createLNumberNode(1)
                 )
             )
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1337, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**
@@ -113,46 +113,20 @@ class ArrayVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1337,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
                 new ArrayItem(
-                    $this->createLNumberNode(1337),
+                    $this->createScalarStringNode('test'),
                     $this->createLNumberNode(1)
                 )
             )
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1337, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEnterNodeUnaryMinusArrayItemWithIntegerArrayKey(): void
-    {
-        $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-
-        $node = new UnaryMinus(
-            new LNumber(1337),
-            $this->getNodeAttributes(1, 1, new LNumber(
-                1337,
-                $this->getNodeAttributes(
-                    1,
-                    1,
-                    new ArrayItem(
-                        new UnaryMinus($this->createLNumberNode(1337)),
-                        $this->createLNumberNode(1)
-                    )
-                )
-            ))
-        );
-        $this->visitor->enterNode($node);
-        $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals(1337, $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**
@@ -162,14 +136,14 @@ class ArrayVisitorTest extends AbstractNodeTestCase
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new LNumber(
-            1,
+        $node = new String_(
+            'test',
             $this->getNodeAttributes(
                 1,
                 1,
                 new Smaller(
-                    $this->createLNumberNode(1),
-                    $this->createLNumberNode(2)
+                    $this->createScalarStringNode('test'),
+                    $this->createScalarStringNode('test2')
                 )
             )
         );
@@ -180,17 +154,17 @@ class ArrayVisitorTest extends AbstractNodeTestCase
     /**
      * @return void
      */
-    public function testEnterNodeWillNotAddNonNumbers(): void
+    public function testEnterNodeWillNotAddNonStrings(): void
     {
         $this->assertCount(0, $this->visitor->getNodeOccurrenceList()->getOccurrences());
 
-        $node = new String_(
-            'foo',
+        $node = new LNumber(
+            1,
             $this->getNodeAttributes(
                 1,
                 1,
                 new ArrayItem(
-                    $this->createScalarStringNode('foo'),
+                    $this->createLNumberNode(1),
                     null
                 )
             )

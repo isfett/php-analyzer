@@ -53,8 +53,8 @@ class SortService
             $nodeA = $occurrenceA->getNode();
             $nodeB = $occurrenceB->getNode();
 
-            $valueA = $nodeA->value;
-            $valueB = $nodeB->value;
+            $valueA = strtolower((string) $nodeA->value);
+            $valueB = strtolower((string) $nodeB->value);
 
             if ($nodeA->hasAttribute('parent') && $nodeA->getAttribute('parent') instanceof Node\Expr\UnaryMinus) {
                 $valueA *= -1;
@@ -69,7 +69,7 @@ class SortService
             /** @var SortField $sortField */
             foreach ($sortConfiguration->getFields() as $sortField) {
                 $field = $sortField->getField();
-                $result = $nodeA->$field <=> $nodeB->$field;
+                $result = strtolower((string) $nodeA->$field) <=> strtolower((string) $nodeB->$field);
                 if ('value' === $field) {
                     $result = $valueA <=> $valueB;
                 }

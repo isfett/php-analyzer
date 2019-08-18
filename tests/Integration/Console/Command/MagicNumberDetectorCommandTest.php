@@ -60,7 +60,7 @@ class MagicNumberDetectorCommandTest extends TestCase
             'directory' => __DIR__ . '/../../../../tests/data',
             '--include-files' => 'magic_number_detector_integrationtest.php',
             '--visitors' => 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase',
-            '--processors' => 'RemoveOne,RemoveZero,IgnoreDefineFunction,IgnoreForLoop',
+            '--processors' => 'IgnoreArrayKey,IgnoreOne,IgnoreZero,IgnoreDefineFunction,IgnoreForLoop',
 
         ], $this->magicNumberDetectorCommand->getDefinition());
 
@@ -134,7 +134,7 @@ EOT;
             'directory' => __DIR__ . '/../../../../tests/data',
             '--include-files' => 'empty.php',
             '--visitors' => 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase',
-            '--processors' => 'RemoveOne,RemoveZero,IgnoreDefineFunction,IgnoreForLoop',
+            '--processors' => 'IgnoreArrayKey,IgnoreOne,IgnoreZero,IgnoreDefineFunction,IgnoreForLoop',
 
         ], $this->magicNumberDetectorCommand->getDefinition());
 
