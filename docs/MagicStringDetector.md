@@ -119,4 +119,4 @@ The following Processors are available:
 - `IgnoreDefineFunction`: This Processor will remove all Magic Strings within the `define()` function
 
 ## Exit-Code
-If at least one Magic String was found the exit-code will be `1`. If no Magic Strings were found, the exit-code will be `0`. So you can use it in your deployment/build script very easy.
+If at least one Magic String was found the exit-code will be `1`. If no Magic Strings were found, the exit-code will be `0`. So you can use it in your deployment/build script very easily.
