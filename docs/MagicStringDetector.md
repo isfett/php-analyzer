@@ -105,7 +105,7 @@ If you mistype the name of a Visitor, you will raise an Exception which will lis
 
 You can combine Processors. Just add them to a comma-seperated list, like <br>`--processors=IgnoreEmptyString,IgnoreDefineFunction`.
 
-You also can use none of the Processors (default).
+You can also use none of the Processors (default).
 
 If you mistype the name of a Processor, you will raise an Exception which will list all possible names. Processor names are case-sensitive.
 
@@ -119,4 +119,4 @@ The following Processors are available:
 - `IgnoreDefineFunction`: This Processor will remove all Magic Strings within the `define()` function
 
 ## Exit-Code
-If at least one Magic String was found the exit-code will be `1`. If no Magic Strings were found, the exit-code will be `0`. So you can use it in your deployment/build script very easy.
+If at least one Magic String was found the exit-code will be `1`. If no Magic Strings were found, the exit-code will be `0`. So you can use it in your deployment/build script very easily.
