@@ -105,7 +105,7 @@ If you mistype the name of a Visitor, you will raise an Exception which will lis
 
 You can combine Processors. Just add them to a comma-seperated list, like <br>`--processors=IgnoreEmptyString,IgnoreDefineFunction`.
 
-You also can use none of the Processors (default).
+You can also use none of the Processors (default).
 
 If you mistype the name of a Processor, you will raise an Exception which will list all possible names. Processor names are case-sensitive.
 
