@@ -78,61 +78,53 @@ class MostUsedConditionsCommandTest extends TestCase
         );
 
         $expectedOutput = <<<EOT
-+------------------------------------------------------------------------------------------------------+-------+
-| Condition                                                                                            | Count |
-+------------------------------------------------------------------------------------------------------+-------+
-| <focus>\$_GET['page']</focus>                                                                         | 1     |
-| most_used_conditions_integrationtest.php:23 <flag></flag><special-info></special-info>               |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>\$i > 3</focus>                                                                                | 1     |
-| most_used_conditions_integrationtest.php:13 <flag></flag><special-info>(NegateBooleanNot)</special-i |       |
-| nfo>                                                                                                 |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>\$i >= 13</focus>                                                                              | 1     |
-| most_used_conditions_integrationtest.php:15 <flag></flag><special-info>(NegateBooleanNot)</special-i |       |
-| nfo>                                                                                                 |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>\$someVar</focus>                                                                              | 1     |
-| most_used_conditions_integrationtest.php:11 <flag></flag><special-info>(RemoveCast)</special-info>   |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>\$someVar !== 0</focus>                                                                        | 1     |
-| most_used_conditions_integrationtest.php:11 <flag></flag><special-info>(RemoveCast)</special-info>   |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>\$this->getUser()</focus>                                                                      | 1     |
-| most_used_conditions_integrationtest.php:9 <flag></flag><special-info>(RemoveAssignment)</special-in |       |
-| fo>                                                                                                  |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>\$x === \$y</focus>                                                                             | 1     |
-| most_used_conditions_integrationtest.php:27-28 <flag></flag><special-info></special-info>            |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>30 !== date('d')</focus>                                                                      | 1     |
-| most_used_conditions_integrationtest.php:17 <flag></flag><special-info>(SplitLogicalOperator, Negate |       |
-| BooleanNot)</special-info>                                                                           |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>isset(\$_GET['page'])</focus>                                                                  | 1     |
-| most_used_conditions_integrationtest.php:21 <flag></flag><special-info></special-info>               |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>isset(\$_SESSION['user'])</focus>                                                              | 1     |
-| most_used_conditions_integrationtest.php:3 <flag></flag><special-info>(SplitIsset)</special-info>    |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>isset(\$_SESSION['user']['id'])</focus>                                                        | 1     |
-| most_used_conditions_integrationtest.php:3 <flag></flag><special-info>(SplitIsset)</special-info>    |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>strtolower('Chris') === 'chris'</focus>                                                       | 1     |
-| most_used_conditions_integrationtest.php:19 <flag></flag><special-info>(RemoveSingleFullyQualifiedNa |       |
-| me)</special-info>                                                                                   |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>3771 === 1337</focus>                                                                         | 2     |
-| most_used_conditions_integrationtest.php:7 <flag></flag><special-info></special-info>                |       |
-| most_used_conditions_integrationtest.php:5 <flag>(flipped) </flag><special-info>(SplitLogicalOperato |       |
-| r, NegateBooleanNot)</special-info>                                                                  |       |
-|------------------------------------------------------------------------------------------------------|-------|
-| <focus>null === \$user</focus>                                                                        | 2     |
-| most_used_conditions_integrationtest.php:5 <flag></flag><special-info>(SplitLogicalOperator, NegateB |       |
-| ooleanNot)</special-info>                                                                            |       |
-| most_used_conditions_integrationtest.php:17 <flag></flag><special-info>(SplitLogicalOperator, Remove |       |
-| DuplicateBooleanNot)</special-info>                                                                  |       |
-+------------------------------------------------------------------------------------------------------+-------+
++-----------------------------------------------------------------------------------------------------------------------------------------+-------+
+| Condition                                                                                                                               | Count |
++-----------------------------------------------------------------------------------------------------------------------------------------+-------+
+| <focus>\$_GET['page']</focus>                                                                                                            | 1     |
+| most_used_conditions_integrationtest.php:23 <flag></flag><special-info></special-info>                                                  |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>\$i > 3</focus>                                                                                                                   | 1     |
+| most_used_conditions_integrationtest.php:13 <flag></flag><special-info>(NegateBooleanNot)</special-info>                                |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>\$i >= 13</focus>                                                                                                                 | 1     |
+| most_used_conditions_integrationtest.php:15 <flag></flag><special-info>(NegateBooleanNot)</special-info>                                |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>\$someVar</focus>                                                                                                                 | 1     |
+| most_used_conditions_integrationtest.php:11 <flag></flag><special-info>(RemoveCast)</special-info>                                      |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>\$someVar !== 0</focus>                                                                                                           | 1     |
+| most_used_conditions_integrationtest.php:11 <flag></flag><special-info>(RemoveCast)</special-info>                                      |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>\$this->getUser()</focus>                                                                                                         | 1     |
+| most_used_conditions_integrationtest.php:9 <flag></flag><special-info>(RemoveAssignment)</special-info>                                 |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>\$x === \$y</focus>                                                                                                                | 1     |
+| most_used_conditions_integrationtest.php:27-28 <flag></flag><special-info></special-info>                                               |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>30 !== date('d')</focus>                                                                                                         | 1     |
+| most_used_conditions_integrationtest.php:17 <flag></flag><special-info>(SplitLogicalOperator, NegateBooleanNot)</special-info>          |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>isset(\$_GET['page'])</focus>                                                                                                     | 1     |
+| most_used_conditions_integrationtest.php:21 <flag></flag><special-info></special-info>                                                  |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>isset(\$_SESSION['user'])</focus>                                                                                                 | 1     |
+| most_used_conditions_integrationtest.php:3 <flag></flag><special-info>(SplitIsset)</special-info>                                       |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>isset(\$_SESSION['user']['id'])</focus>                                                                                           | 1     |
+| most_used_conditions_integrationtest.php:3 <flag></flag><special-info>(SplitIsset)</special-info>                                       |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>strtolower('Chris') === 'chris'</focus>                                                                                          | 1     |
+| most_used_conditions_integrationtest.php:19 <flag></flag><special-info>(RemoveSingleFullyQualifiedName)</special-info>                  |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>3771 === 1337</focus>                                                                                                            | 2     |
+| most_used_conditions_integrationtest.php:7 <flag></flag><special-info></special-info>                                                   |       |
+| most_used_conditions_integrationtest.php:5 <flag>(flipped) </flag><special-info>(SplitLogicalOperator, NegateBooleanNot)</special-info> |       |
+|-----------------------------------------------------------------------------------------------------------------------------------------|-------|
+| <focus>null === \$user</focus>                                                                                                           | 2     |
+| most_used_conditions_integrationtest.php:5 <flag></flag><special-info>(SplitLogicalOperator, NegateBooleanNot)</special-info>           |       |
+| most_used_conditions_integrationtest.php:17 <flag></flag><special-info>(SplitLogicalOperator, RemoveDuplicateBooleanNot)</special-info> |       |
++-----------------------------------------------------------------------------------------------------------------------------------------+-------+
 EOT;
         $this->assertStringContainsString($expectedOutput, $outputText);
     }

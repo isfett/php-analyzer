@@ -9,6 +9,7 @@ use Isfett\PhpAnalyzer\Builder\ProcessorBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilder;
 use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\VisitorBuilderInterface;
+use Isfett\PhpAnalyzer\Console\AbstractCommand;
 use Isfett\PhpAnalyzer\Console\Application;
 use Isfett\PhpAnalyzer\DAO\Condition;
 use Isfett\PhpAnalyzer\DAO\ConditionList;
@@ -26,7 +27,6 @@ use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Error;
 use PhpParser\ParserFactory;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -42,7 +42,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Class MostUsedConditionsCommand
  */
-class MostUsedConditionsCommand extends Command
+class MostUsedConditionsCommand extends AbstractCommand
 {
     /** @var string */
     private const NAME = 'most-used-conditions';
@@ -158,9 +158,8 @@ class MostUsedConditionsCommand extends Command
         $traverserProgressBar = $this->createProgressBar(
             $output,
             'customBar',
-            Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+            count($files)
         );
-        $traverserProgressBar->setMaxSteps(count($files));
 
         foreach ($files as $file) {
             try {
@@ -212,15 +211,13 @@ class MostUsedConditionsCommand extends Command
                 Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
             );
 
-            foreach ($processorsProgressBar->iterate(
-                $this->processorRunner->process($occurrenceList),
-                count($processors)
-            ) as $processorsDone) {
+            foreach($this->processorRunner->process($occurrenceList) as $processorsDone) {
                 $processorsProgressBar->setMessage(sprintf(
                     'Processor %d is processing conditions. Condition count: %d',
                     $processorsDone,
                     count($occurrenceList->getOccurrences())
                 ));
+                $processorsProgressBar->advance();
             }
 
             $processorsProgressBar->setMessage(sprintf(
@@ -347,7 +344,7 @@ class MostUsedConditionsCommand extends Command
         $csvExportData = [];
 
         $table = new Table($output);
-        $table->setColumnMaxWidth(0, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
+        $table->setColumnWidth(0, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
         $table->setHeaders([
             'Condition',
             'Count',
@@ -374,7 +371,7 @@ class MostUsedConditionsCommand extends Command
                     if (null !== $maximumOccurrences && $counter > $maximumOccurrences) {
                         break;
                     }
-                    $line = $occurrence->getNode()->getStartLine();
+                    $line = (string) $occurrence->getNode()->getStartLine();
                     if ($occurrence->getNode()->getStartLine() !== $occurrence->getNode()->getEndLine()) {
                         $line .= sprintf('-%s', $occurrence->getNode()->getEndLine());
                     }
@@ -390,12 +387,7 @@ class MostUsedConditionsCommand extends Command
                     $table->addRow([
                         sprintf(
                             '%s <flag>%s</flag><special-info>%s</special-info>',
-                            sprintf(
-                                '<href=file://%s>%s:%s</>',
-                                $occurrence->getFile()->getPathname(),
-                                $occurrence->getFile()->getRelativePathname(),
-                                $line
-                            ),
+                            $this->getFileLink($occurrence, $line),
                             $showFlags ? '(' . implode(', ', $flags) . ') ' : '',
                             $showAffectedByProcessors ? '(' . implode(', ', $affectedByProcessors) . ')' : ''
                         ),
@@ -651,10 +643,11 @@ class MostUsedConditionsCommand extends Command
         $progressBar->setMessage('Looking for files');
 
         /** @var SplFileInfo $file */
-        foreach ($progressBar->iterate($finder->getIterator()) as $file) {
+        foreach ($finder->getIterator() as $file) {
             $files[] = $file;
             $progressBar->setMessage(sprintf('(%s)', $file->getRelativePathname()), 'filename');
             $progressBar->setMessage(sprintf('Looking for files. File count: %d', count($files)));
+            $progressBar->advance();
         }
 
         return $files;

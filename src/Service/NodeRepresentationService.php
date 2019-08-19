@@ -86,7 +86,7 @@ class NodeRepresentationService
     {
         $classnameWithNamespaces = explode('\\', $originalClassname);
 
-        unset($classnameWithNamespaces[array_key_last($classnameWithNamespaces)]);
+        array_pop($classnameWithNamespaces);
 
         return implode('\\', $classnameWithNamespaces);
     }

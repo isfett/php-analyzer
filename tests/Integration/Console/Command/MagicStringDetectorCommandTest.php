@@ -76,39 +76,39 @@ class MagicStringDetectorCommandTest extends TestCase
         );
 
         $expectedOutput = <<<EOT
-+------------------------------------+----------------------------------------------+
-| String                             | Occurrence                                   |
-+------------------------------------+----------------------------------------------+
-| return <focus>''</focus>           | magic_string_detector_integrationtest.php:20 |
-|------------------------------------|----------------------------------------------|
-| strval(<focus>'10'</focus>)        | magic_string_detector_integrationtest.php:49 |
-|------------------------------------|----------------------------------------------|
-| 'de'.<focus>'_'</focus>            | magic_string_detector_integrationtest.php:38 |
-|------------------------------------|----------------------------------------------|
-| \$input.<focus>'additional'</focus> | magic_string_detector_integrationtest.php:35 |
-|------------------------------------|----------------------------------------------|
-| \$variable = <focus>'bar'</focus>   | magic_string_detector_integrationtest.php:11 |
-|------------------------------------|----------------------------------------------|
-| \$input !== <focus>'c++'</focus>    | magic_string_detector_integrationtest.php:32 |
-|------------------------------------|----------------------------------------------|
-| <focus>'de'</focus>.'_'            | magic_string_detector_integrationtest.php:38 |
-|------------------------------------|----------------------------------------------|
-| 'de'.'_'.<focus>'DE'</focus>       | magic_string_detector_integrationtest.php:38 |
-|------------------------------------|----------------------------------------------|
-| \$variable = <focus>'foo'</focus>   | magic_string_detector_integrationtest.php:5  |
-|------------------------------------|----------------------------------------------|
-| case <focus>'java'</focus>:        | magic_string_detector_integrationtest.php:19 |
-|------------------------------------|----------------------------------------------|
-| 'name' => <focus>'Name'</focus>    | magic_string_detector_integrationtest.php:24 |
-|------------------------------------|----------------------------------------------|
-| \$input === <focus>'php'</focus>    | magic_string_detector_integrationtest.php:14 |
-|------------------------------------|----------------------------------------------|
-| \$input = <focus>'php'</focus>      | magic_string_detector_integrationtest.php:13 |
-|------------------------------------|----------------------------------------------|
-| return <focus>'php'</focus>        | magic_string_detector_integrationtest.php:15 |
-|------------------------------------|----------------------------------------------|
-| return <focus>'string'</focus>     | magic_string_detector_integrationtest.php:41 |
-+------------------------------------+----------------------------------------------+
++--------------------------------------------------------------+----------------------------------------------+
+| String                                                       | Occurrence                                   |
++--------------------------------------------------------------+----------------------------------------------+
+| return <focus>''</focus>                                     | magic_string_detector_integrationtest.php:20 |
+|--------------------------------------------------------------|----------------------------------------------|
+| strval(<focus>'10'</focus>)                                  | magic_string_detector_integrationtest.php:49 |
+|--------------------------------------------------------------|----------------------------------------------|
+| 'de'.<focus>'_'</focus>                                      | magic_string_detector_integrationtest.php:38 |
+|--------------------------------------------------------------|----------------------------------------------|
+| \$input.<focus>'additional'</focus>                           | magic_string_detector_integrationtest.php:35 |
+|--------------------------------------------------------------|----------------------------------------------|
+| \$variable = <focus>'bar'</focus>                             | magic_string_detector_integrationtest.php:11 |
+|--------------------------------------------------------------|----------------------------------------------|
+| \$input !== <focus>'c++'</focus>                              | magic_string_detector_integrationtest.php:32 |
+|--------------------------------------------------------------|----------------------------------------------|
+| <focus>'de'</focus>.'_'                                      | magic_string_detector_integrationtest.php:38 |
+|--------------------------------------------------------------|----------------------------------------------|
+| 'de'.'_'.<focus>'DE'</focus>                                 | magic_string_detector_integrationtest.php:38 |
+|--------------------------------------------------------------|----------------------------------------------|
+| \$variable = <focus>'foo'</focus>                             | magic_string_detector_integrationtest.php:5  |
+|--------------------------------------------------------------|----------------------------------------------|
+| case <focus>'java'</focus>:                                  | magic_string_detector_integrationtest.php:19 |
+|--------------------------------------------------------------|----------------------------------------------|
+| 'name' => <focus>'Name'</focus>                              | magic_string_detector_integrationtest.php:24 |
+|--------------------------------------------------------------|----------------------------------------------|
+| \$input === <focus>'php'</focus>                              | magic_string_detector_integrationtest.php:14 |
+|--------------------------------------------------------------|----------------------------------------------|
+| \$input = <focus>'php'</focus>                                | magic_string_detector_integrationtest.php:13 |
+|--------------------------------------------------------------|----------------------------------------------|
+| return <focus>'php'</focus>                                  | magic_string_detector_integrationtest.php:15 |
+|--------------------------------------------------------------|----------------------------------------------|
+| return <focus>'string'</focus>                               | magic_string_detector_integrationtest.php:41 |
++--------------------------------------------------------------+----------------------------------------------+
 EOT;
         $this->assertStringContainsString($expectedOutput, $outputText);
     }

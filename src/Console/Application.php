@@ -30,7 +30,8 @@ class Application extends BaseApplication
     /** @var int */
     public const EXIT_CODE_FAILURE = 1;
 
-    public const CONSOLE_TABLE_DEFAULT_MAX_WIDTH = 100;
+    /** @var int */
+    public const CONSOLE_TABLE_DEFAULT_MAX_WIDTH = 60;
 
     /**
      * Application constructor.

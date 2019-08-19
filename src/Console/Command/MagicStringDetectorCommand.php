@@ -3,19 +3,13 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Console\Command;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Isfett\PhpAnalyzer\Builder\ConditionListBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\FinderBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\ProcessorBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilder;
 use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\VisitorBuilderInterface;
+use Isfett\PhpAnalyzer\Console\AbstractCommand;
 use Isfett\PhpAnalyzer\Console\Application;
-use Isfett\PhpAnalyzer\DAO\Condition;
-use Isfett\PhpAnalyzer\DAO\ConditionList;
-use Isfett\PhpAnalyzer\DAO\CountedCondition;
-use Isfett\PhpAnalyzer\Node\ConditionList\Countable;
-use Isfett\PhpAnalyzer\Node\ConditionList\FlipChecking;
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Finder\Finder;
@@ -29,9 +23,7 @@ use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Error;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\ParserFactory;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -41,13 +33,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Serializer\Encoder\CsvEncoder;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class MagicStringDetectorCommand
  */
-class MagicStringDetectorCommand extends Command
+class MagicStringDetectorCommand extends AbstractCommand
 {
     /** @var string */
     private const NAME = 'magic-string-detector';
@@ -160,9 +150,8 @@ class MagicStringDetectorCommand extends Command
         $traverserProgressBar = $this->createProgressBar(
             $output,
             'customBar',
-            Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+            count($files)
         );
-        $traverserProgressBar->setMaxSteps(count($files));
 
         foreach ($files as $file) {
             try {
@@ -214,15 +203,13 @@ class MagicStringDetectorCommand extends Command
                 Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
             );
 
-            foreach ($processorsProgressBar->iterate(
-                $this->processorRunner->process($occurrenceList),
-                count($processors)
-            ) as $processorsDone) {
+            foreach($this->processorRunner->process($occurrenceList) as $processorsDone) {
                 $processorsProgressBar->setMessage(sprintf(
                     'Processor %d is processing magic strings. Magic strings found: %d',
                     $processorsDone,
                     count($occurrenceList->getOccurrences())
                 ));
+                $processorsProgressBar->advance();
             }
 
             $processorsProgressBar->setMessage(sprintf(
@@ -248,7 +235,7 @@ class MagicStringDetectorCommand extends Command
         );
 
         $table = new Table($output);
-        $table->setColumnMaxWidth(0, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
+        $table->setColumnWidth(0, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
         $table->setHeaders([
             'String',
             'Occurrence',
@@ -258,14 +245,10 @@ class MagicStringDetectorCommand extends Command
         /** @var Occurrence $occurrence */
         foreach ($sortedOccurrences as $occurrence) {
             $occurrenceCounter++;
-            $line = $occurrence->getNode()->getStartLine();
+            $line = (string) $occurrence->getNode()->getStartLine();
             $node = $occurrence->getNode();
             $parent = $node->getAttribute('parent');
             $isMinus = false;
-            if ($parent instanceof UnaryMinus) {
-                $isMinus = true;
-                $parent = $parent->getAttribute('parent');
-            }
             if ($parent instanceof Arg) {
                 $parent = $parent->getAttribute('parent');
             }
@@ -286,12 +269,7 @@ class MagicStringDetectorCommand extends Command
             );
             $table->addRow([
                 sprintf('%s', $representation),
-                sprintf(
-                    '<href=file://%s>%s:%s</>',
-                    $occurrence->getFile()->getPathname(),
-                    $occurrence->getFile()->getRelativePathname(),
-                    $line
-                ),
+                $this->getFileLink($occurrence, $line),
             ]);
             if ($occurrenceCounter < $occurrenceList->count()) {
                 $table->addRow([new TableSeparator(), new TableSeparator()]);
@@ -440,10 +418,11 @@ class MagicStringDetectorCommand extends Command
         $progressBar->setMessage('Looking for files');
 
         /** @var SplFileInfo $file */
-        foreach ($progressBar->iterate($finder->getIterator()) as $file) {
+        foreach ($finder->getIterator() as $file) {
             $files[] = $file;
             $progressBar->setMessage(sprintf('(%s)', $file->getRelativePathname()), 'filename');
             $progressBar->setMessage(sprintf('Looking for files. File count: %d', count($files)));
+            $progressBar->advance();
         }
 
         return $files;
