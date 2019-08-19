@@ -11,7 +11,7 @@
     "support": {
         "issues": "https://github.com/isfett/php-analyzer/issues"
     },
-    "bin": ["bin/php-analyzer", "bin/php-analyzer.bat", "bin/php-analyzer.php"],
+    "bin": ["bin/php-analyzer"],
     "require": {
         "php": "^7.1",
         "symfony/console": "^3.4 || ^4.0",

@@ -1,15 +1,22 @@
 <?php
 
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
+$environment = $_SERVER['APPLICATION_ENV'] ?? 'dev';
+if (false !== getenv('APPLICATION_ENV')) {
+    $environment = getenv('APPLICATION_ENV');
+}
+
+if (file_exists(__DIR__ . '/../../../autoload.php')) {
+    // php-analyzer is part of a composer installation
+    require_once __DIR__ . '/../../../autoload.php';
+    $environment = 'prod';
+} else {
+    require_once __DIR__ . '/../vendor/autoload.php';
+}
 
 use Isfett\PhpAnalyzer\Kernel;
 use Isfett\PhpAnalyzer\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-$environment = $_SERVER['APPLICATION_ENV'] ?? 'dev';
-if (false !== getenv('APPLICATION_ENV')) {
-    $environment = getenv('APPLICATION_ENV');
-}
 $isDebug = 'dev' === $environment;
 
 $dispatcher = new EventDispatcher();

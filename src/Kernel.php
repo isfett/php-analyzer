@@ -34,6 +34,22 @@ final class Kernel extends SymfonyKernel
     }
 
     /**
+     * @return string
+     */
+    public function getCacheDir(): string
+    {
+        return __DIR__.'/../var/cache/'.$this->environment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogDir(): string
+    {
+        return __DIR__.'/../var/logs';
+    }
+
+    /**
      * @param ContainerBuilder $containerBuilder
      *
      * @return void
