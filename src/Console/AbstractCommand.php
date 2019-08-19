@@ -12,6 +12,9 @@ use Symfony\Component\Console\Command\Command;
  */
 abstract class AbstractCommand extends Command
 {
+    /** @var int */
+    private const SYMFONY_43 = 40300;
+
     /**
      * @param Occurrence $occurrence
      * @param string     $line
@@ -20,7 +23,7 @@ abstract class AbstractCommand extends Command
      */
     protected function getFileLink(Occurrence $occurrence, string $line): string
     {
-        if (Kernel::VERSION_ID >= 40300) { //symfony 4.3 feature
+        if (Kernel::VERSION_ID >= self::SYMFONY_43) { //symfony 4.3 feature
             return sprintf(
                 '<href=file://%s>%s:%s</>',
                 $occurrence->getFile()->getPathname(),
