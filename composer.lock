@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acce545ddb012f623037b144bdc26a2f",
+    "content-hash": "cb5731e664bdd1b1c0bca37d6818da0e",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -293,12 +293,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "4ec4d5a5e6215d92eb47275a2440ffb7b5b3e235"
+                "reference": "c2ac8e1013073c5baf09f91d4bfa8beb7ba690aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/4ec4d5a5e6215d92eb47275a2440ffb7b5b3e235",
-                "reference": "4ec4d5a5e6215d92eb47275a2440ffb7b5b3e235",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c2ac8e1013073c5baf09f91d4bfa8beb7ba690aa",
+                "reference": "c2ac8e1013073c5baf09f91d4bfa8beb7ba690aa",
                 "shasum": ""
             },
             "require": {
@@ -361,7 +361,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-08-15T08:52:52+00:00"
+            "time": "2019-08-19T11:17:23+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -369,12 +369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "ed7d37f3f40b1ade3b3ef8358e253f5af5bb2ce5"
+                "reference": "3fe5f9720b7208d13e5de1deef539e983faa2d74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/ed7d37f3f40b1ade3b3ef8358e253f5af5bb2ce5",
-                "reference": "ed7d37f3f40b1ade3b3ef8358e253f5af5bb2ce5",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/3fe5f9720b7208d13e5de1deef539e983faa2d74",
+                "reference": "3fe5f9720b7208d13e5de1deef539e983faa2d74",
                 "shasum": ""
             },
             "require": {
@@ -434,7 +434,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2019-08-15T09:38:48+00:00"
+            "time": "2019-08-19T11:17:23+00:00"
         },
         {
             "name": "symfony/error-handler",
@@ -442,12 +442,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "aaa114f0f917347edaa33011d73e356cc441a081"
+                "reference": "abdcf487e99261bfbdfbf4824fa9cbd006a4ac3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/aaa114f0f917347edaa33011d73e356cc441a081",
-                "reference": "aaa114f0f917347edaa33011d73e356cc441a081",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/abdcf487e99261bfbdfbf4824fa9cbd006a4ac3a",
+                "reference": "abdcf487e99261bfbdfbf4824fa9cbd006a4ac3a",
                 "shasum": ""
             },
             "require": {
@@ -493,7 +493,7 @@
             ],
             "description": "Symfony ErrorHandler Component",
             "homepage": "https://symfony.com",
-            "time": "2019-08-14T13:27:41+00:00"
+            "time": "2019-08-18T08:09:38+00:00"
         },
         {
             "name": "symfony/error-renderer",
@@ -691,12 +691,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "3ad3f3d88af7a23cd7edc94a9ee07efd4b68c72c"
+                "reference": "f5cbc2c90aea2fe088eae9a41b33dd915765ea0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/3ad3f3d88af7a23cd7edc94a9ee07efd4b68c72c",
-                "reference": "3ad3f3d88af7a23cd7edc94a9ee07efd4b68c72c",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/f5cbc2c90aea2fe088eae9a41b33dd915765ea0b",
+                "reference": "f5cbc2c90aea2fe088eae9a41b33dd915765ea0b",
                 "shasum": ""
             },
             "require": {
@@ -733,7 +733,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2019-08-13T06:48:26+00:00"
+            "time": "2019-08-18T09:59:28+00:00"
         },
         {
             "name": "symfony/finder",
@@ -1290,12 +1290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "a5db9d7ca97f01bd249ca1ac419422d802533f99"
+                "reference": "9b5b1b9f88ec94221fe023f7d3c0cb7356e99a54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/a5db9d7ca97f01bd249ca1ac419422d802533f99",
-                "reference": "a5db9d7ca97f01bd249ca1ac419422d802533f99",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/9b5b1b9f88ec94221fe023f7d3c0cb7356e99a54",
+                "reference": "9b5b1b9f88ec94221fe023f7d3c0cb7356e99a54",
                 "shasum": ""
             },
             "require": {
@@ -1362,7 +1362,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2019-08-14T12:37:46+00:00"
+            "time": "2019-08-16T06:37:15+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -1585,16 +1585,16 @@
         },
         {
             "name": "isfett/coding-standard",
-            "version": "1.0.0",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/isfett/coding-standard.git",
-                "reference": "c9d00340d41b0f358f5fdd5346d5596625320f61"
+                "reference": "d303d561dfa550504eb88dd5b7bb54a111e2b2b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/isfett/coding-standard/zipball/c9d00340d41b0f358f5fdd5346d5596625320f61",
-                "reference": "c9d00340d41b0f358f5fdd5346d5596625320f61",
+                "url": "https://api.github.com/repos/isfett/coding-standard/zipball/d303d561dfa550504eb88dd5b7bb54a111e2b2b6",
+                "reference": "d303d561dfa550504eb88dd5b7bb54a111e2b2b6",
                 "shasum": ""
             },
             "require": {
@@ -1615,7 +1615,7 @@
                 }
             ],
             "description": "Coding-Standard for PHP",
-            "time": "2019-08-04T13:43:16+00:00"
+            "time": "2019-08-09T19:08:53+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1965,12 +1965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "93d7dbf3e59b86f6bcae40b094cbfdc97578b4ba"
+                "reference": "e401ec333b98e6552957f78b78d19fed178211c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/93d7dbf3e59b86f6bcae40b094cbfdc97578b4ba",
-                "reference": "93d7dbf3e59b86f6bcae40b094cbfdc97578b4ba",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/e401ec333b98e6552957f78b78d19fed178211c2",
+                "reference": "e401ec333b98e6552957f78b78d19fed178211c2",
                 "shasum": ""
             },
             "require": {
@@ -2026,7 +2026,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2019-08-15T08:03:24+00:00"
+            "time": "2019-08-17T19:45:22+00:00"
         },
         {
             "name": "phpspec/prophecy",
