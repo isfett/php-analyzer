@@ -369,12 +369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "3fe5f9720b7208d13e5de1deef539e983faa2d74"
+                "reference": "02bd58fb49dafd71d3907709482a4960ec25a6ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/3fe5f9720b7208d13e5de1deef539e983faa2d74",
-                "reference": "3fe5f9720b7208d13e5de1deef539e983faa2d74",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/02bd58fb49dafd71d3907709482a4960ec25a6ab",
+                "reference": "02bd58fb49dafd71d3907709482a4960ec25a6ab",
                 "shasum": ""
             },
             "require": {
@@ -434,7 +434,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2019-08-19T11:17:23+00:00"
+            "time": "2019-08-19T14:04:49+00:00"
         },
         {
             "name": "symfony/error-handler",
