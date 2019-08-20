@@ -231,9 +231,8 @@ class MostUsedConditionsCommand extends AbstractCommand
         $conditionListProgressBar = $this->createProgressBar(
             $output,
             'customBar',
-            Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+            count($occurrenceList->getOccurrences())
         );
-        $conditionListProgressBar->setMaxSteps(count($occurrenceList->getOccurrences()));
         $conditionListProgressBar->setMessage(sprintf(
             'Create ConditionList (print ast nodes). Flip-Check: %s',
             $flipChecking ? 'active' : 'inactive'
@@ -272,9 +271,8 @@ class MostUsedConditionsCommand extends AbstractCommand
         $countedListProgressBar = $this->createProgressBar(
             $output,
             'customBar',
-            Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
+            count($rawConditions)
         );
-        $countedListProgressBar->setMaxSteps(count($rawConditions));
         $countedListProgressBar->setMessage('Check for multiple conditions');
 
         foreach ($rawConditions as $condition) {
