@@ -38,6 +38,6 @@ class ShellExecTest extends AbstractNodeRepresentationTest
 
         $representation = new ShellExec($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('shell_exec($command)', $representation->representation());
+        $this->assertSame('shell_exec($command)', $representation->representation());
     }
 }

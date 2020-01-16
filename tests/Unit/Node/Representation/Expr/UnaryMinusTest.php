@@ -36,6 +36,6 @@ class UnaryMinusTest extends AbstractNodeRepresentationTest
 
         $representation = new UnaryMinus($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('-$x', $representation->representation());
+        $this->assertSame('-$x', $representation->representation());
     }
 }

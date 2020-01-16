@@ -36,6 +36,6 @@ class ErrorSuppressTest extends AbstractNodeRepresentationTest
 
         $representation = new ErrorSuppress($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('@$x', $representation->representation());
+        $this->assertSame('@$x', $representation->representation());
     }
 }

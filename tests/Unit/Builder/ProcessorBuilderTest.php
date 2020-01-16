@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Isfett\PhpAnalyzer\Tests\Unit\Builder;
 
 use Isfett\PhpAnalyzer\Builder\ProcessorBuilder;
+use Isfett\PhpAnalyzer\Builder\ProcessorBuilderInterface;
 use Isfett\PhpAnalyzer\Exception\InvalidProcessorNameException;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessorBuilderTest extends TestCase
 {
-    /** @var ProcessorBuilder */
+    /** @var ProcessorBuilderInterface */
     private $builder;
 
     /**

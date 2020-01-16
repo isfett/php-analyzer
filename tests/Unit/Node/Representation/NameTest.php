@@ -31,7 +31,7 @@ class NameTest extends AbstractNodeRepresentationTest
 
         $representation = new Name($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('test', $representation->representation());
+        $this->assertSame('test', $representation->representation());
     }
 
     /**
@@ -49,6 +49,6 @@ class NameTest extends AbstractNodeRepresentationTest
 
         $representation = new Name($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('test\\test2', $representation->representation());
+        $this->assertSame('test\\test2', $representation->representation());
     }
 }

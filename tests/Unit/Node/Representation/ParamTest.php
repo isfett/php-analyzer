@@ -71,6 +71,6 @@ class ParamTest extends AbstractNodeRepresentationTest
 
         $representation = new Param($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->representation());
+        $this->assertSame($expectedOutput, $representation->representation());
     }
 }

@@ -38,6 +38,6 @@ class TernaryTest extends AbstractNodeRepresentationTest
 
         $representation = new Ternary($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x', $representation->representation());
+        $this->assertSame('$x', $representation->representation());
     }
 }

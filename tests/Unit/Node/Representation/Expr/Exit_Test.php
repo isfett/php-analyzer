@@ -36,7 +36,7 @@ class Exit_Test extends AbstractNodeRepresentationTest
 
         $representation = new Exit_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('exit(1)', $representation->representation());
+        $this->assertSame('exit(1)', $representation->representation());
     }
 
     /**
@@ -51,6 +51,6 @@ class Exit_Test extends AbstractNodeRepresentationTest
 
         $representation = new Exit_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('exit', $representation->representation());
+        $this->assertSame('exit', $representation->representation());
     }
 }

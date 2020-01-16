@@ -34,7 +34,7 @@ class NodeRepresentationServiceTest extends AbstractNodeTestCase
     {
         $node = $this->createNameNode('test');
 
-        $this->assertEquals('test', $this->nodeRepresentationService->representationForNode($node));
+        $this->assertSame('test', $this->nodeRepresentationService->representationForNode($node));
     }
 
     /**
@@ -44,7 +44,7 @@ class NodeRepresentationServiceTest extends AbstractNodeTestCase
     {
         $node = new Int_($this->createVariableNode('i'), $this->getNodeAttributes());
 
-        $this->assertEquals('(int) $i', $this->nodeRepresentationService->representationForNode($node));
+        $this->assertSame('(int) $i', $this->nodeRepresentationService->representationForNode($node));
     }
 
     /**
@@ -80,7 +80,7 @@ class NodeRepresentationServiceTest extends AbstractNodeTestCase
         $transformedArguments = $this->nodeRepresentationService->representationForArguments($arguments);
 
         $this->assertCount(1, $transformedArguments);
-        $this->assertEquals('$test', $transformedArguments[0]);
+        $this->assertSame('$test', $transformedArguments[0]);
     }
 
     /**
@@ -96,7 +96,7 @@ class NodeRepresentationServiceTest extends AbstractNodeTestCase
         $transformedArguments = $this->nodeRepresentationService->representationForArguments($arguments);
 
         $this->assertCount(2, $transformedArguments);
-        $this->assertEquals('$test', $transformedArguments[0]);
-        $this->assertEquals('$test2', $transformedArguments[1]);
+        $this->assertSame('$test', $transformedArguments[0]);
+        $this->assertSame('$test2', $transformedArguments[1]);
     }
 }

@@ -31,6 +31,6 @@ class VarLikeIdentifierTest extends AbstractNodeRepresentationTest
 
         $representation = new VarLikeIdentifier($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$test', $representation->representation());
+        $this->assertSame('$test', $representation->representation());
     }
 }

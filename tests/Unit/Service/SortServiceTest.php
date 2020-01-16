@@ -51,7 +51,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]));
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             1 => [
                 'count' => 77,
             ],
@@ -90,7 +90,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]));
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             2 => [
                 'count' => 100,
                 'name' => 'apple',
@@ -128,7 +128,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]), 1);
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             0 => [
                 'count' => 5,
             ],
@@ -160,7 +160,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]), null, 2);
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             0 => [
                 'count' => 77,
             ],
@@ -196,7 +196,7 @@ class SortServiceTest extends AbstractNodeTestCase
         /** @var Occurrence $occurrence */
         foreach ($sortedNodes as $key => $occurrence) {
             $node = $occurrence->getNode();
-            $this->assertEquals($expectedValues[$key], $node->value);
+            $this->assertSame($expectedValues[$key], $node->value);
         }
     }
 
@@ -227,7 +227,7 @@ class SortServiceTest extends AbstractNodeTestCase
         /** @var Occurrence $occurrence */
         foreach ($sortedNodes as $key => $occurrence) {
             $node = $occurrence->getNode();
-            $this->assertEquals($expectedValues[$key], $node->value);
+            $this->assertSame($expectedValues[$key], $node->value);
         }
     }
 }

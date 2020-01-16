@@ -38,7 +38,7 @@ class PropertyPropertyTest extends AbstractNodeRepresentationTest
             ->method('representationForNode')
             ->willReturn('$test');
 
-        $this->assertEquals('$test', $representation->representation());
+        $this->assertSame('$test', $representation->representation());
     }
 
     /**
@@ -58,6 +58,6 @@ class PropertyPropertyTest extends AbstractNodeRepresentationTest
             ->method('representationForNode')
             ->willReturn('$test', 1);
 
-        $this->assertEquals('$test = 1', $representation->representation());
+        $this->assertSame('$test = 1', $representation->representation());
     }
 }

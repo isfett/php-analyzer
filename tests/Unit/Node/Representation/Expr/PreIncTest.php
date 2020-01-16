@@ -36,6 +36,6 @@ class PreIncTest extends AbstractNodeRepresentationTest
 
         $representation = new PreInc($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('++$x', $representation->representation());
+        $this->assertSame('++$x', $representation->representation());
     }
 }

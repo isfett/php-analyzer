@@ -37,6 +37,6 @@ class AssignRefTest extends AbstractNodeRepresentationTest
 
         $representation = new AssignRef($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x =& $y', $representation->representation());
+        $this->assertSame('$x =& $y', $representation->representation());
     }
 }

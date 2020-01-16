@@ -32,7 +32,7 @@ class FinderTest extends TestCase
     {
         $property = (new \ReflectionClass(\Symfony\Component\Finder\Finder::class))->getProperty('ignore');
         $property->setAccessible(true);
-        $this->assertEquals(3, $property->getValue($this->finder));
+        $this->assertSame(3, $property->getValue($this->finder));
         // 3 is the sum of the constants
         // const IGNORE_VCS_FILES = 1;
         // const IGNORE_DOT_FILES = 2;

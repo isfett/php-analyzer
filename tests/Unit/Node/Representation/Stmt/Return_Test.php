@@ -36,6 +36,6 @@ class Return_Test extends AbstractNodeRepresentationTest
             ->method('representationForNode')
             ->willReturn('1');
 
-        $this->assertEquals('return 1', $representation->representation());
+        $this->assertSame('return 1', $representation->representation());
     }
 }

@@ -37,6 +37,6 @@ class BitwiseOrTest extends AbstractNodeRepresentationTest
 
         $representation = new BitwiseOr($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable |= $variable2', $representation->representation());
+        $this->assertSame('$variable |= $variable2', $representation->representation());
     }
 }

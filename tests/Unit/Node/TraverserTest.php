@@ -69,6 +69,6 @@ class TraverserTest extends AbstractNodeTestCase
 
         $this->traverser->addVisitor($visitor);
 
-        $this->assertEquals(3, $this->traverser->getNodeOccurrencesCount());
+        $this->assertSame(3, $this->traverser->getNodeOccurrencesCount());
     }
 }

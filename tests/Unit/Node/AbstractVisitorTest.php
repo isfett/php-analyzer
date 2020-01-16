@@ -43,7 +43,7 @@ class AbstractVisitorTest extends AbstractNodeTestCase
 
         /** @var Occurrence $occurrence */
         $occurrence = $visitor->getNodeOccurrenceList()->getOccurrences()->first();
-        $this->assertEquals($file, $occurrence->getFile());
+        $this->assertSame($file, $occurrence->getFile());
         $this->assertEquals(new Variable('test'), $occurrence->getNode());
     }
 }

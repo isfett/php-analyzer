@@ -36,6 +36,6 @@ class Empty_Test extends AbstractNodeRepresentationTest
 
         $representation = new Empty_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('empty($x)', $representation->representation());
+        $this->assertSame('empty($x)', $representation->representation());
     }
 }

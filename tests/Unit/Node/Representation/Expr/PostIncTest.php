@@ -36,6 +36,6 @@ class PostIncTest extends AbstractNodeRepresentationTest
 
         $representation = new PostInc($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x++', $representation->representation());
+        $this->assertSame('$x++', $representation->representation());
     }
 }

@@ -64,7 +64,7 @@ class ElseIfVisitorTest extends AbstractNodeTestCase
         foreach ($this->visitor->getNodeOccurrenceList()->getOccurrences() as $key => $occurrence) {
             /** @var String_ $node */
             $node = $occurrence->getNode();
-            $this->assertEquals($key + 1, $node->value);
+            $this->assertSame((string) ($key + 1), $node->value);
         }
     }
 

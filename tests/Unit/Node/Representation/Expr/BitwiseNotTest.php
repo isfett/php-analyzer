@@ -36,6 +36,6 @@ class BitwiseNotTest extends AbstractNodeRepresentationTest
 
         $representation = new BitwiseNot($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('~$x', $representation->representation());
+        $this->assertSame('~$x', $representation->representation());
     }
 }

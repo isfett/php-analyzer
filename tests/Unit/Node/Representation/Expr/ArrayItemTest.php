@@ -70,6 +70,6 @@ class ArrayItemTest extends AbstractNodeRepresentationTest
 
         $representation = new ArrayItem($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->representation());
+        $this->assertSame($expectedOutput, $representation->representation());
     }
 }

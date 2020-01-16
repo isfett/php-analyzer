@@ -71,7 +71,7 @@ class MostUsedConditionsCommandTest extends TestCase
         $exitCode = $this->mostUsedConditionsCommand->run($input, $output);
         $outputText = $output->fetch();
 
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_SUCCESS, $exitCode);
         $this->assertStringStartsWith(
             '<command-start>Starting most-used-conditions command</command-start>',
             $outputText

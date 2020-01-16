@@ -65,7 +65,7 @@ class ApplicationTest extends TestCase
             'Description',
             $output->fetch()
         );
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_SUCCESS, $exitCode);
 
         $input = new ArrayInput([
             '-q' => true,
@@ -78,7 +78,7 @@ class ApplicationTest extends TestCase
             'Description',
             $output->fetch()
         );
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_SUCCESS, $exitCode);
     }
 
     /**
@@ -94,10 +94,10 @@ class ApplicationTest extends TestCase
 
         $output = new BufferedOutput();
         $exitCode = $this->application->doRun($input, $output);
-        $this->assertEquals(
+        $this->assertSame(
             self::APPLICATION_INFO,
             $output->fetch()
         );
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_SUCCESS, $exitCode);
     }
 }

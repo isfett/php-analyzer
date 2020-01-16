@@ -32,6 +32,6 @@ class DNumberTest extends AbstractNodeRepresentationTest
 
         $representation = new DNumber($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('1.337', $representation->representation());
+        $this->assertSame('1.337', $representation->representation());
     }
 }

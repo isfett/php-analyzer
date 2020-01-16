@@ -97,6 +97,6 @@ class ArrowFunctionTest extends AbstractNodeRepresentationTest
 
         $representation = new ArrowFunction($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->representation());
+        $this->assertSame($expectedOutput, $representation->representation());
     }
 }

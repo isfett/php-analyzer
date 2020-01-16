@@ -56,7 +56,7 @@ class ConditionVisitorTest extends AbstractNodeTestCase
         );
         $this->visitor->enterNode($node);
         $this->assertCount(1, $this->visitor->getNodeOccurrenceList()->getOccurrences());
-        $this->assertEquals('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
+        $this->assertSame('test', $this->visitor->getNodeOccurrenceList()->getOccurrences()->last()->getNode()->value);
     }
 
     /**

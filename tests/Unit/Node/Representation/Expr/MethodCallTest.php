@@ -43,6 +43,6 @@ class MethodCallTest extends AbstractNodeRepresentationTest
 
         $representation = new MethodCall($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$classObject->test($x)', $representation->representation());
+        $this->assertSame('$classObject->test($x)', $representation->representation());
     }
 }

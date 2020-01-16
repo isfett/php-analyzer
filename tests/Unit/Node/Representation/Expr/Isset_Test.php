@@ -38,6 +38,6 @@ class Isset_Test extends AbstractNodeRepresentationTest
 
         $representation = new Isset_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('isset($x)', $representation->representation());
+        $this->assertSame('isset($x)', $representation->representation());
     }
 }

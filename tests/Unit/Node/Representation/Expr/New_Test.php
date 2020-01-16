@@ -42,6 +42,6 @@ class New_Test extends AbstractNodeRepresentationTest
 
         $representation = new New_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('(new Classname($x))', $representation->representation());
+        $this->assertSame('(new Classname($x))', $representation->representation());
     }
 }

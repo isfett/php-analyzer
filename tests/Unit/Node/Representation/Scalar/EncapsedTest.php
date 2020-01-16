@@ -39,7 +39,7 @@ class EncapsedTest extends AbstractNodeRepresentationTest
 
         $representation = new Encapsed($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('"$x"', $representation->representation());
+        $this->assertSame('"$x"', $representation->representation());
     }
 
     /**
@@ -61,6 +61,6 @@ class EncapsedTest extends AbstractNodeRepresentationTest
 
         $representation = new Encapsed($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('"\\$x"', $representation->representation());
+        $this->assertSame('"\\$x"', $representation->representation());
     }
 }

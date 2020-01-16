@@ -58,7 +58,7 @@ class ClosureTest extends AbstractNodeRepresentationTest
 
         $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->representation());
+        $this->assertSame($expectedOutput, $representation->representation());
     }
 
     /**
@@ -84,7 +84,7 @@ class ClosureTest extends AbstractNodeRepresentationTest
 
         $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('function($test) { /* CLOSURE */ }', $representation->representation());
+        $this->assertSame('function($test) { /* CLOSURE */ }', $representation->representation());
     }
 
     /**
@@ -110,7 +110,7 @@ class ClosureTest extends AbstractNodeRepresentationTest
 
         $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('function() use ($test) { /* CLOSURE */ }', $representation->representation());
+        $this->assertSame('function() use ($test) { /* CLOSURE */ }', $representation->representation());
     }
 
     /**
@@ -138,6 +138,6 @@ class ClosureTest extends AbstractNodeRepresentationTest
 
         $representation = new Closure($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('function&($test2) use ($test) { /* CLOSURE */ }', $representation->representation());
+        $this->assertSame('function&($test2) use ($test) { /* CLOSURE */ }', $representation->representation());
     }
 }

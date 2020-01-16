@@ -69,7 +69,7 @@ class MagicStringDetectorCommandTest extends TestCase
         $exitCode = $this->magicStringDetectorCommand->run($input, $output);
         $outputText = $output->fetch();
 
-        $this->assertEquals(Application::EXIT_CODE_FAILURE, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_FAILURE, $exitCode);
         $this->assertStringStartsWith(
             '<command-start>Starting magic-string-detector command</command-start>',
             $outputText
@@ -133,7 +133,7 @@ EOT;
         $exitCode = $this->magicStringDetectorCommand->run($input, $output);
         $outputText = $output->fetch();
 
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_SUCCESS, $exitCode);
         $this->assertStringStartsWith(
             '<command-start>Starting magic-string-detector command</command-start>',
             $outputText

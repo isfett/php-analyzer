@@ -36,6 +36,6 @@ class Print_Test extends AbstractNodeRepresentationTest
 
         $representation = new Print_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('print($x)', $representation->representation());
+        $this->assertSame('print($x)', $representation->representation());
     }
 }
