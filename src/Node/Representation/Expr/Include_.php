@@ -15,7 +15,7 @@ class Include_ extends AbstractRepresentation
     private const FORMAT_REPRESENTATION = '%s(%s)';
 
     /** @var string */
-    private const TYPE_REQUIRE_ONCE = 'require_once';
+    private const TYPE_INCLUDE = 'include';
 
     /** @var string */
     private const TYPE_INCLUDE_ONCE = 'include_once';
@@ -24,7 +24,7 @@ class Include_ extends AbstractRepresentation
     private const TYPE_REQUIRE = 'require';
 
     /** @var string */
-    private const TYPE_INCLUDE = 'include';
+    private const TYPE_REQUIRE_ONCE = 'require_once';
 
     /** @var array */
     private static $includeFunctions = [

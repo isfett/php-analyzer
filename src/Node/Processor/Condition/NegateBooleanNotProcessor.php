@@ -14,10 +14,10 @@ use PhpParser\Node;
 class NegateBooleanNotProcessor extends AbstractProcessor
 {
     /** @var string */
-    private const NAMESPACE_BOOLEAN_NOT = 'BooleanNot';
+    private const FORMAT_TRANSFORM = '%s%s%s';
 
     /** @var string */
-    private const FORMAT_TRANSFORM = '%s%s%s';
+    private const NAMESPACE_BOOLEAN_NOT = 'BooleanNot';
 
     /**
      * @param Occurrence $occurrence

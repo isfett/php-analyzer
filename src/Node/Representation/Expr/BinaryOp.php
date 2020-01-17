@@ -15,22 +15,22 @@ class BinaryOp extends AbstractRepresentation
     private const BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL = 'getOperatorSigil';
 
     /** @var string */
-    public const OPERATOR_SIGN_IDENTICAL = '===';
-
-    /** @var string */
-    public const OPERATOR_SIGN_NOT_IDENTICAL = '!==';
-
-    /** @var string */
-    public const OPERATOR_SIGN_EQUAL = '==';
-
-    /** @var string */
-    public const OPERATOR_SIGN_NOT_EQUAL = '!=';
+    private const FORMAT_PARENTHESES = '(%s)';
 
     /** @var string */
     private const FORMAT_REPRESENTATION = '%s %s %s';
 
     /** @var string */
-    private const FORMAT_PARENTHESES = '(%s)';
+    public const OPERATOR_SIGN_EQUAL = '==';
+
+    /** @var string */
+    public const OPERATOR_SIGN_IDENTICAL = '===';
+
+    /** @var string */
+    public const OPERATOR_SIGN_NOT_EQUAL = '!=';
+
+    /** @var string */
+    public const OPERATOR_SIGN_NOT_IDENTICAL = '!==';
 
     /**
      * @return string
@@ -44,7 +44,7 @@ class BinaryOp extends AbstractRepresentation
 
         if (BooleanOr::class === get_class($node) &&
             (is_callable([$node->left, self::BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL]) ||
-            is_callable([$node->right, self::BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL]))
+                is_callable([$node->right, self::BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL]))
         ) {
             $format = sprintf(self::FORMAT_PARENTHESES, $format);
         }

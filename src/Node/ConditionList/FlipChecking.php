@@ -12,12 +12,10 @@ use Isfett\PhpAnalyzer\Node\Representation\Expr\BinaryOp;
  */
 class FlipChecking extends ConditionList
 {
-    /** @var string */
-    private const SPACE = ' ';
-
     /** @var int */
-    private const ONE = 1;
+    private const FIRST_CHARACTER = 0;
 
+    /** @var array */
     private const FLIP_OPERATORS = [
         BinaryOp::OPERATOR_SIGN_IDENTICAL,
         BinaryOp::OPERATOR_SIGN_NOT_IDENTICAL,
@@ -25,11 +23,14 @@ class FlipChecking extends ConditionList
         BinaryOp::OPERATOR_SIGN_NOT_EQUAL,
     ];
 
-    /** @var int */
-    private const FIRST_CHARACTER = 0;
-
     /** @var string */
     private const FORMAT_FLIPPED = '%s %s %s';
+
+    /** @var int */
+    private const ONE = 1;
+
+    /** @var string */
+    private const SPACE = ' ';
 
     /** @var array */
     private $conditionHashes = [];

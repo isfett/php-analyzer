@@ -11,10 +11,10 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
 class BitwiseNot extends AbstractRepresentation
 {
     /** @var string */
-    private const OPERATOR = '~';
+    private const FORMAT_REPRESENTATION = '%s%s';
 
     /** @var string */
-    private const FORMAT_REPRESENTATION = '%s%s';
+    private const OPERATOR = '~';
 
     /**
      * @return string

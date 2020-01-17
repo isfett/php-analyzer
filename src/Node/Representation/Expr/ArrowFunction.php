@@ -11,16 +11,16 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
 class ArrowFunction extends AbstractRepresentation
 {
     /** @var string */
-    private const OPERATOR = '=>';
+    private const FORMAT_REPRESENTATION = '(%sfn%s(%s)%s %s %s)';
 
     /** @var string */
-    private const FORMAT_REPRESENTATION = '(%sfn%s(%s)%s %s %s)';
+    private const FORMAT_RETURN_TYPE = ': %s';
 
     /** @var string */
     private const FORMAT_STATIC = 'static ';
 
     /** @var string */
-    private const FORMAT_RETURN_TYPE = ': %s';
+    private const OPERATOR = '=>';
 
     /**
      * @return string

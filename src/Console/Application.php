@@ -67,8 +67,7 @@ class Application extends BaseApplication
     private const PROGRESSBAR_FORMAT_CUSTOM_BAR = '%current%/%max% (%percent:2s%%) [%bar%] %elapsed:6s% -> %message%';
 
     /** @var string */
-    private const PROGRESSBAR_FORMAT_DURATION = self::PROGRESSBAR_FORMAT_MESSAGE_ONLY .
-                  self::PROGRESSBAR_FORMAT_ELAPSED_TIME;
+    private const PROGRESSBAR_FORMAT_DURATION = self::PROGRESSBAR_FORMAT_MESSAGE.self::PROGRESSBAR_FORMAT_ELAPSED_TIME;
 
     /** @var string */
     private const PROGRESSBAR_FORMAT_ELAPSED_TIME = ' (took %elapsed:6s%)';
@@ -77,7 +76,7 @@ class Application extends BaseApplication
     private const PROGRESSBAR_FORMAT_FINDER = '%elapsed:6s% | %message% -> %filename%';
 
     /** @var string */
-    private const PROGRESSBAR_FORMAT_MESSAGE_ONLY = '<info>%message%</info>';
+    private const PROGRESSBAR_FORMAT_MESSAGE = '<info>%message%</info>';
 
     /** @var string */
     public const PROGRESSBAR_NAME_CUSTOM_BAR = 'customBar';
@@ -172,7 +171,7 @@ class Application extends BaseApplication
 
         ProgressBar::setFormatDefinition(
             self::PROGRESSBAR_NAME_MESSAGE_ONLY,
-            self::PROGRESSBAR_FORMAT_MESSAGE_ONLY
+            self::PROGRESSBAR_FORMAT_MESSAGE
         );
         ProgressBar::setFormatDefinition(
             self::PROGRESSBAR_NAME_DURATION,

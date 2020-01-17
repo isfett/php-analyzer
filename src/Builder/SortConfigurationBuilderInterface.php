@@ -11,16 +11,17 @@ use Isfett\PhpAnalyzer\DAO\Configuration\Sort;
 interface SortConfigurationBuilderInterface
 {
     /**
-     * @return Sort
-     */
-    public function getSortConfiguration(): Sort;
-
-    /**
-     * @param int|null $maxResults
+     * @param string $field
+     * @param string $direction
      *
      * @return self
      */
-    public function setMaxResults(?int $maxResults = null): self;
+    public function addSortField(string $field, string $direction): self;
+
+    /**
+     * @return Sort
+     */
+    public function getSortConfiguration(): Sort;
 
     /**
      * @param int|null $firstResult
@@ -30,10 +31,9 @@ interface SortConfigurationBuilderInterface
     public function setFirstResult(?int $firstResult = null): self;
 
     /**
-     * @param string $field
-     * @param string $direction
+     * @param int|null $maxResults
      *
      * @return self
      */
-    public function addSortField(string $field, string $direction): self;
+    public function setMaxResults(?int $maxResults = null): self;
 }

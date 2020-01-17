@@ -18,10 +18,10 @@ class Double extends AbstractRepresentation
     private const CAST_TYPE_FLOAT = 'float';
 
     /** @var string */
-    private const FORMAT_REPRESENTATION = '(%s) %s';
+    private const CAST_TYPE_REAL = 'real';
 
     /** @var string */
-    private const CAST_TYPE_REAL = 'real';
+    private const FORMAT_REPRESENTATION = '(%s) %s';
 
     /** @var string */
     private const NODE_ATTRIBUTE_CAST_TYPE = 'kind';

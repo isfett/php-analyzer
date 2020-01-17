@@ -15,13 +15,13 @@ abstract class AbstractRepresentation implements RepresentationInterface
     private const COMMA_WITH_SPACE = ', ';
 
     /** @var string */
-    protected const NAMESPACE_SEPARATOR = '\\';
-
-    /** @var string */
     protected const EMPTY_STRING = '';
 
     /** @var string */
     protected const EQUAL_SIGN = '=';
+
+    /** @var string */
+    protected const NAMESPACE_SEPARATOR = '\\';
 
     /** @var string */
     protected const NEGATION_SIGN = '!';
@@ -41,11 +41,11 @@ abstract class AbstractRepresentation implements RepresentationInterface
     /** @var string */
     protected const VARIADIC_SIGN = '...';
 
-    /** @var NodeRepresentationService */
-    protected $nodeRepresentationService;
-
     /** @var Node */
     protected $node;
+
+    /** @var NodeRepresentationService */
+    protected $nodeRepresentationService;
 
     /**
      * AbstractRepresentation constructor.
@@ -60,16 +60,6 @@ abstract class AbstractRepresentation implements RepresentationInterface
     }
 
     /**
-     * @param Node $node
-     *
-     * @return string|null
-     */
-    protected function representate(Node $node): ?string
-    {
-        return $this->nodeRepresentationService->representationForNode($node);
-    }
-
-    /**
      * @param array  $arguments
      * @param string $implodeBy
      *
@@ -78,5 +68,15 @@ abstract class AbstractRepresentation implements RepresentationInterface
     protected function arguments(array $arguments, string $implodeBy = self::COMMA_WITH_SPACE): string
     {
         return implode($implodeBy, $this->nodeRepresentationService->representationForArguments($arguments));
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return string|null
+     */
+    protected function representate(Node $node): ?string
+    {
+        return $this->nodeRepresentationService->representationForNode($node);
     }
 }
