@@ -8,6 +8,7 @@ use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Node\Traverser;
 use Isfett\PhpAnalyzer\Node\AbstractVisitor;
 use Isfett\PhpAnalyzer\Node\Visitor\VisitorInterface;
+use PhpParser\NodeVisitorAbstract;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -70,5 +71,30 @@ class TraverserTest extends AbstractNodeTestCase
         $this->traverser->addVisitor($visitor);
 
         $this->assertSame(3, $this->traverser->getNodeOccurrencesCount());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetNodeOccurrencesCountWithoutSupportedVisitor(): void
+    {
+        $this->traverser->addVisitor(new NodeVisitorAbstract());
+
+        $this->assertSame(0, $this->traverser->getNodeOccurrencesCount());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetFileWithoutSupportedVisitor(): void
+    {
+        /** @var MockObject|VisitorInterface $visitor */
+        $visitor = $this->createMock(AbstractVisitor::class);
+        $visitor
+            ->expects($this->never())
+            ->method('setFile');
+
+        $this->traverser->addVisitor(new NodeVisitorAbstract());
+        $this->traverser->setFile($this->createSplFileInfoMock());
     }
 }
