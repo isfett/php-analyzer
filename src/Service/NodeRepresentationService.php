@@ -12,6 +12,41 @@ use PhpParser\Node;
  */
 class NodeRepresentationService
 {
+    /** @var string */
+    private const FORMAT_NAMESPACE = '%s\\%s';
+
+    /** @var string */
+    private const NAMESPACE_NODE = 'Node';
+
+    /** @var string */
+    private const NAMESPACE_NODE_REPRESENTATION = 'Isfett\\PhpAnalyzer\\Node\\Representation';
+
+    /** @var string */
+    private const NAMESPACE_PHP_PARSER = 'PhpParser';
+
+    /** @var string */
+    private const NAMESPACE_SEPARATOR = '\\';
+
+    /**
+     * @param array $arguments
+     *
+     * @return array
+     */
+    public function representationForArguments(array $arguments): array
+    {
+        if (!count($arguments)) {
+            return [];
+        }
+
+        $representedArguments = [];
+
+        foreach ($arguments as $key => $argument) {
+            $representedArguments[$key] = $this->representationForNode($argument);
+        }
+
+        return $representedArguments;
+    }
+
     /**
      * @param Node $node
      *
@@ -36,23 +71,17 @@ class NodeRepresentationService
     }
 
     /**
-     * @param array $arguments
+     * @param string $originalClassname
      *
-     * @return array
+     * @return string
      */
-    public function representationForArguments(array $arguments): array
+    private function getAbstractClassname(string $originalClassname): string
     {
-        if (0 === count($arguments)) {
-            return [];
-        }
+        $classnameWithNamespaces = explode(self::NAMESPACE_SEPARATOR, $originalClassname);
 
-        $representedArguments = [];
+        array_pop($classnameWithNamespaces);
 
-        foreach ($arguments as $key => $argument) {
-            $representedArguments[$key] = $this->representationForNode($argument);
-        }
-
-        return $representedArguments;
+        return implode(self::NAMESPACE_SEPARATOR, $classnameWithNamespaces);
     }
 
     /**
@@ -62,32 +91,18 @@ class NodeRepresentationService
      */
     private function transformClassname(string $classname): string
     {
-        $classWithNamespaces = explode('\\', $classname);
+        $classWithNamespaces = explode(self::NAMESPACE_SEPARATOR, $classname);
 
-        $keyPhpParser = array_search('PhpParser', $classWithNamespaces, true);
+        $keyPhpParser = array_search(self::NAMESPACE_PHP_PARSER, $classWithNamespaces, true);
         unset($classWithNamespaces[$keyPhpParser]);
 
-        $keyNode = array_search('Node', $classWithNamespaces, true);
+        $keyNode = array_search(self::NAMESPACE_NODE, $classWithNamespaces, true);
         unset($classWithNamespaces[$keyNode]);
 
         return sprintf(
-            '%s\\%s',
-            'Isfett\\PhpAnalyzer\\Node\\Representation',
-            implode('\\', $classWithNamespaces)
+            self::FORMAT_NAMESPACE,
+            self::NAMESPACE_NODE_REPRESENTATION,
+            implode(self::NAMESPACE_SEPARATOR, $classWithNamespaces)
         );
-    }
-
-    /**
-     * @param string $originalClassname
-     *
-     * @return string
-     */
-    private function getAbstractClassname(string $originalClassname): string
-    {
-        $classnameWithNamespaces = explode('\\', $originalClassname);
-
-        array_pop($classnameWithNamespaces);
-
-        return implode('\\', $classnameWithNamespaces);
     }
 }

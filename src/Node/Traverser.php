@@ -12,28 +12,33 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class Traverser extends NodeTraverser
 {
-    /**
-     * @param SplFileInfo $file
-     */
-    public function setFile(SplFileInfo $file): void
-    {
-        $this->updateFileInVisitors($file);
-    }
+    /** @var int */
+    private const COUNTER_START = 0;
 
     /**
      * @return int
      */
     public function getNodeOccurrencesCount(): int
     {
-        $count = 0;
+        $occurrenceCounter = self::COUNTER_START;
 
         foreach ($this->visitors as $visitor) {
-            if ($visitor instanceof VisitorInterface) {
-                $count += $visitor->getNodeOccurrenceList()->count();
+            if (!$visitor instanceof VisitorInterface) {
+                continue;
             }
+
+            $occurrenceCounter += $visitor->getNodeOccurrenceList()->count();
         }
 
-        return $count;
+        return $occurrenceCounter;
+    }
+
+    /**
+     * @param SplFileInfo $file
+     */
+    public function setFile(SplFileInfo $file): void
+    {
+        $this->updateFileInVisitors($file);
     }
 
     /**
@@ -44,9 +49,11 @@ class Traverser extends NodeTraverser
     private function updateFileInVisitors(SplFileInfo $file): void
     {
         foreach ($this->visitors as $visitor) {
-            if ($visitor instanceof VisitorInterface) {
-                $visitor->setFile($file);
+            if (!$visitor instanceof VisitorInterface) {
+                continue;
             }
+
+            $visitor->setFile($file);
         }
     }
 }

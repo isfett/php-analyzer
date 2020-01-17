@@ -33,7 +33,7 @@ class SwitchCaseVisitor extends AbstractVisitor
     private function isCase(Node $node): bool
     {
         /** @var Node $parent */
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
 
         return $parentNode instanceof Node\Stmt\Case_;
     }

@@ -12,6 +12,12 @@ use PhpParser\Node;
  */
 class IgnoreOneProcessor extends AbstractProcessor
 {
+    /** @var float */
+    private const ONE_DOUBLE = 1.00;
+
+    /** @var int */
+    private const ONE_INT = 1;
+
     /**
      * @param Occurrence $occurrence
      *
@@ -22,11 +28,12 @@ class IgnoreOneProcessor extends AbstractProcessor
         /** @var Node\Scalar\LNumber|Node\Scalar\DNumber $node */
         $node = $occurrence->getNode();
 
-        if ($node->getAttribute('parent') instanceof Node\Expr\UnaryMinus) {
+        if ($node->getAttribute(self::NODE_ATTRIBUTE_PARENT) instanceof Node\Expr\UnaryMinus) {
             return;
         }
 
-        if (1 === $node->value || 1.00 === $node->value) {
+        // phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
+        if (self::ONE_INT === $node->value || self::ONE_DOUBLE === $node->value) {
             $this->nodeOccurrenceList->removeOccurrence($occurrence);
         }
     }

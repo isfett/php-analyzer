@@ -12,6 +12,9 @@ use PhpParser\Node;
  */
 class IgnoreDefineFunctionProcessor extends AbstractProcessor
 {
+    /** @var string */
+    private const FUNCTION_NAME_DEFINE = 'define';
+
     /**
      * @param Occurrence $occurrence
      *
@@ -22,10 +25,11 @@ class IgnoreDefineFunctionProcessor extends AbstractProcessor
         /** @var Node\Scalar\LNumber|Node\Scalar\DNumber $node */
         $node = $occurrence->getNode();
 
-        $parentParentNode = $node->getAttribute('parent')->getAttribute('parent');
+        $parentParentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT)->getAttribute(self::NODE_ATTRIBUTE_PARENT);
+        // phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
         if ($parentParentNode instanceof Node\Expr\FuncCall &&
             $parentParentNode->name instanceof Node\Name &&
-            'define' === $parentParentNode->name->getLast()
+            self::FUNCTION_NAME_DEFINE === $parentParentNode->name->getLast()
         ) {
             $this->nodeOccurrenceList->removeOccurrence($occurrence);
         }

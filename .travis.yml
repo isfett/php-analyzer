@@ -4,15 +4,18 @@ php:
   - '7.1'
   - '7.2'
   - '7.3'
-  - '7.4snapshot' # beta2
+  - '7.4'
   #- nightly #8 (symfony does not support php 8 yet)
 
 before_install:
   - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
+  - vendor/bin/phpcs --standard=vendor/isfett/coding-standard/phpcs/isfett.xml src
+  - vendor/bin/phpmd src text vendor/isfett/coding-standard/phpmd/isfett.xml
+  - bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --processors=IgnoreDefineFunction --excludes=vendor,var,tests,docs,bin --exclude-files=Kernel.php
+  - bin/php-analyzer magic-string-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --processors=IgnoreDefineFunction --excludes=vendor,var,tests,docs,bin --exclude-files=Kernel.php
   - vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=coverage.xml
-  - bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --processors=IgnoreArrayKey,IgnoreOne,IgnoreZero,IgnoreMinusOne,IgnoreDefineFunction,IgnoreForLoop --excludes=vendor,var,tests,docs
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

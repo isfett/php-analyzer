@@ -8,6 +8,9 @@ namespace Isfett\PhpAnalyzer\Node\Representation;
  */
 class VarLikeIdentifier extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s%s';
+
     /**
      * @return string
      */
@@ -17,8 +20,8 @@ class VarLikeIdentifier extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            '%s%s',
-            '$',
+            self::FORMAT_REPRESENTATION,
+            self::VARIABLE_SIGN,
             $node->name
         );
     }

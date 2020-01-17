@@ -10,6 +10,12 @@ use Symfony\Component\Finder\Finder as SymfonyFinder;
  */
 class Finder extends SymfonyFinder
 {
+    /** @var string */
+    private const IS_DIR = 'is_dir';
+
+    /** @var string */
+    private const WILDCARD_GLOB = '*.';
+
     /**
      * Finder constructor.
      *
@@ -19,6 +25,8 @@ class Finder extends SymfonyFinder
      * @param array $excludePaths
      * @param array $excludeFiles
      * @param array $suffixes
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         array $directories,
@@ -29,7 +37,7 @@ class Finder extends SymfonyFinder
         array $suffixes
     ) {
         parent::__construct();
-        $dirs = array_filter($directories, 'is_dir');
+        $dirs = array_filter($directories, self::IS_DIR);
 
         $this
             ->files()
@@ -42,10 +50,8 @@ class Finder extends SymfonyFinder
             $this->name($includeFile);
         }
 
-        if (0 === count($includeFiles)) {
-            foreach ($suffixes as $suffix) {
-                $this->name('*.' . $suffix);
-            }
+        if (!count($includeFiles)) {
+            $this->addWildcardIncludes($suffixes);
         }
 
         foreach ($excludePaths as $notPath) {
@@ -54,6 +60,18 @@ class Finder extends SymfonyFinder
 
         foreach ($excludeFiles as $notName) {
             $this->notName($notName);
+        }
+    }
+
+    /**
+     * @param array $suffixes
+     *
+     * @return void
+     */
+    private function addWildcardIncludes(array $suffixes): void
+    {
+        foreach ($suffixes as $suffix) {
+            $this->name(self::WILDCARD_GLOB . $suffix);
         }
     }
 }

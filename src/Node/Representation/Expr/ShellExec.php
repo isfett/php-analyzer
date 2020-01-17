@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class ShellExec extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = 'shell_exec(%s)';
+
     /**
      * @return string
      */
@@ -19,7 +22,7 @@ class ShellExec extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            'shell_exec(%s)',
+            self::FORMAT_REPRESENTATION,
             $this->arguments($node->parts)
         );
     }

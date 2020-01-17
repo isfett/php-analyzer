@@ -3,28 +3,19 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Console\Command;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Isfett\PhpAnalyzer\Builder\FinderBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\ProcessorBuilderInterface;
-use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilder;
 use Isfett\PhpAnalyzer\Builder\SortConfigurationBuilderInterface;
 use Isfett\PhpAnalyzer\Builder\VisitorBuilderInterface;
 use Isfett\PhpAnalyzer\Console\AbstractCommand;
 use Isfett\PhpAnalyzer\Console\Application;
-use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
-use Isfett\PhpAnalyzer\Finder\Finder;
-use Isfett\PhpAnalyzer\Node\AbstractVisitor;
-use Isfett\PhpAnalyzer\Node\ProcessorRunner;
 use Isfett\PhpAnalyzer\Node\ProcessorRunnerInterface;
-use Isfett\PhpAnalyzer\Node\Traverser;
-use Isfett\PhpAnalyzer\Node\VisitorConnector\ParentConnector;
 use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
-use PhpParser\Error;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\ParserFactory;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,7 +23,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class MagicStringDetectorCommand
@@ -40,58 +30,61 @@ use Symfony\Component\Finder\SplFileInfo;
 class MagicStringDetectorCommand extends AbstractCommand
 {
     /** @var string */
-    private const NAME = 'magic-string-detector';
+    private const COMMAND_HELP = 'Find out your most used conditions';
 
-    /** @var FinderBuilderInterface */
-    private $finderBuilder;
+    /** @var string */
+    private const COMMAND_NAME = 'magic-string-detector';
 
-    /** @var VisitorBuilderInterface */
-    private $visitorBuilder;
+    /** @var string */
+    private const HEADER_OCCURRENCE = 'Occurrence';
 
-    /** @var ProcessorBuilderInterface */
-    private $processorBuilder;
+    /** @var string */
+    private const HEADER_STRING = 'String';
 
-    /** @var ProcessorRunner */
-    private $processorRunner;
+    /** @var string */
+    private const PROCESSOR_PREFIX = self::VISITOR_PROCESSOR_PREFIX;
 
-    /** @var SortConfigurationBuilder */
-    private $sortConfigurationBuilder;
+    /** @var string */
+    private const QUOTED_VALUE = '\'%s\'';
 
-    /** @var NodeRepresentationService */
-    private $nodeRepresentationService;
+    /** @var string */
+    private const VISITOR_PREFIX = self::VISITOR_PROCESSOR_PREFIX;
 
-    /** @var SortService */
-    private $sortService;
+    /** @var string */
+    private const VISITOR_PROCESSOR_PREFIX = 'MagicString';
 
     /**
      * MagicStringDetectorCommand constructor.
      *
      * @param FinderBuilderInterface            $finderBuilder
-     * @param VisitorBuilderInterface           $visitorBuilder
-     * @param ProcessorBuilderInterface         $processorBuilder
-     * @param SortConfigurationBuilderInterface $sortConfigurationBuilder
-     * @param ProcessorRunnerInterface          $processorRunner
      * @param NodeRepresentationService         $nodeRepresentationService
+     * @param ProcessorBuilderInterface         $processorBuilder
+     * @param ProcessorRunnerInterface          $processorRunner
+     * @param SortConfigurationBuilderInterface $sortConfigurationBuilder
      * @param SortService                       $sortService
+     * @param VisitorBuilderInterface           $visitorBuilder
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FinderBuilderInterface $finderBuilder,
-        VisitorBuilderInterface $visitorBuilder,
-        ProcessorBuilderInterface $processorBuilder,
-        SortConfigurationBuilderInterface $sortConfigurationBuilder,
-        ProcessorRunnerInterface $processorRunner,
         NodeRepresentationService $nodeRepresentationService,
-        SortService $sortService
+        ProcessorBuilderInterface $processorBuilder,
+        ProcessorRunnerInterface $processorRunner,
+        SortConfigurationBuilderInterface $sortConfigurationBuilder,
+        SortService $sortService,
+        VisitorBuilderInterface $visitorBuilder
     ) {
-        $this->finderBuilder = $finderBuilder;
-        $this->visitorBuilder = $visitorBuilder;
-        $this->processorBuilder = $processorBuilder;
-        $this->processorRunner = $processorRunner;
-        $this->sortConfigurationBuilder = $sortConfigurationBuilder;
-        $this->nodeRepresentationService = $nodeRepresentationService;
-        $this->sortService = $sortService;
-
-        parent::__construct(self::NAME);
+        parent::__construct(
+            self::COMMAND_NAME,
+            $finderBuilder,
+            $nodeRepresentationService,
+            $processorBuilder,
+            $processorRunner,
+            $sortConfigurationBuilder,
+            $sortService,
+            $visitorBuilder
+        );
     }
 
     /**
@@ -99,134 +92,27 @@ class MagicStringDetectorCommand extends AbstractCommand
      * @param OutputInterface $output
      *
      * @return int
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $output->write(['<command-start>Starting magic-string-detector command</command-start>'], ['']);
+        $this->startCommand(self::COMMAND_NAME, $output);
 
-        $directory = realpath($input->getArgument('directory'));
-        if (false === $directory) {
-            throw new \RuntimeException(sprintf(
-                'Directory %s does not exist',
-                $input->getArgument('directory')
-            ));
-        }
+        $files = $this->getFiles($input, $output);
 
-        $finderProgressBar = $this->createProgressBar($output, 'customFinder');
+        $occurrenceList = $this->traverseFiles($files, self::VISITOR_PREFIX, $input, $output);
 
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $this->processOccurrences($occurrenceList, self::PROCESSOR_PREFIX, $input, $output);
 
-        $finder = $this->finderBuilder
-            ->setDirectories([$directory])
-            ->setIncludeFiles($this->getArrayOption('include-files', $input))
-            ->setExcludes($this->getArrayOption('excludes', $input))
-            ->setExcludePaths($this->getArrayOption('exclude-paths', $input))
-            ->setExcludeFiles($this->getArrayOption('exclude-files', $input))
-            ->setSuffixes($this->getArrayOption('suffixes', $input))
-            ->getFinder();
-
-        $files = $this->processFinder($finder, $finderProgressBar);
-
-        $this->finishProgressBar($finderProgressBar, $output);
-
-        if (0 === count($files)) {
-            $output->writeln('<error>No files found</error>');
-
-            return Application::EXIT_CODE_FAILURE;
-        }
-
-        $traverser = new Traverser();
-        $traverser->addVisitor(new ParentConnector());
-        $visitors = $this->visitorBuilder
-            ->setPrefix('MagicString')
-            ->setNames($input->getOption('visitors'))
-            ->getVisitors();
-
-        foreach ($visitors as $visitor) {
-            $output->writeln('Adding '.$this->getClassnameWithoutNamespace(get_class($visitor)).' Visitor');
-            $traverser->addVisitor($visitor);
-        }
-
-        $traverserProgressBar = $this->createProgressBar(
-            $output,
-            'customBar',
-            count($files)
-        );
-
-        foreach ($files as $file) {
-            try {
-                $ast = $parser->parse($file->getContents());
-            } catch (Error $exception) {
-                continue;
-            } finally {
-                $traverserProgressBar->advance();
-            }
-            $traverser->setFile($file);
-            $traverser->traverse($ast);
-            $traverserProgressBar->setMessage(sprintf(
-                'Visitors are checking for magic strings in files. Magic strings found: %d',
-                $traverser->getNodeOccurrencesCount()
-            ));
-        }
-
-        $traverserProgressBar->setMessage(sprintf(
-            'Visitors checked magic strings in %d files. Magic strings found: %d',
-            count($files),
-            $traverser->getNodeOccurrencesCount()
-        ));
-        $this->finishProgressBar($traverserProgressBar, $output);
-
-        $occurrenceList = new OccurrenceList();
-
-        /** @var AbstractVisitor $visitor */
-        foreach ($visitors as $visitor) {
-            /** @var Occurrence $occurrence */
-            foreach ($visitor->getNodeOccurrenceList()->getOccurrences() as $occurrence) {
-                $occurrenceList->addOccurrence($occurrence);
-            }
-        }
-
-        $processors = $this->processorBuilder
-            ->setPrefix('MagicString')
-            ->setNames($input->getOption('processors'))
-            ->getProcessors();
-
-        if (count($processors)) {
-            foreach ($processors as $processor) {
-                $output->writeln('Adding '.$this->getClassnameWithoutNamespace(get_class($processor)).' Processor');
-                $this->processorRunner->addProcessor($processor);
-            }
-
-            $processorsProgressBar = $this->createProgressBar(
-                $output,
-                'customBar',
-                Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH
-            );
-
-            foreach($this->processorRunner->process($occurrenceList) as $processorsDone) {
-                $processorsProgressBar->setMessage(sprintf(
-                    'Processor %d is processing magic strings. Magic strings found: %d',
-                    $processorsDone,
-                    count($occurrenceList->getOccurrences())
-                ));
-                $processorsProgressBar->advance();
-            }
-
-            $processorsProgressBar->setMessage(sprintf(
-                'Processors processed magic strings. Magic strings found: %d',
-                count($occurrenceList->getOccurrences())
-            ));
-            $this->finishProgressBar($processorsProgressBar, $output);
-        }
-
-        if (0 === $occurrenceList->getOccurrences()->count()) {
+        if (!$occurrenceList->getOccurrences()->count()) {
             return Application::EXIT_CODE_SUCCESS;
         }
 
         $sortConfiguration = $this->sortConfigurationBuilder
             ->setMaxResults(null)
             ->setFirstResult(null)
-            ->addSortField('value', $this->getSort($input))
+            ->addSortField(self::SORT_FIELD_VALUE, $this->getSort($input))
             ->getSortConfiguration();
 
         $sortedOccurrences = $this->sortService->sortOccurrenceCollectionByNodeValues(
@@ -234,51 +120,7 @@ class MagicStringDetectorCommand extends AbstractCommand
             $sortConfiguration
         );
 
-        $table = new Table($output);
-        $table->setColumnWidth(0, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
-        $table->setHeaders([
-            'String',
-            'Occurrence',
-        ]);
-
-        $occurrenceCounter = 0;
-        /** @var Occurrence $occurrence */
-        foreach ($sortedOccurrences as $occurrence) {
-            $occurrenceCounter++;
-            $line = (string) $occurrence->getNode()->getStartLine();
-            $node = $occurrence->getNode();
-            $parent = $node->getAttribute('parent');
-            $isMinus = false;
-            if ($parent instanceof Arg) {
-                $parent = $parent->getAttribute('parent');
-            }
-            if ($occurrence->getNode()->getStartLine() !== $occurrence->getNode()->getEndLine()) {
-                $line .= sprintf('-%s', $occurrence->getNode()->getEndLine());
-            }
-            $representation = $this->nodeRepresentationService->representationForNode(
-                $parent
-            );
-            $value = $node->value;
-            if ($isMinus) {
-                $value = '-'.$value;
-            }
-            $representation = $this->lreplace(
-                (string) "'" . $value . "'",
-                "<focus>'" . $value . "'</focus>",
-                $representation
-            );
-            $table->addRow([
-                sprintf('%s', $representation),
-                $this->getFileLink($occurrence, $line),
-            ]);
-            if ($occurrenceCounter < $occurrenceList->count()) {
-                $table->addRow([new TableSeparator(), new TableSeparator()]);
-            }
-        }
-
-        $table->render();
-
-        $output->write(PHP_EOL);
+        $this->renderResultTable($sortedOccurrences, $output);
 
         return Application::EXIT_CODE_FAILURE;
     }
@@ -289,181 +131,139 @@ class MagicStringDetectorCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName(self::NAME)
-            ->setHelp('Find out your most used conditions')
-            ->addArgument('username', InputArgument::REQUIRED, 'The username of the user.')
+            ->setName(self::COMMAND_NAME)
+            ->setHelp(self::COMMAND_HELP)
             ->setDefinition(
                 new InputDefinition([
                     new InputArgument(
-                        'directory',
+                        self::ARGUMENT_DIRECTORY,
                         InputArgument::OPTIONAL,
-                        'path to directory which should be checked',
+                        self::DESCRIPTION_DIRECTORY,
                         getcwd()
                     ),
                 ])
             )
             ->addOption(
-                'excludes',
+                self::ARGUMENT_EXCLUDES,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of directories-names which should be excluded (must be relative to source)',
-                'vendor'
+                self::DESCRIPTION_EXCLUDES,
+                self::DEFAULT_EXCLUDES
             )
             ->addOption(
-                'exclude-paths',
+                self::ARGUMENT_EXCLUDE_PATHS,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of directories-paths which should be excluded (must be relative to source)',
-                ''
+                self::DESCRIPTION_EXCLUDE_PATHS,
+                self::DEFAULT_EXCLUDE_PATHS
             )
             ->addOption(
-                'exclude-files',
+                self::ARGUMENT_EXCLUDE_FILES,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of files which should be excluded (must be relative to source)',
-                ''
+                self::DESCRIPTION_EXCLUDE_FILES,
+                self::DEFAULT_EXCLUDE_FILES
             )
             ->addOption(
-                'include-files',
+                self::ARGUMENT_INCLUDE_FILES,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of files which should be included (must be relative to source)',
-                ''
+                self::DESCRIPTION_INCLUDE_FILES,
+                self::DEFAULT_INCLUDE_FILES
             )
             ->addOption(
-                'suffixes',
+                self::ARGUMENT_SUFFIXES,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of valid source code filename extensions',
-                'php'
+                self::DESCRIPTION_SUFFIXES,
+                self::DEFAULT_SUFFIXES
             )
             ->addOption(
-                'visitors',
+                self::ARGUMENT_VISITORS,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of visitors which should check the source code to 
-                 find conditions (on wrong input you can see a list of possible visitors)',
-                'Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase'
+                self::DESCRIPTION_VISITORS,
+                self::DEFAULT_VISITORS
             )
             ->addOption(
-                'processors',
+                self::ARGUMENT_PROCESSORS,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Comma-separated string of processors which should transform the conditions
-                  (on wrong input you can see a list of possible processor)',
-                ''
+                self::DESCRIPTION_PROCESSORS,
+                self::DEFAULT_PROCESSORS
             )
             ->addOption(
-                'sort',
+                self::ARGUMENT_SORT,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'sort direction of conditions, desc or asc',
-                'asc'
+                self::DESCRIPTION_SORT,
+                self::DEFAULT_SORT
             );
     }
 
     /**
-     * @param string         $name
-     * @param InputInterface $input
+     * @param Node $node
      *
-     * @return array
+     * @return string
      */
-    private function getArrayOption(string $name, InputInterface $input): array
+    private function getNodeValue(Node $node): string
     {
-        if ('' === $inputOption = $input->getOption($name)) {
-            return [];
-        }
-
-        return explode(',', $inputOption);
+        return (string) $node->value;
     }
 
     /**
-     * @param OutputInterface $output
-     * @param string          $format
-     * @param int             $max
-     *
-     * @return ProgressBar
-     */
-    private function createProgressBar(OutputInterface $output, string $format, int $max = 0): ProgressBar
-    {
-        $progressBar = new ProgressBar($output, $max);
-        $progressBar->setFormat($format);
-        $progressBar->start();
-
-        return $progressBar;
-    }
-
-    /**
-     * @param ProgressBar     $progressBar
+     * @param ArrayCollection $sortedOccurrences
      * @param OutputInterface $output
      *
      * @return void
      */
-    private function finishProgressBar(ProgressBar $progressBar, OutputInterface $output): void
-    {
-        $progressBar->setFormat('messageDuration');
-        $progressBar->finish();
-        $output->writeln('');
-    }
+    private function renderResultTable(
+        ArrayCollection $sortedOccurrences,
+        OutputInterface $output
+    ): void {
+        $table = new Table($output);
+        $table->setColumnWidth(self::TABLE_FIRST_COLUMN_INDEX, Application::CONSOLE_TABLE_DEFAULT_MAX_WIDTH);
+        $table->setHeaders([
+            self::HEADER_STRING,
+            self::HEADER_OCCURRENCE,
+        ]);
 
-    /**
-     * @param Finder      $finder
-     * @param ProgressBar $progressBar
-     *
-     * @return array
-     */
-    private function processFinder(Finder $finder, ProgressBar $progressBar): array
-    {
-        $files = [];
-        $progressBar->setMessage('Looking for files');
+        $occurrenceCounter = self::COUNTER_START;
+        /** @var Occurrence $occurrence */
+        foreach ($sortedOccurrences as $occurrence) {
+            $occurrenceCounter++;
+            $node = $occurrence->getNode();
+            $parent = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
+            if ($parent instanceof Arg) {
+                $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
+            }
 
-        /** @var SplFileInfo $file */
-        foreach ($finder->getIterator() as $file) {
-            $files[] = $file;
-            $progressBar->setMessage(sprintf('(%s)', $file->getRelativePathname()), 'filename');
-            $progressBar->setMessage(sprintf('Looking for files. File count: %d', count($files)));
-            $progressBar->advance();
+            $line = $this->getLineRepresentationForOccurrence($occurrence);
+
+            $representation = $this->nodeRepresentationService->representationForNode(
+                $parent
+            );
+
+            $value = $this->getNodeValue($node);
+
+            $representation = $this->leftReplace(
+                sprintf(self::QUOTED_VALUE, $value),
+                sprintf(self::TABLE_MESSAGE_FOCUSED_VALUE, sprintf(self::QUOTED_VALUE, $value)),
+                $representation
+            );
+            $table->addRow([
+                $representation,
+                $this->getFileLink($occurrence, $line),
+            ]);
+            if ($occurrenceCounter >= $sortedOccurrences->count()) {
+                continue;
+            }
+
+            $table->addRow([new TableSeparator(), new TableSeparator()]);
         }
 
-        return $files;
-    }
+        $table->render();
 
-    /**
-     * @param string $classname
-     *
-     * @return string
-     */
-    private function getClassnameWithoutNamespace(string $classname): string
-    {
-        $classWithNamespaces = explode('\\', $classname);
-
-        return end($classWithNamespaces);
-    }
-
-    /**
-     * @param string $search
-     * @param string $replace
-     * @param string $subject
-     *
-     * @return string
-     */
-    private function lreplace(string $search, string $replace, string $subject): string
-    {
-        $pos = strrpos($subject, $search);
-        if (false !== $pos) {
-            $subject = substr_replace($subject, $replace, $pos, strlen($search));
-        }
-
-        return $subject;
-    }
-
-    /**
-     * @param InputInterface $input
-     *
-     * @return string
-     */
-    private function getSort(InputInterface $input): string
-    {
-        return $input->getOption('sort');
+        $output->write(\PHP_EOL);
     }
 }

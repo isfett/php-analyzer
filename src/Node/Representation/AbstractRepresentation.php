@@ -11,6 +11,36 @@ use PhpParser\Node;
  */
 abstract class AbstractRepresentation implements RepresentationInterface
 {
+    /** @var string */
+    private const COMMA_WITH_SPACE = ', ';
+
+    /** @var string */
+    protected const NAMESPACE_SEPARATOR = '\\';
+
+    /** @var string */
+    protected const EMPTY_STRING = '';
+
+    /** @var string */
+    protected const EQUAL_SIGN = '=';
+
+    /** @var string */
+    protected const NEGATION_SIGN = '!';
+
+    /** @var string */
+    protected const REF_SIGN = '&';
+
+    /** @var string */
+    protected const SPACE = ' ';
+
+    /** @var string */
+    protected const UNDERSCORE = '_';
+
+    /** @var string */
+    protected const VARIABLE_SIGN = '$';
+
+    /** @var string */
+    protected const VARIADIC_SIGN = '...';
+
     /** @var NodeRepresentationService */
     protected $nodeRepresentationService;
 
@@ -45,7 +75,7 @@ abstract class AbstractRepresentation implements RepresentationInterface
      *
      * @return string
      */
-    protected function arguments(array $arguments, string $implodeBy = ', '): string
+    protected function arguments(array $arguments, string $implodeBy = self::COMMA_WITH_SPACE): string
     {
         return implode($implodeBy, $this->nodeRepresentationService->representationForArguments($arguments));
     }

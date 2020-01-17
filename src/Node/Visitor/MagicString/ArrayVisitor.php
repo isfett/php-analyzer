@@ -33,7 +33,7 @@ class ArrayVisitor extends AbstractVisitor
     private function isArray(Node $node): bool
     {
         /** @var Node $parent */
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
 
         return $parentNode instanceof Node\Expr\ArrayDimFetch || $parentNode instanceof Node\Expr\ArrayItem;
     }

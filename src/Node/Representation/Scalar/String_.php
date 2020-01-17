@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class String_ extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '\'%s\'';
+
     /**
      * @return string
      */
@@ -18,6 +21,6 @@ class String_ extends AbstractRepresentation
         /** @var \PhpParser\Node\Scalar\String_ $node */
         $node = $this->node;
 
-        return sprintf("'%s'", $node->value);
+        return sprintf(self::FORMAT_REPRESENTATION, $node->value);
     }
 }

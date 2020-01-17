@@ -27,14 +27,7 @@ interface FinderBuilderInterface
      *
      * @return FinderBuilderInterface
      */
-    public function setIncludeFiles(array $files): self;
-
-    /**
-     * @param array $excludes
-     *
-     * @return FinderBuilderInterface
-     */
-    public function setExcludes(array $excludes): self;
+    public function setExcludeFiles(array $files): self;
 
     /**
      * @param array $directories
@@ -44,11 +37,18 @@ interface FinderBuilderInterface
     public function setExcludePaths(array $directories): self;
 
     /**
+     * @param array $excludes
+     *
+     * @return FinderBuilderInterface
+     */
+    public function setExcludes(array $excludes): self;
+
+    /**
      * @param array $files
      *
      * @return FinderBuilderInterface
      */
-    public function setExcludeFiles(array $files): self;
+    public function setIncludeFiles(array $files): self;
 
     /**
      * @param array $directories

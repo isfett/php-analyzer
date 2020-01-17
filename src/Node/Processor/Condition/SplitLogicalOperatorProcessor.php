@@ -6,8 +6,6 @@ namespace Isfett\PhpAnalyzer\Node\Processor\Condition;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Node\AbstractProcessor;
 use PhpParser\Node;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\BinaryOp;
 
 /**
  * Class SplitLogicalOperatorProcessor
@@ -28,8 +26,10 @@ class SplitLogicalOperatorProcessor extends AbstractProcessor
             $node = $node->expr;
             $isBooleanNot = true;
         }
+
+        // phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
         if ($this->isLogicalOperator($node)) {
-            /** @var BinaryOp $node */
+            /** @var Node\Expr\BinaryOp $node */
             $this->createLogicalOperatorOccurrences($occurrence, $node, $isBooleanNot);
 
             $this->nodeOccurrenceList->removeOccurrence($occurrence);
@@ -37,30 +37,35 @@ class SplitLogicalOperatorProcessor extends AbstractProcessor
     }
 
     /**
-     * @param Node $node
+     * @param Occurrence         $originalOccurrence
+     * @param Node\Expr\BinaryOp $originalNode
+     * @param bool               $isBooleanNot
      *
-     * @return bool
+     * @return void
      */
-    private function isLogicalOperator(Node $node): bool
-    {
-        return $this->isLogicalOperatorBoolean($node) || $this->isLogicalOperatorLogical($node);
-    }
+    private function createLogicalOperatorOccurrences(
+        Occurrence $originalOccurrence,
+        Node\Expr\BinaryOp $originalNode,
+        bool $isBooleanNot
+    ): void {
+        foreach (self::BINARY_OP_SIDES as $operatorSide) {
+            $sideNode = $originalNode->$operatorSide;
 
-    /**
-     * @param Node $node
-     *
-     * @return bool
-     */
-    private function isBooleanNotNestedLogicalOperator(Node $node): bool
-    {
-        return $node instanceof BooleanNot && $this->isLogicalOperator($node->expr);
+            $node = $this->createNewLogicalOperatorNode($sideNode, $isBooleanNot);
+            $occurrence = clone $originalOccurrence;
+            $occurrence->setNode($node);
+            $this->markOccurrenceAsAffected($occurrence);
+            $this->nodeOccurrenceList->addOccurrence($occurrence);
+
+            $this->process($occurrence);
+        }
     }
 
     /**
      * @param Node\Expr $originalNode
      * @param bool      $isBooleanNot
      *
-     * @return Node|BooleanNot|BinaryOp
+     * @return Node|Node\Expr\BooleanNot|Node\Expr\BinaryOp
      */
     private function createNewLogicalOperatorNode(Node\Expr $originalNode, bool $isBooleanNot): Node
     {
@@ -71,6 +76,26 @@ class SplitLogicalOperatorProcessor extends AbstractProcessor
         }
 
         return $node;
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return bool
+     */
+    private function isBooleanNotNestedLogicalOperator(Node $node): bool
+    {
+        return $node instanceof Node\Expr\BooleanNot && $this->isLogicalOperator($node->expr);
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return bool
+     */
+    private function isLogicalOperator(Node $node): bool
+    {
+        return $this->isLogicalOperatorBoolean($node) || $this->isLogicalOperatorLogical($node);
     }
 
     /**
@@ -93,30 +118,5 @@ class SplitLogicalOperatorProcessor extends AbstractProcessor
     {
         return $node instanceof Node\Expr\BinaryOp\LogicalAnd ||
             $node instanceof Node\Expr\BinaryOp\LogicalOr;
-    }
-
-    /**
-     * @param Occurrence $originalOccurrence
-     * @param BinaryOp   $originalNode
-     * @param bool       $isBooleanNot
-     *
-     * @return void
-     */
-    private function createLogicalOperatorOccurrences(
-        Occurrence $originalOccurrence,
-        BinaryOp $originalNode,
-        bool $isBooleanNot
-    ): void {
-        foreach (['left', 'right'] as $operatorSide) {
-            $sideNode = $originalNode->$operatorSide;
-
-            $node = $this->createNewLogicalOperatorNode($sideNode, $isBooleanNot);
-            $occurrence = clone $originalOccurrence;
-            $occurrence->setNode($node);
-            $this->markOccurrenceAsAffected($occurrence);
-            $this->nodeOccurrenceList->addOccurrence($occurrence);
-
-            $this->process($occurrence);
-        }
     }
 }

@@ -8,6 +8,9 @@ namespace Isfett\PhpAnalyzer\Exception;
  */
 class InvalidSortConfigurationException extends \RuntimeException
 {
+    /** @var int */
+    private const ERROR_CODE = 0;
+
     /**
      * InvalidSortConfigurationException constructor.
      *
@@ -16,6 +19,6 @@ class InvalidSortConfigurationException extends \RuntimeException
      */
     public function __construct(string $message, ?\Throwable $previous = null)
     {
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, self::ERROR_CODE, $previous);
     }
 }

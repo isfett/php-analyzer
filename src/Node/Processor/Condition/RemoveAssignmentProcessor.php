@@ -27,6 +27,7 @@ class RemoveAssignmentProcessor extends AbstractProcessor
         } else {
             $node = $this->replaceAssignment($node, $occurrence);
         }
+
         $occurrence->setNode($node);
     }
 
@@ -54,10 +55,11 @@ class RemoveAssignmentProcessor extends AbstractProcessor
      */
     private function replaceAssignmentInBinaryOp(Node\Expr\BinaryOp $node, Occurrence $occurrence): Node\Expr\BinaryOp
     {
-        foreach (['left', 'right'] as $binaryOpSide) {
+        foreach (self::BINARY_OP_SIDES as $binaryOpSide) {
             if ($node->$binaryOpSide instanceof Node\Expr\BinaryOp) {
                 $node->$binaryOpSide = $this->replaceAssignmentInBinaryOp($node->$binaryOpSide, $occurrence);
             }
+
             $node->$binaryOpSide = $this->replaceAssignment($node->$binaryOpSide, $occurrence);
         }
 

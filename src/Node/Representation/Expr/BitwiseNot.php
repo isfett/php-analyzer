@@ -10,6 +10,12 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class BitwiseNot extends AbstractRepresentation
 {
+    /** @var string */
+    private const OPERATOR = '~';
+
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s%s';
+
     /**
      * @return string
      */
@@ -19,8 +25,8 @@ class BitwiseNot extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            '%s%s',
-            '~',
+            self::FORMAT_REPRESENTATION,
+            self::OPERATOR,
             $this->representate($node->expr)
         );
     }

@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class Case_ extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = 'case %s:';
+
     /**
      * @return string
      */
@@ -19,7 +22,7 @@ class Case_ extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            'case %s:',
+            self::FORMAT_REPRESENTATION,
             $this->representate($node->cond)
         );
     }

@@ -22,14 +22,6 @@ class ConditionList
     }
 
     /**
-     * @return ArrayCollection<Condition>
-     */
-    public function getConditions(): ArrayCollection
-    {
-        return $this->conditions;
-    }
-
-    /**
      * @param Condition $condition
      *
      * @return void
@@ -37,5 +29,13 @@ class ConditionList
     public function addCondition(Condition $condition): void
     {
         $this->conditions->add($condition);
+    }
+
+    /**
+     * @return ArrayCollection<Condition>
+     */
+    public function getConditions(): ArrayCollection
+    {
+        return $this->conditions;
     }
 }

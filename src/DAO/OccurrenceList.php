@@ -22,6 +22,16 @@ class OccurrenceList
     }
 
     /**
+     * @param Occurrence $occurrence
+     *
+     * @return void
+     */
+    public function addOccurrence(Occurrence $occurrence): void
+    {
+        $this->occurrences->add($occurrence);
+    }
+
+    /**
      * @return int
      */
     public function count(): int
@@ -35,16 +45,6 @@ class OccurrenceList
     public function getOccurrences(): ArrayCollection
     {
         return $this->occurrences;
-    }
-
-    /**
-     * @param Occurrence $occurrence
-     *
-     * @return void
-     */
-    public function addOccurrence(Occurrence $occurrence): void
-    {
-        $this->occurrences->add($occurrence);
     }
 
     /**

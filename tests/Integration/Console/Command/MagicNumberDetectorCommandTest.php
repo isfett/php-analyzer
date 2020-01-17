@@ -36,12 +36,12 @@ class MagicNumberDetectorCommandTest extends TestCase
 
         $this->magicNumberDetectorCommand = new MagicNumberDetectorCommand(
             new FinderBuilder(),
-            new VisitorBuilder(),
-            new ProcessorBuilder(),
-            new SortConfigurationBuilder(),
-            new ProcessorRunner(),
             new NodeRepresentationService(),
-            new SortService()
+            new ProcessorBuilder(),
+            new ProcessorRunner(),
+            new SortConfigurationBuilder(),
+            new SortService(),
+            new VisitorBuilder()
         );
 
         $this->application = new Application();

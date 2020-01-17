@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class PropertyProperty extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s = %s';
+
     /**
      * @return string
      */
@@ -19,11 +22,11 @@ class PropertyProperty extends AbstractRepresentation
         $node = $this->node;
 
         if (null === $node->default) {
-            return sprintf('%s', $this->representate($node->name));
+            return $this->representate($node->name);
         }
 
         return sprintf(
-            '%s = %s',
+            self::FORMAT_REPRESENTATION,
             $this->representate($node->name),
             $this->representate($node->default)
         );

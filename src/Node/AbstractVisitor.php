@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node;
 
-use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\Node\Visitor\VisitorInterface;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -15,6 +15,9 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInterface
 {
+    /** @var string */
+    protected const NODE_ATTRIBUTE_PARENT = 'parent';
+
     /** @var SplFileInfo */
     protected $file;
 

@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class PreInc extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '++%s';
+
     /**
      * @return string
      */
@@ -19,7 +22,7 @@ class PreInc extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            '++%s',
+            self::FORMAT_REPRESENTATION,
             $this->representate($node->var)
         );
     }

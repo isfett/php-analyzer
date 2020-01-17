@@ -18,9 +18,6 @@ class Ternary extends AbstractRepresentation
         /** @var \PhpParser\Node\Expr\Ternary $node */
         $node = $this->node;
 
-        return sprintf(
-            '%s',
-            $this->representate($node->cond)
-        );
+        return $this->representate($node->cond);
     }
 }

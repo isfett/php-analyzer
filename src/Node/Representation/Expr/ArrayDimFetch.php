@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class ArrayDimFetch extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s[%s]';
+
     /**
      * @return string
      */
@@ -20,7 +23,7 @@ class ArrayDimFetch extends AbstractRepresentation
 
 
         return sprintf(
-            '%s[%s]',
+            self::FORMAT_REPRESENTATION,
             $this->representate($node->var),
             null === $node->dim ? '' : $this->representate($node->dim)
         );

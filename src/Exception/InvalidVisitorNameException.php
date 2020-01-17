@@ -10,6 +10,27 @@ use Isfett\PhpAnalyzer\Finder\Finder;
  */
 class InvalidVisitorNameException extends \LogicException
 {
+    /** @var string */
+    private const EMPTY_STRING = '';
+
+    /** @var int */
+    private const ERROR_CODE = 0;
+
+    /** @var string */
+    private const ERROR_MESSAGE = 'Visitor with name %s does not exist. Possible Visitors are: %s';
+
+    /** @var string */
+    private const EXCLUDE_INTERFACE = 'VisitorInterface.php';
+
+    /** @var string */
+    private const PATH = '/Node/Visitor/';
+
+    /** @var string */
+    private const SUFFIX_FILENAME = 'Visitor.php';
+
+    /** @var string */
+    private const VISITOR_NAME_DELIMITER = ', ';
+
     /**
      * InvalidVisitorNameException constructor.
      *
@@ -20,11 +41,15 @@ class InvalidVisitorNameException extends \LogicException
     public function __construct(string $visitorName, string $prefix, ?\Throwable $previous = null)
     {
         $possibleVisitorNames = $this->getPossibleVisitorNames($prefix);
-        parent::__construct(sprintf(
-            'Visitor with name %s does not exist. Possible Visitors are: %s',
-            $visitorName,
-            implode(', ', $possibleVisitorNames)
-        ), 0, $previous);
+        parent::__construct(
+            sprintf(
+                self::ERROR_MESSAGE,
+                $visitorName,
+                implode(self::VISITOR_NAME_DELIMITER, $possibleVisitorNames)
+            ),
+            self::ERROR_CODE,
+            $previous
+        );
     }
 
     /**
@@ -34,11 +59,15 @@ class InvalidVisitorNameException extends \LogicException
      */
     private function getPossibleVisitorNames(string $prefix): array
     {
-        $finder = new Finder([dirname(__DIR__) . '/Node/Visitor/'.$prefix], [], [], [], ['VisitorInterface.php'], []);
+        $finder = new Finder([dirname(__DIR__) . self::PATH . $prefix], [], [], [], [self::EXCLUDE_INTERFACE], []);
         $finder->sortByName();
         $possibleVisitorNames = [];
         foreach ($finder->getIterator() as $file) {
-            $possibleVisitorNames[] = str_replace('Visitor.php', '', $file->getRelativePathname());
+            $possibleVisitorNames[] = str_replace(
+                self::SUFFIX_FILENAME,
+                self::EMPTY_STRING,
+                $file->getRelativePathname()
+            );
         }
 
         return $possibleVisitorNames;

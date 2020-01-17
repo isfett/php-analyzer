@@ -16,6 +16,6 @@ class Name extends AbstractRepresentation
         /** @var \PhpParser\Node\Name $node */
         $node = $this->node;
 
-        return implode('\\', $node->parts);
+        return implode(self::NAMESPACE_SEPARATOR, $node->parts);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Isfett\PhpAnalyzer\Tests\Unit\Builder;
 
 use Isfett\PhpAnalyzer\Builder\FinderBuilder;
+use Isfett\PhpAnalyzer\Builder\FinderBuilderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 
@@ -12,6 +13,7 @@ use Symfony\Component\Finder\Finder;
  */
 class FinderBuilderTest extends TestCase
 {
+    /** @var FinderBuilderInterface */
     private $builder;
 
     /**

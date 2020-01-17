@@ -38,7 +38,7 @@ class OperationVisitor extends AbstractVisitor
             Node\Expr\BinaryOp\ShiftRight::class,
         ];
         /** @var Node $parent */
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
 
         return in_array(get_class($parentNode), $possibleOperations, true);
     }

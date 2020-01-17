@@ -36,14 +36,14 @@ class MostUsedConditionsCommandTest extends TestCase
         parent::setUp();
 
         $this->mostUsedConditionsCommand = new MostUsedConditionsCommand(
-            new FinderBuilder(),
             new ConditionListBuilder(),
-            new VisitorBuilder(),
-            new ProcessorBuilder(),
-            new SortConfigurationBuilder(),
-            new ProcessorRunner(),
+            new FinderBuilder(),
             new NodeRepresentationService(),
-            new SortService()
+            new ProcessorBuilder(),
+            new ProcessorRunner(),
+            new SortConfigurationBuilder(),
+            new SortService(),
+            new VisitorBuilder()
         );
 
         $this->application = new Application();

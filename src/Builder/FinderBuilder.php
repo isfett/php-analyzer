@@ -14,16 +14,16 @@ class FinderBuilder implements FinderBuilderInterface
     private $directories = [];
 
     /** @var array */
-    private $includeFiles = [];
-
-    /** @var array */
-    private $excludes = [];
+    private $excludeFiles = [];
 
     /** @var array */
     private $excludePaths = [];
 
     /** @var array */
-    private $excludeFiles = [];
+    private $excludes = [];
+
+    /** @var array */
+    private $includeFiles = [];
 
     /** @var array */
     private $suffixes = [];
@@ -56,25 +56,13 @@ class FinderBuilder implements FinderBuilderInterface
     }
 
     /**
-     * @param array $includeFiles
+     * @param array $excludeFiles
      *
      * @return FinderBuilderInterface
      */
-    public function setIncludeFiles(array $includeFiles): FinderBuilderInterface
+    public function setExcludeFiles(array $excludeFiles): FinderBuilderInterface
     {
-        $this->includeFiles = $includeFiles;
-
-        return $this;
-    }
-
-    /**
-     * @param array $excludes
-     *
-     * @return FinderBuilderInterface
-     */
-    public function setExcludes(array $excludes): FinderBuilderInterface
-    {
-        $this->excludes = $excludes;
+        $this->excludeFiles = $excludeFiles;
 
         return $this;
     }
@@ -92,13 +80,25 @@ class FinderBuilder implements FinderBuilderInterface
     }
 
     /**
-     * @param array $excludeFiles
+     * @param array $excludes
      *
      * @return FinderBuilderInterface
      */
-    public function setExcludeFiles(array $excludeFiles): FinderBuilderInterface
+    public function setExcludes(array $excludes): FinderBuilderInterface
     {
-        $this->excludeFiles = $excludeFiles;
+        $this->excludes = $excludes;
+
+        return $this;
+    }
+
+    /**
+     * @param array $includeFiles
+     *
+     * @return FinderBuilderInterface
+     */
+    public function setIncludeFiles(array $includeFiles): FinderBuilderInterface
+    {
+        $this->includeFiles = $includeFiles;
 
         return $this;
     }

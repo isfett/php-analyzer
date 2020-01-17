@@ -14,6 +14,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class Compiler implements CompilerPassInterface
 {
+    /** @var string */
+    private const METHOD_ADD = 'add';
+
     /**
      * @param ContainerBuilder $containerBuilder
      *
@@ -24,11 +27,11 @@ class Compiler implements CompilerPassInterface
         $applicationDefinition = $containerBuilder->findDefinition(Application::class);
 
         foreach ($containerBuilder->getDefinitions() as $definition) {
-            if (! is_a($definition->getClass(), Command::class, true)) {
+            if (!is_a($definition->getClass(), Command::class, true)) {
                 continue;
             }
 
-            $applicationDefinition->addMethodCall('add', [new Reference($definition->getClass())]);
+            $applicationDefinition->addMethodCall(self::METHOD_ADD, [new Reference($definition->getClass())]);
         }
     }
 }

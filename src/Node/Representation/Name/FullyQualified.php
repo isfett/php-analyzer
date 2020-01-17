@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class FullyQualified extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s%s';
+
     /**
      * @return string
      */
@@ -18,6 +21,10 @@ class FullyQualified extends AbstractRepresentation
         /** @var \PhpParser\Node\Name\FullyQualified $node */
         $node = $this->node;
 
-        return sprintf('\\%s', implode('\\', $node->parts));
+        return sprintf(
+            self::FORMAT_REPRESENTATION,
+            self::NAMESPACE_SEPARATOR,
+            implode(self::NAMESPACE_SEPARATOR, $node->parts)
+        );
     }
 }

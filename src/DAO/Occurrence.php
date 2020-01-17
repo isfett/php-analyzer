@@ -11,8 +11,8 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class Occurrence
 {
-    /** @var Node */
-    private $node;
+    /** @var array */
+    private $affectedByProcessors = [];
 
     /** @var SplFileInfo */
     private $file;
@@ -20,8 +20,8 @@ class Occurrence
     /** @var bool */
     private $isFlipped = false;
 
-    /** @var array */
-    private $affectedByProcessors = [];
+    /** @var Node */
+    private $node;
 
     /**
      * Condition constructor.
@@ -33,6 +33,36 @@ class Occurrence
     {
         $this->node = $node;
         $this->file = $file;
+    }
+
+    /**
+     * @param string $processorName
+     *
+     * @return void
+     */
+    public function addAffectedByProcessor(string $processorName): void
+    {
+        if (in_array($processorName, $this->affectedByProcessors, true)) {
+            return;
+        }
+
+        $this->affectedByProcessors[] = $processorName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAffectedByProcessors(): array
+    {
+        return $this->affectedByProcessors;
+    }
+
+    /**
+     * @return SplFileInfo
+     */
+    public function getFile(): SplFileInfo
+    {
+        return $this->file;
     }
 
     /**
@@ -52,14 +82,6 @@ class Occurrence
     }
 
     /**
-     * @return SplFileInfo
-     */
-    public function getFile(): SplFileInfo
-    {
-        return $this->file;
-    }
-
-    /**
      * @return bool
      */
     public function isFlipped(): bool
@@ -73,25 +95,5 @@ class Occurrence
     public function setIsFlipped(bool $isFlipped): void
     {
         $this->isFlipped = $isFlipped;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAffectedByProcessors(): array
-    {
-        return $this->affectedByProcessors;
-    }
-
-    /**
-     * @param string $processorName
-     *
-     * @return void
-     */
-    public function addAffectedByProcessor(string $processorName): void
-    {
-        if (!in_array($processorName, $this->affectedByProcessors, true)) {
-            $this->affectedByProcessors[] = $processorName;
-        }
     }
 }

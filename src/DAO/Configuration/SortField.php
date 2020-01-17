@@ -9,10 +9,10 @@ namespace Isfett\PhpAnalyzer\DAO\Configuration;
 class SortField
 {
     /** @var string */
-    private $field;
+    private $direction;
 
     /** @var string */
-    private $direction;
+    private $field;
 
     /**
      * SortField constructor.
@@ -29,16 +29,16 @@ class SortField
     /**
      * @return string
      */
-    public function getField(): string
+    public function getDirection(): string
     {
-        return $this->field;
+        return $this->direction;
     }
 
     /**
      * @return string
      */
-    public function getDirection(): string
+    public function getField(): string
     {
-        return $this->direction;
+        return $this->field;
     }
 }

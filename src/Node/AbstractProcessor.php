@@ -5,7 +5,6 @@ namespace Isfett\PhpAnalyzer\Node;
 
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\DAO\OccurrenceList;
-use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr;
 
 /**
@@ -13,6 +12,30 @@ use PhpParser\Node\Expr;
  */
 abstract class AbstractProcessor implements Processor\ProcessorInterface
 {
+    /** @var string */
+    private const BINARY_OP_LEFT = 'left';
+
+    /** @var string */
+    private const BINARY_OP_RIGHT = 'right';
+
+    /** @var array */
+    protected const BINARY_OP_SIDES = [self::BINARY_OP_LEFT, self::BINARY_OP_RIGHT];
+
+    /** @var string */
+    protected const EMPTY_STRING = '';
+
+    /** @var string */
+    protected const NAMESPACE_SEPARATOR = '\\';
+
+    /** @var string */
+    protected const NODE_ATTRIBUTE_PARENT = 'parent';
+
+    /** @var string */
+    protected const NODE_PROPERTY_NAME = 'name';
+
+    /** @var string */
+    private const REPLACE_SEARCH = 'Processor';
+
     /** @var OccurrenceList */
     protected $nodeOccurrenceList;
 
@@ -22,16 +45,6 @@ abstract class AbstractProcessor implements Processor\ProcessorInterface
     public function setNodeOccurrenceList(OccurrenceList $nodeOccurrenceList): void
     {
         $this->nodeOccurrenceList = $nodeOccurrenceList;
-    }
-
-    /**
-     * @param Expr $node
-     *
-     * @return BooleanNot
-     */
-    protected function negate(Expr $node): BooleanNot
-    {
-        return new BooleanNot($node, $node->getAttributes());
     }
 
     /**
@@ -45,13 +58,13 @@ abstract class AbstractProcessor implements Processor\ProcessorInterface
     }
 
     /**
-     * @param string $classname
+     * @param Expr $node
      *
-     * @return string
+     * @return Expr\BooleanNot
      */
-    private function getProcessorName(string $classname): string
+    protected function negate(Expr $node): Expr\BooleanNot
     {
-        return str_replace('Processor', '', $this->getClassnameWithoutNamespace($classname));
+        return new Expr\BooleanNot($node, $node->getAttributes());
     }
 
     /**
@@ -61,8 +74,18 @@ abstract class AbstractProcessor implements Processor\ProcessorInterface
      */
     private function getClassnameWithoutNamespace(string $classname): string
     {
-        $classWithNamespaces = explode('\\', $classname);
+        $classWithNamespaces = explode(self::NAMESPACE_SEPARATOR, $classname);
 
         return end($classWithNamespaces);
+    }
+
+    /**
+     * @param string $classname
+     *
+     * @return string
+     */
+    private function getProcessorName(string $classname): string
+    {
+        return str_replace(self::REPLACE_SEARCH, self::EMPTY_STRING, $this->getClassnameWithoutNamespace($classname));
     }
 }

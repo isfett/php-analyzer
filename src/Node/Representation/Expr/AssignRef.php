@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class AssignRef extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s %s%s %s';
+
     /**
      * @return string
      */
@@ -19,8 +22,10 @@ class AssignRef extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            '%s =& %s',
+            self::FORMAT_REPRESENTATION,
             $this->representate($node->var),
+            self::EQUAL_SIGN,
+            self::REF_SIGN,
             $this->representate($node->expr)
         );
     }

@@ -13,6 +13,9 @@ use PhpParser\Node;
  */
 class ParentConnector extends AbstractVisitor
 {
+    /** @var int */
+    private const ONE = 1;
+
     /** @var array */
     private $stack;
 
@@ -20,6 +23,8 @@ class ParentConnector extends AbstractVisitor
      * @param array $nodes
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beginTraverse(array $nodes): void
     {
@@ -33,11 +38,12 @@ class ParentConnector extends AbstractVisitor
      */
     public function enterNode(Node $node): void
     {
-        if (!empty($this->stack)) {
+        if (count($this->stack)) {
             /** @var Node $parent */
-            $parent = $this->stack[count($this->stack)-1];
-            $node->setAttribute('parent', $parent);
+            $parent = $this->stack[count($this->stack) - self::ONE];
+            $node->setAttribute(self::NODE_ATTRIBUTE_PARENT, $parent);
         }
+
         $this->stack[] = $node;
     }
 
@@ -45,6 +51,8 @@ class ParentConnector extends AbstractVisitor
      * @param Node $node
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function leaveNode(Node $node): void
     {

@@ -8,6 +8,9 @@ namespace Isfett\PhpAnalyzer\Node\Representation;
  */
 class Param extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s%s%s%s%s';
+
     /**
      * @return string
      */
@@ -16,13 +19,15 @@ class Param extends AbstractRepresentation
         /** @var \PhpParser\Node\Param $node */
         $node = $this->node;
 
-        $byRef = $node->byRef ? '&' : '';
-        $type = $node->type ? $node->type.' ' : '';
-        $default = $node->default ? ' = '. $this->representate($node->default) : '';
-        $variadic = $node->variadic ? '...' : '';
+        $byRef = $node->byRef ? self::REF_SIGN : self::EMPTY_STRING;
+        $type = $node->type ? $node->type . self::SPACE : self::EMPTY_STRING;
+        $default = $node->default ?
+            self::SPACE . self::EQUAL_SIGN . self::SPACE . $this->representate($node->default) :
+            self::EMPTY_STRING;
+        $variadic = $node->variadic ? self::VARIADIC_SIGN : self::EMPTY_STRING;
 
         return sprintf(
-            '%s%s%s%s%s',
+            self::FORMAT_REPRESENTATION,
             $type,
             $variadic,
             $byRef,

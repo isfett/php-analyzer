@@ -16,22 +16,95 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends BaseApplication
 {
     /** @var string */
-    private const APPLICATION_VERSION = '1.2.2';
+    private const APPLICATION_AUTHOR = 'Christopher Stenke <chris@isfett.com>';
 
     /** @var string */
     private const APPLICATION_NAME = 'php-analyzer';
 
     /** @var string */
-    private const APPLICATION_AUTHOR = 'Christopher Stenke <chris@isfett.com>';
+    private const APPLICATION_VERSION = '1.2.2';
+
+    /** @var string */
+    private const ARGUMENT_HELP = 'help';
+
+    /** @var string */
+    private const COLOR_BLACK = 'black';
+
+    /** @var string */
+    private const COLOR_CYAN = 'cyan';
+
+    /** @var string */
+    private const COLOR_MAGENTA = 'magenta';
+
+    /** @var string */
+    private const COLOR_RED = 'red';
+
+    /** @var string */
+    private const COLOR_YELLOW = 'yellow';
 
     /** @var int */
-    public const EXIT_CODE_SUCCESS = 0;
+    public const CONSOLE_TABLE_DEFAULT_MAX_WIDTH = 60;
 
     /** @var int */
     public const EXIT_CODE_FAILURE = 1;
 
     /** @var int */
-    public const CONSOLE_TABLE_DEFAULT_MAX_WIDTH = 60;
+    public const EXIT_CODE_SUCCESS = 0;
+
+    /** @var string */
+    private const FORMAT_APPLICATION_INFO = '%s %s by %s%s';
+
+    /** @var string */
+    private const FORMAT_VERSION = '--version';
+
+    /** @var string */
+    private const PARAMETER_QUIET = '--quiet';
+
+    /** @var string */
+    private const PARAMETER_QUIET_SHORT = '-q';
+
+    /** @var string */
+    private const PROGRESSBAR_FORMAT_CUSTOM_BAR = '%current%/%max% (%percent:2s%%) [%bar%] %elapsed:6s% -> %message%';
+
+    /** @var string */
+    private const PROGRESSBAR_FORMAT_DURATION = self::PROGRESSBAR_FORMAT_MESSAGE_ONLY .
+                  self::PROGRESSBAR_FORMAT_ELAPSED_TIME;
+
+    /** @var string */
+    private const PROGRESSBAR_FORMAT_ELAPSED_TIME = ' (took %elapsed:6s%)';
+
+    /** @var string */
+    private const PROGRESSBAR_FORMAT_FINDER = '%elapsed:6s% | %message% -> %filename%';
+
+    /** @var string */
+    private const PROGRESSBAR_FORMAT_MESSAGE_ONLY = '<info>%message%</info>';
+
+    /** @var string */
+    public const PROGRESSBAR_NAME_CUSTOM_BAR = 'customBar';
+
+    /** @var string */
+    public const PROGRESSBAR_NAME_DURATION = 'messageDuration';
+
+    /** @var string */
+    public const PROGRESSBAR_NAME_FINDER = 'customFinder';
+
+    /** @var string */
+    public const PROGRESSBAR_NAME_MESSAGE_ONLY = 'messageOnly';
+
+    /** @var string */
+    private const STYLE_BOLD = 'bold';
+
+    /** @var string */
+    private const STYLE_COMMAND_START = 'command-start';
+
+    /** @var string */
+    private const STYLE_FLAG = 'flag';
+
+    /** @var string */
+    private const STYLE_FOCUS = 'focus';
+
+    /** @var string */
+    private const STYLE_SPECIAL_INFO = 'special-info';
 
     /**
      * Application constructor.
@@ -58,10 +131,61 @@ class Application extends BaseApplication
         }
 
         if (null === $input->getFirstArgument()) {
-            $input = new ArrayInput(['help']);
+            $input = new ArrayInput([self::ARGUMENT_HELP]);
         }
 
         return parent::doRun($input, $output);
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return bool
+     */
+    private function checkParameterOptionVersion(InputInterface $input): bool
+    {
+        return $input->hasParameterOption(self::FORMAT_VERSION);
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    private function initStyles(OutputInterface $output): void
+    {
+        $outputFormatter = $output->getFormatter();
+        $outputFormatter->setStyle(
+            self::STYLE_COMMAND_START,
+            new OutputFormatterStyle(self::COLOR_RED, self::COLOR_BLACK, [self::STYLE_BOLD])
+        );
+        $outputFormatter->setStyle(
+            self::STYLE_FOCUS,
+            new OutputFormatterStyle(self::COLOR_CYAN, self::COLOR_BLACK, [self::STYLE_BOLD])
+        );
+        $outputFormatter->setStyle(
+            self::STYLE_FLAG,
+            new OutputFormatterStyle(self::COLOR_YELLOW, self::COLOR_BLACK, [self::STYLE_BOLD])
+        );
+        $outputFormatter->setStyle(
+            self::STYLE_SPECIAL_INFO,
+            new OutputFormatterStyle(self::COLOR_MAGENTA, self::COLOR_BLACK)
+        );
+
+        ProgressBar::setFormatDefinition(
+            self::PROGRESSBAR_NAME_MESSAGE_ONLY,
+            self::PROGRESSBAR_FORMAT_MESSAGE_ONLY
+        );
+        ProgressBar::setFormatDefinition(
+            self::PROGRESSBAR_NAME_DURATION,
+            self::PROGRESSBAR_FORMAT_DURATION
+        );
+        ProgressBar::setFormatDefinition(
+            self::PROGRESSBAR_NAME_FINDER,
+            self::PROGRESSBAR_FORMAT_FINDER
+        );
+        ProgressBar::setFormatDefinition(
+            self::PROGRESSBAR_NAME_CUSTOM_BAR,
+            self::PROGRESSBAR_FORMAT_CUSTOM_BAR
+        );
     }
 
     /**
@@ -72,66 +196,20 @@ class Application extends BaseApplication
      */
     private function printApplicationInfoWhenNotInQuietMode(InputInterface $input, OutputInterface $output): void
     {
-        if (false === $input->hasParameterOption('--quiet') && false === $input->hasParameterOption('-q')) {
-            $output->write(
-                sprintf(
-                    '%s %s by %s' . PHP_EOL,
-                    $this->getName(),
-                    $this->getVersion(),
-                    self::APPLICATION_AUTHOR
-                )
-            );
+        if (true === $input->hasParameterOption(self::PARAMETER_QUIET) ||
+            true === $input->hasParameterOption(self::PARAMETER_QUIET_SHORT)
+        ) {
+            return;
         }
-    }
 
-    /**
-     * @param InputInterface $input
-     *
-     * @return bool
-     */
-    private function checkParameterOptionVersion(InputInterface $input): bool
-    {
-        return $input->hasParameterOption('--version');
-    }
-
-    /**
-     * @param OutputInterface $output
-     */
-    private function initStyles(OutputInterface $output): void
-    {
-        $outputFormatter = $output->getFormatter();
-        $outputFormatter->setStyle(
-            'command-start',
-            new OutputFormatterStyle('red', 'black', ['bold'])
-        );
-        $outputFormatter->setStyle(
-            'focus',
-            new OutputFormatterStyle('cyan', 'black', ['bold'])
-        );
-        $outputFormatter->setStyle(
-            'flag',
-            new OutputFormatterStyle('yellow', 'black', ['bold'])
-        );
-        $outputFormatter->setStyle(
-            'special-info',
-            new OutputFormatterStyle('magenta', 'black')
-        );
-
-        ProgressBar::setFormatDefinition(
-            'messageOnly',
-            '<info>%message%</info>'
-        );
-        ProgressBar::setFormatDefinition(
-            'messageDuration',
-            '<info>%message%</info> (took %elapsed:6s%)'
-        );
-        ProgressBar::setFormatDefinition(
-            'customFinder',
-            '%elapsed:6s% | %message% -> %filename%'
-        );
-        ProgressBar::setFormatDefinition(
-            'customBar',
-            '%current%/%max% (%percent:2s%%) [%bar%] %elapsed:6s% -> %message%'
+        $output->write(
+            sprintf(
+                self::FORMAT_APPLICATION_INFO,
+                $this->getName(),
+                $this->getVersion(),
+                self::APPLICATION_AUTHOR,
+                \PHP_EOL
+            )
         );
     }
 }

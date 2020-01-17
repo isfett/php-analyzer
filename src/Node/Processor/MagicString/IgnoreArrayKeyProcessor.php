@@ -22,11 +22,15 @@ class IgnoreArrayKeyProcessor extends AbstractProcessor
         /** @var Node\Scalar\String_ $node */
         $node = $occurrence->getNode();
 
-        if ($node->getAttribute('parent') instanceof Node\Expr\ArrayItem) {
-            $key = $node->getAttribute('parent')->key;
-            if (null !== $key && $key === $node) {
-                $this->nodeOccurrenceList->removeOccurrence($occurrence);
-            }
+        if (!$node->getAttribute(self::NODE_ATTRIBUTE_PARENT) instanceof Node\Expr\ArrayItem) {
+            return;
         }
+
+        $key = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT)->key;
+        if (null === $key || $key !== $node) {
+            return;
+        }
+
+        $this->nodeOccurrenceList->removeOccurrence($occurrence);
     }
 }
