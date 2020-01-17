@@ -11,7 +11,7 @@ use Symfony\Component\Finder\Finder as SymfonyFinder;
 class Finder extends SymfonyFinder
 {
     /** @var string */
-    private const IS_DIR = 'is_dir';
+    private const FUNCTION_IS_DIR = 'is_dir';
 
     /** @var string */
     private const WILDCARD_GLOB = '*.';
@@ -37,7 +37,7 @@ class Finder extends SymfonyFinder
         array $suffixes
     ) {
         parent::__construct();
-        $dirs = array_filter($directories, self::IS_DIR);
+        $dirs = array_filter($directories, self::FUNCTION_IS_DIR);
 
         $this
             ->files()
