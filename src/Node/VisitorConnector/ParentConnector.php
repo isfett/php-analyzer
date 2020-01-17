@@ -17,7 +17,7 @@ class ParentConnector extends AbstractVisitor
     private const ONE = 1;
 
     /** @var array */
-    private $stack;
+    private $stack = [];
 
     /**
      * @param array $nodes
