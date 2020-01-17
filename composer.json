@@ -40,7 +40,7 @@
     "autoload-dev": {
         "psr-4": {
             "Isfett\\PhpAnalyzer\\Tests\\": "tests/",
-            "SlevomatCodingStandard\\": "vendor/stat/coding-standard-php/phpcs/SlevomatCodingStandard"
+            "SlevomatCodingStandard\\": "vendor/isfett/coding-standard/phpcs/SlevomatCodingStandard"
         }
     }
 }
