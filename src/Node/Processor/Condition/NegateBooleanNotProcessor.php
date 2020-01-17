@@ -26,13 +26,13 @@ class NegateBooleanNotProcessor extends AbstractProcessor
      */
     public function process(Occurrence $occurrence): void
     {
+        /** @var Node\Expr\BooleanNot $node */
         $node = $occurrence->getNode();
         if (!$this->isBooleanNotAndHasBinaryOpExpression($node)) {
             return;
         }
 
-        /** @var Node\Expr\BooleanNot $node */
-        /** @var BinaryOp $expression */
+        /** @var Node\Expr\BinaryOp $expression */
         $expression = $node->expr;
 
         $occurrence->setNode($this->processBinaryOp($expression, $occurrence));
