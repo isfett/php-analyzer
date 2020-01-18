@@ -110,7 +110,7 @@ abstract class AbstractCommand extends Command
     /** @var string */
     protected const DESCRIPTION_PROCESSORS = 'Comma-separated string of processors which should transform the conditions (on wrong input you can see a list of possible processor)'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-        /** @var string */
+    /** @var string */
     protected const DESCRIPTION_SORT = 'sort direction of conditions, desc or asc'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
@@ -119,7 +119,7 @@ abstract class AbstractCommand extends Command
     /** @var string */
     protected const DESCRIPTION_VISITORS = 'Comma-separated string of visitors which should check the source code to find conditions (on wrong input you can see a list of possible visitors)'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-        /** @var string */
+    /** @var string */
     protected const EMPTY_STRING = ''; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
@@ -149,7 +149,7 @@ abstract class AbstractCommand extends Command
     /** @var string */
     protected const FORMAT_PROCESSORS_PROGRESS_MESSAGE = 'Processor %d is processing magic numbers. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-        /** @var string */
+    /** @var string */
     private const FORMAT_TO_LINE = '%s%s'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
@@ -158,7 +158,7 @@ abstract class AbstractCommand extends Command
     /** @var string */
     private const FORMAT_VISITORS_PROGRESS_MESSAGE = 'Visitors are checking for magic numbers in files. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-        /** @var string */
+    /** @var string */
     private const LINE_SEPARATOR = '-'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
