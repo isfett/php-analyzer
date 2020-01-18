@@ -1657,12 +1657,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/isfett/coding-standard.git",
-                "reference": "917084d9c07ec6608566d17f17edd5e1b1297082"
+                "reference": "94b1e220dc3fbd8258c30cf13155fa38f9ff7983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/isfett/coding-standard/zipball/917084d9c07ec6608566d17f17edd5e1b1297082",
-                "reference": "917084d9c07ec6608566d17f17edd5e1b1297082",
+                "url": "https://api.github.com/repos/isfett/coding-standard/zipball/94b1e220dc3fbd8258c30cf13155fa38f9ff7983",
+                "reference": "94b1e220dc3fbd8258c30cf13155fa38f9ff7983",
                 "shasum": ""
             },
             "require": {
@@ -1682,7 +1682,7 @@
                 }
             ],
             "description": "Coding-Standard for PHP",
-            "time": "2020-01-17T18:31:18+00:00"
+            "time": "2020-01-17T23:16:59+00:00"
         },
         {
             "name": "myclabs/deep-copy",
