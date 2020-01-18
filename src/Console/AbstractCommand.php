@@ -90,9 +90,6 @@ abstract class AbstractCommand extends Command
     protected const DEFAULT_SUFFIXES = 'php';
 
     /** @var string */
-    protected const DEFAULT_VISITORS = 'Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase';
-
-    /** @var string */
     protected const DESCRIPTION_DIRECTORY = 'path to directory which should be checked';
 
     /** @var string */

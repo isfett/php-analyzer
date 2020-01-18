@@ -70,6 +70,9 @@ class MostUsedConditionsCommand extends AbstractCommand
     private const COMMAND_NAME = 'most-used-conditions';
 
     /** @var string */
+    private const DEFAULT_VISITORS = 'BooleanReturn,Coalesce,ElseIf,If,Ternary';
+
+    /** @var string */
     private const DESCRIPTION_CSV_DELIMITER_SEMICOLON = 'change the csv delimiter to ;';
 
     /** @var string */

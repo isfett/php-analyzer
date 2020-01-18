@@ -36,6 +36,9 @@ class MagicStringDetectorCommand extends AbstractCommand
     private const COMMAND_NAME = 'magic-string-detector';
 
     /** @var string */
+    private const DEFAULT_VISITORS = 'Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary';
+
+    /** @var string */
     private const HEADER_OCCURRENCE = 'Occurrence';
 
     /** @var string */
