@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class Clone_ extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = 'clone %s';
+
     /**
      * @return string
      */
@@ -19,7 +22,7 @@ class Clone_ extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            'clone %s',
+            self::FORMAT_REPRESENTATION,
             $this->representate($node->expr)
         );
     }

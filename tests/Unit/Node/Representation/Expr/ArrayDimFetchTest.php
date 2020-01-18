@@ -37,7 +37,7 @@ class ArrayDimFetchTest extends AbstractNodeRepresentationTest
 
         $representation = new ArrayDimFetch($this->nodeRepresentationService, $node);
 
-        $this->assertEquals("\$test['x']", $representation->representation());
+        $this->assertSame("\$test['x']", $representation->representation());
     }
 
     /**
@@ -57,6 +57,6 @@ class ArrayDimFetchTest extends AbstractNodeRepresentationTest
 
         $representation = new ArrayDimFetch($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$test[]', $representation->representation());
+        $this->assertSame('$test[]', $representation->representation());
     }
 }

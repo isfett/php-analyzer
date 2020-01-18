@@ -33,7 +33,7 @@ class AssignVisitor extends AbstractVisitor
     private function isAssignment(Node $node): bool
     {
         /** @var Node $parent */
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
 
         return $parentNode instanceof Node\Expr\Assign;
     }

@@ -12,12 +12,25 @@ use Isfett\PhpAnalyzer\Node\Representation\Expr\BinaryOp;
  */
 class FlipChecking extends ConditionList
 {
+    /** @var int */
+    private const FIRST_CHARACTER = 0;
+
+    /** @var array */
     private const FLIP_OPERATORS = [
         BinaryOp::OPERATOR_SIGN_IDENTICAL,
         BinaryOp::OPERATOR_SIGN_NOT_IDENTICAL,
         BinaryOp::OPERATOR_SIGN_EQUAL,
         BinaryOp::OPERATOR_SIGN_NOT_EQUAL,
     ];
+
+    /** @var string */
+    private const FORMAT_FLIPPED = '%s %s %s';
+
+    /** @var int */
+    private const ONE = 1;
+
+    /** @var string */
+    private const SPACE = ' ';
 
     /** @var array */
     private $conditionHashes = [];
@@ -30,14 +43,16 @@ class FlipChecking extends ConditionList
     public function addCondition(Condition $condition): void
     {
         foreach (self::FLIP_OPERATORS as $operator) {
-            if (false !== strpos($condition->getCondition(), ' '.$operator.' ')) {
-                $flippedCond = $this->flipCondition($condition->getCondition(), $operator);
-                $flippedCondHash = md5($flippedCond);
-                if (in_array($flippedCondHash, $this->conditionHashes, true)) {
-                    $condition->setCondition($flippedCond);
-                    $condition->getOccurrence()->setIsFlipped(true);
-                    break;
-                }
+            if (false === strpos($condition->getCondition(), self::SPACE . $operator . self::SPACE)) {
+                continue;
+            }
+
+            $flippedCond = $this->flipCondition($condition->getCondition(), $operator);
+            $flippedCondHash = md5($flippedCond);
+            if (in_array($flippedCondHash, $this->conditionHashes, true)) {
+                $condition->setCondition($flippedCond);
+                $condition->getOccurrence()->setIsFlipped(true);
+                break;
             }
         }
 
@@ -55,10 +70,10 @@ class FlipChecking extends ConditionList
     private function flipCondition(string $condition, string $operator): string
     {
         return sprintf(
-            '%s %s %s',
-            substr($condition, strpos($condition, $operator) + strlen($operator) + 1),
+            self::FORMAT_FLIPPED,
+            substr($condition, strpos($condition, $operator) + strlen($operator) + self::ONE),
             $operator,
-            substr($condition, 0, strpos($condition, $operator) - 1)
+            substr($condition, self::FIRST_CHARACTER, strpos($condition, $operator) - self::ONE)
         );
     }
 }

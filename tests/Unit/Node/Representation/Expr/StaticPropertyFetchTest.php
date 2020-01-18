@@ -37,6 +37,6 @@ class StaticPropertyFetchTest extends AbstractNodeRepresentationTest
 
         $representation = new StaticPropertyFetch($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('Classname::X', $representation->representation());
+        $this->assertSame('Classname::X', $representation->representation());
     }
 }

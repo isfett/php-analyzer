@@ -37,6 +37,6 @@ class PlusTest extends AbstractNodeRepresentationTest
 
         $representation = new Plus($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable += $variable2', $representation->representation());
+        $this->assertSame('$variable += $variable2', $representation->representation());
     }
 }

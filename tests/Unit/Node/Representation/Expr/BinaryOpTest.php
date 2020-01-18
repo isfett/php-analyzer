@@ -74,7 +74,7 @@ class BinaryOpTest extends AbstractNodeRepresentationTest
 
         $representation = new BinaryOp($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->representation());
+        $this->assertSame($expectedOutput, $representation->representation());
     }
 
     /**
@@ -101,6 +101,6 @@ class BinaryOpTest extends AbstractNodeRepresentationTest
 
         $representation = new BinaryOp($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('($variable === $variable2 || $variable3 === $variable4)', $representation->representation());
+        $this->assertSame('($variable === $variable2 || $variable3 === $variable4)', $representation->representation());
     }
 }

@@ -26,8 +26,8 @@ class EqualTest extends AbstractNodeTestCase
         $negatedNode = (new Equal())->negate($node);
 
         $this->assertInstanceOf(BinaryOp\NotEqual::class, $negatedNode);
-        $this->assertEquals($node->left, $negatedNode->left);
-        $this->assertEquals($node->right, $negatedNode->right);
-        $this->assertEquals($node->getAttributes(), $negatedNode->getAttributes());
+        $this->assertSame($node->left, $negatedNode->left);
+        $this->assertSame($node->right, $negatedNode->right);
+        $this->assertSame($node->getAttributes(), $negatedNode->getAttributes());
     }
 }

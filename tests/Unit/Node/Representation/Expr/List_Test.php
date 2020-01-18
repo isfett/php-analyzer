@@ -38,6 +38,6 @@ class List_Test extends AbstractNodeRepresentationTest
 
         $representation = new List_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('list($x)', $representation->representation());
+        $this->assertSame('list($x)', $representation->representation());
     }
 }

@@ -63,6 +63,6 @@ class ArgTest extends AbstractNodeRepresentationTest
 
         $representation = new Arg($this->nodeRepresentationService, $node);
 
-        $this->assertEquals($expectedOutput, $representation->representation());
+        $this->assertSame($expectedOutput, $representation->representation());
     }
 }

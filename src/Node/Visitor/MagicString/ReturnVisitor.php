@@ -33,7 +33,7 @@ class ReturnVisitor extends AbstractVisitor
     private function isReturn(Node $node): bool
     {
         /** @var Node $parent */
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
 
         return $parentNode instanceof Node\Stmt\Return_;
     }

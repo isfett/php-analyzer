@@ -10,6 +10,12 @@ use PhpParser\Node;
  */
 class NodeRepresentationClassDoesNotExistException extends \LogicException
 {
+    /** @var int */
+    private const ERROR_CODE = 0;
+
+    /** @var string */
+    private const ERROR_MESSAGE = 'No Representation for node %s found';
+
     /**
      * NodeRepresentationClassDoesNotExistException constructor.
      *
@@ -18,9 +24,13 @@ class NodeRepresentationClassDoesNotExistException extends \LogicException
      */
     public function __construct(Node $node, ?\Throwable $previous = null)
     {
-        parent::__construct(sprintf(
-            'No Representation for node %s found',
-            get_class($node)
-        ), 0, $previous);
+        parent::__construct(
+            sprintf(
+                self::ERROR_MESSAGE,
+                get_class($node)
+            ),
+            self::ERROR_CODE,
+            $previous
+        );
     }
 }

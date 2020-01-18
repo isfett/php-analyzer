@@ -6,14 +6,15 @@ namespace Isfett\PhpAnalyzer\Node\Processor\Condition;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
 use Isfett\PhpAnalyzer\Node\AbstractProcessor;
 use PhpParser\Node;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Isset_;
 
 /**
  * Class SplitIssetProcessor
  */
 class SplitIssetProcessor extends AbstractProcessor
 {
+    /** @var int */
+    private const ONE = 1;
+
     /**
      * @param Occurrence $occurrence
      *
@@ -28,8 +29,10 @@ class SplitIssetProcessor extends AbstractProcessor
             $node = $node->expr;
             $isBooleanNot = true;
         }
+
+        // phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
         if ($this->isIssetAndHasMultipleArguments($node)) {
-            /** @var Isset_ $node */
+            /** @var Node\Expr\Isset_ $node */
             $arguments = $node->vars;
             $node->vars = [];
 
@@ -39,33 +42,36 @@ class SplitIssetProcessor extends AbstractProcessor
     }
 
     /**
-     * @param Node $node
+     * @param Occurrence       $originalOccurrence
+     * @param iterable         $arguments
+     * @param Node\Expr\Isset_ $originalNode
+     * @param bool             $isBooleanNot
      *
-     * @return bool
+     * @return void
      */
-    private function isIssetAndHasMultipleArguments(Node $node): bool
-    {
-        return $node instanceof Isset_ && count($node->vars) > 1;
+    private function createIssetOccurrences(
+        Occurrence $originalOccurrence,
+        iterable $arguments,
+        Node\Expr\Isset_ $originalNode,
+        bool $isBooleanNot
+    ): void {
+        foreach ($arguments as $argument) {
+            $node = $this->createNewIssetNode($originalNode, $argument, $isBooleanNot);
+            $occurrence = clone $originalOccurrence;
+            $occurrence->setNode($node);
+            $this->markOccurrenceAsAffected($occurrence);
+            $this->nodeOccurrenceList->addOccurrence($occurrence);
+        }
     }
 
     /**
-     * @param Node $node
+     * @param Node\Expr\Isset_ $originalNode
+     * @param Node             $var
+     * @param bool             $isBooleanNot
      *
-     * @return bool
+     * @return Node|Node\Expr\Isset_|Node\Expr\BooleanNot
      */
-    private function isBooleanNotNestedIsset(Node $node): bool
-    {
-        return $node instanceof BooleanNot && $this->isIssetAndHasMultipleArguments($node->expr);
-    }
-
-    /**
-     * @param Isset_ $originalNode
-     * @param Node   $var
-     * @param bool   $isBooleanNot
-     *
-     * @return Node|Isset_|BooleanNot
-     */
-    private function createNewIssetNode(Isset_ $originalNode, Node $var, bool $isBooleanNot): Node
+    private function createNewIssetNode(Node\Expr\Isset_ $originalNode, Node $var, bool $isBooleanNot): Node
     {
         $node = clone $originalNode;
         $node->vars[] = $var;
@@ -78,25 +84,22 @@ class SplitIssetProcessor extends AbstractProcessor
     }
 
     /**
-     * @param Occurrence $originalOccurrence
-     * @param iterable   $arguments
-     * @param Isset_     $originalNode
-     * @param bool       $isBooleanNot
+     * @param Node $node
      *
-     * @return void
+     * @return bool
      */
-    private function createIssetOccurrences(
-        Occurrence $originalOccurrence,
-        iterable $arguments,
-        Isset_ $originalNode,
-        bool $isBooleanNot
-    ): void {
-        foreach ($arguments as $argument) {
-            $node = $this->createNewIssetNode($originalNode, $argument, $isBooleanNot);
-            $occurrence = clone $originalOccurrence;
-            $occurrence->setNode($node);
-            $this->markOccurrenceAsAffected($occurrence);
-            $this->nodeOccurrenceList->addOccurrence($occurrence);
-        }
+    private function isBooleanNotNestedIsset(Node $node): bool
+    {
+        return $node instanceof Node\Expr\BooleanNot && $this->isIssetAndHasMultipleArguments($node->expr);
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return bool
+     */
+    private function isIssetAndHasMultipleArguments(Node $node): bool
+    {
+        return $node instanceof Node\Expr\Isset_ && count($node->vars) > self::ONE;
     }
 }

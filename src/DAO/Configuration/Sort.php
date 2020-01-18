@@ -44,16 +44,16 @@ class Sort
     /**
      * @return int|null
      */
-    public function getMaxResults(): ?int
+    public function getFirstResult(): ?int
     {
-        return $this->maxResults;
+        return $this->firstResult;
     }
 
     /**
      * @return int|null
      */
-    public function getFirstResult(): ?int
+    public function getMaxResults(): ?int
     {
-        return $this->firstResult;
+        return $this->maxResults;
     }
 }

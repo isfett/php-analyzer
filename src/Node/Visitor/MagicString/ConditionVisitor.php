@@ -51,7 +51,7 @@ class ConditionVisitor extends AbstractVisitor
             Node\Expr\BinaryOp\Spaceship::class,
         ];
         /** @var Node $parent */
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
 
         return in_array(get_class($parentNode), $possibleConditions, true);
     }
@@ -64,7 +64,7 @@ class ConditionVisitor extends AbstractVisitor
     private function notComparingAgainstConst(Node $node): bool
     {
         /** @var Node $parent */
-        $parentNode = $node->getAttribute('parent');
+        $parentNode = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
 
         return $parentNode instanceof Node\Expr\BinaryOp &&
             !$parentNode->left instanceof Node\Expr\ConstFetch &&

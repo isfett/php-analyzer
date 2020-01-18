@@ -37,7 +37,7 @@ class ClosureUseTest extends AbstractNodeRepresentationTest
 
         $representation = new ClosureUse($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x', $representation->representation());
+        $this->assertSame('$x', $representation->representation());
     }
 
     /**
@@ -57,6 +57,6 @@ class ClosureUseTest extends AbstractNodeRepresentationTest
 
         $representation = new ClosureUse($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('&$x', $representation->representation());
+        $this->assertSame('&$x', $representation->representation());
     }
 }

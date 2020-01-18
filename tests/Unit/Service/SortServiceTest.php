@@ -51,7 +51,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]));
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             1 => [
                 'count' => 77,
             ],
@@ -90,7 +90,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]));
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             2 => [
                 'count' => 100,
                 'name' => 'apple',
@@ -128,7 +128,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]), 1);
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             0 => [
                 'count' => 5,
             ],
@@ -160,7 +160,7 @@ class SortServiceTest extends AbstractNodeTestCase
         ]), null, 2);
 
         $sortedCollection = $this->sortService->sortArrayCollection($collection, $sortConfiguration);
-        $this->assertEquals([
+        $this->assertSame([
             0 => [
                 'count' => 77,
             ],
@@ -177,26 +177,30 @@ class SortServiceTest extends AbstractNodeTestCase
     {
         $sortConfiguration = new Sort(new ArrayCollection([
             new SortField('value', 'ASC'),
-        ]), 2, 3);
+        ]), 1, 3);
 
         $nodes = new ArrayCollection([
-            $this->createOccurrence(new Node\Scalar\LNumber(13)),
-            $this->createOccurrence(new Node\Scalar\LNumber(15)),
-            $this->createOccurrence(new Node\Scalar\LNumber(11)),
-            $this->createOccurrence(new Node\Scalar\LNumber(5)),
-            $this->createOccurrence(new Node\Scalar\LNumber(2)),
-            $this->createOccurrence(new Node\Scalar\LNumber(99)),
-            $this->createOccurrence(new Node\Scalar\LNumber(77)),
+            $this->createOccurrence($this->createLNumberNode(13)),
+            $this->createOccurrence($this->createLNumberNode(15)),
+            $this->createOccurrence($this->createLNumberNode(-11)),
+            $this->createOccurrence($this->createLNumberNode(5)),
+            $this->createOccurrence($this->createLNumberNode(2)),
+            $this->createOccurrence($this->createLNumberNode(99)),
+            $this->createOccurrence($this->createLNumberNode(77)),
         ]);
 
         $sortedNodes = $this->sortService->sortOccurrenceCollectionByNodeValues($nodes, $sortConfiguration);
 
-        $expectedValues = [5, 11, 13];
+        $expectedValues = [11, 2, 5];
         $this->assertCount(3, $sortedNodes);
         /** @var Occurrence $occurrence */
         foreach ($sortedNodes as $key => $occurrence) {
             $node = $occurrence->getNode();
-            $this->assertEquals($expectedValues[$key], $node->value);
+            $this->assertSame($expectedValues[$key], $node->value);
+
+            if (0 === $key) {
+                $this->assertInstanceOf(Node\Expr\UnaryMinus::class, $node->getAttribute('parent'));
+            }
         }
     }
 
@@ -210,14 +214,14 @@ class SortServiceTest extends AbstractNodeTestCase
         ]), 2, 2);
 
         $nodes = new ArrayCollection([
-            $this->createOccurrence(new Node\Scalar\LNumber(13)),
-            $this->createOccurrence(new Node\Scalar\LNumber(15)),
-            $this->createOccurrence(new Node\Scalar\LNumber(11)),
-            $this->createOccurrence(new Node\Scalar\LNumber(5)),
-            $this->createOccurrence(new Node\Scalar\LNumber(2)),
-            $this->createOccurrence(new Node\Scalar\LNumber(99)),
-            $this->createOccurrence(new Node\Scalar\LNumber(77)),
-            $this->createOccurrence(new Node\Scalar\LNumber(77)),
+            $this->createOccurrence($this->createLNumberNode(13)),
+            $this->createOccurrence($this->createLNumberNode(15)),
+            $this->createOccurrence($this->createLNumberNode(-11)),
+            $this->createOccurrence($this->createLNumberNode(5)),
+            $this->createOccurrence($this->createLNumberNode(2)),
+            $this->createOccurrence($this->createLNumberNode(99)),
+            $this->createOccurrence($this->createLNumberNode(77)),
+            $this->createOccurrence($this->createLNumberNode(77)),
         ]);
 
         $sortedNodes = $this->sortService->sortOccurrenceCollectionByNodeValues($nodes, $sortConfiguration);
@@ -227,7 +231,7 @@ class SortServiceTest extends AbstractNodeTestCase
         /** @var Occurrence $occurrence */
         foreach ($sortedNodes as $key => $occurrence) {
             $node = $occurrence->getNode();
-            $this->assertEquals($expectedValues[$key], $node->value);
+            $this->assertSame($expectedValues[$key], $node->value);
         }
     }
 }

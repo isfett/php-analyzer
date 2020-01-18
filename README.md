@@ -30,6 +30,8 @@ This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser
 ## Planned
 - Find Duplicate Code (ignoring codestyle, just checking statements)
 - Find Classes/Functions with the highest cyclomatic complexity
+- Halstead-Metrics
+- Most Used Constants (Order by name or value)
 
 ## Contributing
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.

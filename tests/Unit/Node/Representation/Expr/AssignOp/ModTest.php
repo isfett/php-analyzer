@@ -37,6 +37,6 @@ class ModTest extends AbstractNodeRepresentationTest
 
         $representation = new Mod($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable %= $variable2', $representation->representation());
+        $this->assertSame('$variable %= $variable2', $representation->representation());
     }
 }

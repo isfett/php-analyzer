@@ -11,6 +11,9 @@ use PhpParser\Node;
  */
 class BooleanReturnVisitor extends AbstractVisitor
 {
+    /** @var string */
+    private const RETURN_TYPE_BOOL = 'bool';
+
     /**
      * @param Node $node
      *
@@ -22,7 +25,7 @@ class BooleanReturnVisitor extends AbstractVisitor
             /** @var Node\Identifier|Node\Name|null $returnType */
             $returnType = $node->returnType;
             if ($returnType instanceof Node\Identifier &&
-                'bool' === strtolower($returnType->name) &&
+                self::RETURN_TYPE_BOOL === strtolower($returnType->name) &&
                 count($node->stmts)
             ) {
                 /** @var Node\Stmt\Return_ $return */

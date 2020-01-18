@@ -22,8 +22,10 @@ class IgnoreEmptyStringProcessor extends AbstractProcessor
         /** @var Node\Scalar\String_ $node */
         $node = $occurrence->getNode();
 
-        if ('' === $node->value) {
-            $this->nodeOccurrenceList->removeOccurrence($occurrence);
+        if (self::EMPTY_STRING !== $node->value) {
+            return;
         }
+
+        $this->nodeOccurrenceList->removeOccurrence($occurrence);
     }
 }

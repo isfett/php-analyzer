@@ -27,11 +27,13 @@ class CountedCondition
     }
 
     /**
-     * @return int
+     * @param Occurrence $occurrence
+     *
+     * @return void
      */
-    public function getCount(): int
+    public function addOccurrence(Occurrence $occurrence): void
     {
-        return count($this->occurrences);
+        $this->occurrences[] = $occurrence;
     }
 
     /**
@@ -43,20 +45,18 @@ class CountedCondition
     }
 
     /**
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return count($this->occurrences);
+    }
+
+    /**
      * @return array
      */
     public function getOccurrences(): array
     {
         return $this->occurrences;
-    }
-
-    /**
-     * @param Occurrence $occurrence
-     *
-     * @return void
-     */
-    public function addOccurrence(Occurrence $occurrence): void
-    {
-        $this->occurrences[] = $occurrence;
     }
 }

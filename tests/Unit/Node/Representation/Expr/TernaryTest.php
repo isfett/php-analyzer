@@ -34,10 +34,10 @@ class TernaryTest extends AbstractNodeRepresentationTest
 
         $this->nodeRepresentationService
             ->method('representationForNode')
-            ->willReturn('$x');
+            ->willReturn('$x', '$a', '$b');
 
         $representation = new Ternary($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x', $representation->representation());
+        $this->assertSame('$x ? $a : $b', $representation->representation());
     }
 }

@@ -15,6 +15,9 @@ use Isfett\PhpAnalyzer\Exception\InvalidSortConfigurationException;
  */
 class SortConfigurationBuilder implements SortConfigurationBuilderInterface
 {
+    /** @var string */
+    private const NO_SORT_FIELDS_EXCEPTION_MESSAGE = 'You need to add at least one sort field';
+
     /** @var int|null */
     private $firstResult;
 
@@ -33,43 +36,6 @@ class SortConfigurationBuilder implements SortConfigurationBuilderInterface
     }
 
     /**
-     * @return Sort
-     * @throws InvalidSortConfigurationException
-     */
-    public function getSortConfiguration(): Sort
-    {
-        if (0 === $this->sortFields->count()) {
-            throw new InvalidSortConfigurationException('You need to add at least one sort field');
-        }
-
-        return new Sort($this->sortFields, $this->firstResult, $this->maxResults);
-    }
-
-    /**
-     * @param int|null $maxResults
-     *
-     * @return SortConfigurationBuilderInterface
-     */
-    public function setMaxResults(?int $maxResults = null): SortConfigurationBuilderInterface
-    {
-        $this->maxResults = $maxResults;
-
-        return $this;
-    }
-
-    /**
-     * @param int|null $firstResult
-     *
-     * @return SortConfigurationBuilderInterface
-     */
-    public function setFirstResult(?int $firstResult = null): SortConfigurationBuilderInterface
-    {
-        $this->firstResult = $firstResult;
-
-        return $this;
-    }
-
-    /**
      * @param string $field
      * @param string $direction
      *
@@ -85,6 +51,43 @@ class SortConfigurationBuilder implements SortConfigurationBuilderInterface
 
         $sortField = new SortField($field, $direction);
         $this->sortFields->add($sortField);
+
+        return $this;
+    }
+
+    /**
+     * @return Sort
+     * @throws InvalidSortConfigurationException
+     */
+    public function getSortConfiguration(): Sort
+    {
+        if (!$this->sortFields->count()) {
+            throw new InvalidSortConfigurationException(self::NO_SORT_FIELDS_EXCEPTION_MESSAGE);
+        }
+
+        return new Sort($this->sortFields, $this->firstResult, $this->maxResults);
+    }
+
+    /**
+     * @param int|null $firstResult
+     *
+     * @return SortConfigurationBuilderInterface
+     */
+    public function setFirstResult(?int $firstResult = null): SortConfigurationBuilderInterface
+    {
+        $this->firstResult = $firstResult;
+
+        return $this;
+    }
+
+    /**
+     * @param int|null $maxResults
+     *
+     * @return SortConfigurationBuilderInterface
+     */
+    public function setMaxResults(?int $maxResults = null): SortConfigurationBuilderInterface
+    {
+        $this->maxResults = $maxResults;
 
         return $this;
     }

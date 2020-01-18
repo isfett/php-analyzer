@@ -12,9 +12,7 @@ use Isfett\PhpAnalyzer\DAO\CountedCondition;
  */
 class Countable
 {
-    /**
-     * @var ArrayCollection<CountedCondition>
-     */
+    /** @var ArrayCollection<CountedCondition> */
     private $countedConditions;
 
     /**
@@ -23,14 +21,6 @@ class Countable
     public function __construct()
     {
         $this->countedConditions = new ArrayCollection();
-    }
-
-    /**
-     * @return ArrayCollection<CountedCondition>
-     */
-    public function getCountedConditions(): ArrayCollection
-    {
-        return $this->countedConditions;
     }
 
     /**
@@ -54,6 +44,14 @@ class Countable
             $countedCondition = $this->countedConditions->get($foundKey);
             $countedCondition->addOccurrence($condition->getOccurrence());
         }
+    }
+
+    /**
+     * @return ArrayCollection<CountedCondition>
+     */
+    public function getCountedConditions(): ArrayCollection
+    {
+        return $this->countedConditions;
     }
 
     /**

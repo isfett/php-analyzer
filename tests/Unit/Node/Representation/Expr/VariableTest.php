@@ -32,7 +32,7 @@ class VariableTest extends AbstractNodeRepresentationTest
 
         $representation = new Variable($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$test', $representation->representation());
+        $this->assertSame('$test', $representation->representation());
     }
 
     /**
@@ -54,6 +54,6 @@ class VariableTest extends AbstractNodeRepresentationTest
             ->method('representationForNode')
             ->willReturn('$test');
 
-        $this->assertEquals('$$test', $representation->representation());
+        $this->assertSame('$$test', $representation->representation());
     }
 }

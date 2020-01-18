@@ -21,6 +21,7 @@ class RemoveDuplicateBooleanNotProcessor extends AbstractProcessor
     {
         /** @var Node $node */
         $node = $occurrence->getNode();
+        // phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
         if ($node instanceof Node\Expr\BooleanNot && $node->expr instanceof Node\Expr\BooleanNot) {
             $occurrence->setNode($node->expr->expr);
             $this->markOccurrenceAsAffected($occurrence);

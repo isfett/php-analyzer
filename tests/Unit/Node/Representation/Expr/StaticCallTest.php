@@ -43,6 +43,6 @@ class StaticCallTest extends AbstractNodeRepresentationTest
 
         $representation = new StaticCall($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('Classname::x($x)', $representation->representation());
+        $this->assertSame('Classname::x($x)', $representation->representation());
     }
 }

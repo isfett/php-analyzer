@@ -56,7 +56,7 @@ class SplitIssetProcessorTest extends AbstractNodeTestCase
         foreach (array_values($nodeOccurrenceList->getOccurrences()->toArray()) as $key => $occurrence) {
             $this->assertInstanceOf(Isset_::class, $occurrence->getNode());
             $this->assertCount(1, $occurrence->getNode()->vars);
-            $this->assertEquals($childNodes[$key], $occurrence->getNode()->vars[0]);
+            $this->assertSame($childNodes[$key], $occurrence->getNode()->vars[0]);
             $this->assertContains('SplitIsset', $occurrence->getAffectedByProcessors());
         }
     }
@@ -89,7 +89,7 @@ class SplitIssetProcessorTest extends AbstractNodeTestCase
             $this->assertInstanceOf(BooleanNot::class, $occurrence->getNode());
             $this->assertInstanceOf(Isset_::class, $occurrence->getNode()->expr);
             $this->assertCount(1, $occurrence->getNode()->expr->vars);
-            $this->assertEquals($childNodes[$key], $occurrence->getNode()->expr->vars[0]);
+            $this->assertSame($childNodes[$key], $occurrence->getNode()->expr->vars[0]);
             $this->assertContains('SplitIsset', $occurrence->getAffectedByProcessors());
         }
     }

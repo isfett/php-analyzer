@@ -42,8 +42,8 @@ class SortConfigurationBuilderTest extends TestCase
         $this->assertNull($sortConfiguration->getMaxResults());
         $this->assertCount(1, $sortConfiguration->getFields());
         $this->assertInstanceOf(SortField::class, $sortConfiguration->getFields()->first());
-        $this->assertEquals('count', $sortConfiguration->getFields()->first()->getField());
-        $this->assertEquals('DESC', $sortConfiguration->getFields()->first()->getDirection());
+        $this->assertSame('count', $sortConfiguration->getFields()->first()->getField());
+        $this->assertSame('DESC', $sortConfiguration->getFields()->first()->getDirection());
     }
 
     /**
@@ -65,11 +65,11 @@ class SortConfigurationBuilderTest extends TestCase
         foreach ($sortConfiguration->getFields() as $key => $field) {
             $this->assertInstanceOf(SortField::class, $field);
             if (0 === $key) {
-                $this->assertEquals('count', $field->getField());
-                $this->assertEquals('DESC', $field->getDirection());
+                $this->assertSame('count', $field->getField());
+                $this->assertSame('DESC', $field->getDirection());
             } elseif (1 === $key) {
-                $this->assertEquals('name', $field->getField());
-                $this->assertEquals('ASC', $field->getDirection());
+                $this->assertSame('name', $field->getField());
+                $this->assertSame('ASC', $field->getDirection());
             }
         }
     }
@@ -85,7 +85,7 @@ class SortConfigurationBuilderTest extends TestCase
             ->getSortConfiguration();
 
         $this->assertInstanceOf(Sort::class, $sortConfiguration);
-        $this->assertEquals(10, $sortConfiguration->getMaxResults());
+        $this->assertSame(10, $sortConfiguration->getMaxResults());
         $this->assertNull($sortConfiguration->getFirstResult());
     }
 
@@ -100,7 +100,7 @@ class SortConfigurationBuilderTest extends TestCase
             ->getSortConfiguration();
 
         $this->assertInstanceOf(Sort::class, $sortConfiguration);
-        $this->assertEquals(10, $sortConfiguration->getFirstResult());
+        $this->assertSame(10, $sortConfiguration->getFirstResult());
         $this->assertNull($sortConfiguration->getMaxResults());
     }
 
@@ -116,8 +116,8 @@ class SortConfigurationBuilderTest extends TestCase
             ->getSortConfiguration();
 
         $this->assertInstanceOf(Sort::class, $sortConfiguration);
-        $this->assertEquals(10, $sortConfiguration->getFirstResult());
-        $this->assertEquals(10, $sortConfiguration->getMaxResults());
+        $this->assertSame(10, $sortConfiguration->getFirstResult());
+        $this->assertSame(10, $sortConfiguration->getMaxResults());
     }
 
     /**

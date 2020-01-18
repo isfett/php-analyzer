@@ -67,7 +67,19 @@ abstract class AbstractNodeTestCase extends TestCase
      */
     protected function createLNumberNode(int $value): Node\Scalar\LNumber
     {
-        return new Node\Scalar\LNumber($value, $this->getNodeAttributes());
+        $isMinus = false;
+        if ($value < 0) {
+            $value *= -1;
+            $isMinus = true;
+        }
+
+        $node = new Node\Scalar\LNumber($value, $this->getNodeAttributes());
+
+        if ($isMinus) {
+            $node->setAttribute('parent', new Node\Expr\UnaryMinus($node));
+        }
+
+        return $node;
     }
 
     /**

@@ -31,6 +31,6 @@ class IdentifierTest extends AbstractNodeRepresentationTest
 
         $representation = new Identifier($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('test', $representation->representation());
+        $this->assertSame('test', $representation->representation());
     }
 }

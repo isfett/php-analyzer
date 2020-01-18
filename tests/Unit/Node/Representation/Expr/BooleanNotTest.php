@@ -36,6 +36,6 @@ class BooleanNotTest extends AbstractNodeRepresentationTest
 
         $representation = new BooleanNot($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('!$x', $representation->representation());
+        $this->assertSame('!$x', $representation->representation());
     }
 }

@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class BooleanNot extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s%s';
+
     /**
      * @return string
      */
@@ -19,8 +22,8 @@ class BooleanNot extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            '%s%s',
-            '!',
+            self::FORMAT_REPRESENTATION,
+            self::NEGATION_SIGN,
             $this->representate($node->expr)
         );
     }

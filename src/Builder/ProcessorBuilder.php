@@ -12,11 +12,23 @@ use Isfett\PhpAnalyzer\Node\Processor\ProcessorInterface;
  */
 class ProcessorBuilder implements ProcessorBuilderInterface
 {
+    /** @var string */
+    private const COMMA = ',';
+
+    /** @var string */
+    private const COMMA_WITH_SPACE = ', ';
+
+    /** @var string */
+    private const EMPTY_STRING = '';
+
+    /** @var string */
+    private const FORMAT_NAMESPACE = 'Isfett\\PhpAnalyzer\\Node\\Processor\\%s\\%sProcessor';
+
     /** @var array */
     private $names = [];
 
     /** @var string */
-    private $prefix = '';
+    private $prefix = self::EMPTY_STRING;
 
     /**
      * @return ArrayCollection<ProcessorInterface>
@@ -26,7 +38,7 @@ class ProcessorBuilder implements ProcessorBuilderInterface
         $visitors = new ArrayCollection();
 
         foreach ($this->names as $name) {
-            $classname = sprintf('Isfett\\PhpAnalyzer\\Node\\Processor\\%s\\%sProcessor', $this->prefix, $name);
+            $classname = sprintf(self::FORMAT_NAMESPACE, $this->prefix, $name);
 
             if (!class_exists($classname)) {
                 throw new InvalidProcessorNameException($name, $this->prefix);
@@ -45,10 +57,10 @@ class ProcessorBuilder implements ProcessorBuilderInterface
      */
     public function setNames(string $names): ProcessorBuilderInterface
     {
-        if ('' === $names) {
+        if (self::EMPTY_STRING === $names) {
             $this->names = [];
         } else {
-            $this->names = explode(',', str_replace(', ', ',', $names));
+            $this->names = explode(self::COMMA, str_replace(self::COMMA_WITH_SPACE, self::COMMA, $names));
         }
 
         return $this;
@@ -57,7 +69,7 @@ class ProcessorBuilder implements ProcessorBuilderInterface
     /**
      * @param string $prefix
      *
-     * @return VisitorBuilderInterface
+     * @return ProcessorBuilderInterface
      */
     public function setPrefix(string $prefix): ProcessorBuilderInterface
     {

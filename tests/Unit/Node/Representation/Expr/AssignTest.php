@@ -37,6 +37,6 @@ class AssignTest extends AbstractNodeRepresentationTest
 
         $representation = new Assign($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x = $y', $representation->representation());
+        $this->assertSame('$x = $y', $representation->representation());
     }
 }

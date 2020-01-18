@@ -37,6 +37,6 @@ class PropertyFetchTest extends AbstractNodeRepresentationTest
 
         $representation = new PropertyFetch($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$this->x', $representation->representation());
+        $this->assertSame('$this->x', $representation->representation());
     }
 }

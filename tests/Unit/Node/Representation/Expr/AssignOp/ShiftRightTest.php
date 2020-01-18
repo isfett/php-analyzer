@@ -37,6 +37,6 @@ class ShiftRightTest extends AbstractNodeRepresentationTest
 
         $representation = new ShiftRight($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$variable >>= $variable2', $representation->representation());
+        $this->assertSame('$variable >>= $variable2', $representation->representation());
     }
 }

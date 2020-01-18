@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class Variable extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s%s';
+
     /**
      * @return string
      */
@@ -25,8 +28,8 @@ class Variable extends AbstractRepresentation
         }
 
         return sprintf(
-            '%s%s',
-            '$',
+            self::FORMAT_REPRESENTATION,
+            self::VARIABLE_SIGN,
             $name
         );
     }

@@ -7,15 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Isfett\PhpAnalyzer\DAO\Configuration\Sort;
 use Isfett\PhpAnalyzer\DAO\Configuration\SortField;
-use Isfett\PhpAnalyzer\DAO\Occurrence;
-use Isfett\PhpAnalyzer\Node\Representation\Expr\UnaryMinus;
-use PhpParser\Node;
+use Isfett\PhpAnalyzer\Service\SortService\SortByNodeValues;
 
 /**
  * Class SortService
  */
 class SortService
 {
+    /** @var int */
+    private const ARRAY_FIRST_KEY = 0;
+
+    /** @var int */
+    private const HUMAN_TO_COMPUTER_ARRAY_OFFSET = 1;
+
     /**
      * @param ArrayCollection $collection
      * @param Sort            $sortConfiguration
@@ -45,50 +49,21 @@ class SortService
         Sort $sortConfiguration
     ): ArrayCollection {
         $collectionIterator = $collection->getIterator();
-        $collectionIterator->uasort(static function ($occurrenceA, $occurrenceB) use ($sortConfiguration) {
-            /** @var Occurrence $occurrenceA */
-            /** @var Occurrence $occurrenceB */
-            /** @var Node\Scalar\LNumber|Node\Scalar\DNumber $nodeA */
-            /** @var Node\Scalar\LNumber|Node\Scalar\DNumber $nodeB */
-            $nodeA = $occurrenceA->getNode();
-            $nodeB = $occurrenceB->getNode();
-
-            $valueA = strtolower((string) $nodeA->value);
-            $valueB = strtolower((string) $nodeB->value);
-
-            if ($nodeA->hasAttribute('parent') && $nodeA->getAttribute('parent') instanceof Node\Expr\UnaryMinus) {
-                $valueA *= -1;
-            }
-
-            if ($nodeB->hasAttribute('parent') && $nodeB->getAttribute('parent') instanceof Node\Expr\UnaryMinus) {
-                $valueB *= -1;
-            }
-
-            $result = 0;
-
-            /** @var SortField $sortField */
-            foreach ($sortConfiguration->getFields() as $sortField) {
-                $field = $sortField->getField();
-                $result = strtolower((string) $nodeA->$field) <=> strtolower((string) $nodeB->$field);
-                if ('value' === $field) {
-                    $result = $valueA <=> $valueB;
-                }
-                if (Criteria::DESC === $sortField->getDirection()) {
-                    $result *= -1;
-                }
-                if (0 !== $result) {
-                    return $result;
-                }
-            }
-
-            return $result;
-        });
+        $collectionIterator->uasort([new SortByNodeValues($sortConfiguration), SortByNodeValues::SORT_FUNCTION]);
         $collectionArray = iterator_to_array($collectionIterator, true);
         if (null !== $sortConfiguration->getFirstResult()) {
-            $collectionArray = array_slice($collectionArray, $sortConfiguration->getFirstResult() - 1);
+            $collectionArray = array_slice(
+                $collectionArray,
+                $sortConfiguration->getFirstResult() - self::HUMAN_TO_COMPUTER_ARRAY_OFFSET
+            );
         }
+
         if (null !== $sortConfiguration->getMaxResults()) {
-            $collectionArray = array_slice($collectionArray, 0, $sortConfiguration->getMaxResults());
+            $collectionArray = array_slice(
+                $collectionArray,
+                self::ARRAY_FIRST_KEY,
+                $sortConfiguration->getMaxResults()
+            );
         }
 
         return new ArrayCollection($collectionArray);

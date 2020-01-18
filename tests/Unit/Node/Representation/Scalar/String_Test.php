@@ -32,6 +32,6 @@ class String_Test extends AbstractNodeRepresentationTest
 
         $representation = new String_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals("'test'", $representation->representation());
+        $this->assertSame("'test'", $representation->representation());
     }
 }

@@ -55,6 +55,6 @@ class Include_Test extends AbstractNodeRepresentationTest
 
         $representation = new Include_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals(sprintf("%s('path/to/file')", $includeFunction), $representation->representation());
+        $this->assertSame(sprintf("%s('path/to/file')", $includeFunction), $representation->representation());
     }
 }

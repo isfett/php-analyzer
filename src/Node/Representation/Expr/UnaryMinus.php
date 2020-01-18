@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class UnaryMinus extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '-%s';
+
     /**
      * @return string
      */
@@ -19,7 +22,7 @@ class UnaryMinus extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            '-%s',
+            self::FORMAT_REPRESENTATION,
             $this->representate($node->expr)
         );
     }

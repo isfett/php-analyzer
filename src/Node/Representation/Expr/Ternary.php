@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class Ternary extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%s ?%s%s%s: %s';
+
     /**
      * @return string
      */
@@ -19,8 +22,12 @@ class Ternary extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            '%s',
-            $this->representate($node->cond)
+            self::FORMAT_REPRESENTATION,
+            $this->representate($node->cond),
+            null === $node->if ? self::EMPTY_STRING : self::SPACE,
+            $this->representate($node->if),
+            null === $node->if ? self::EMPTY_STRING : self::SPACE,
+            $this->representate($node->else)
         );
     }
 }

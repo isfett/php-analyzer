@@ -12,6 +12,9 @@ use PhpParser\Node;
  */
 class RemoveSingleFullyQualifiedNameProcessor extends AbstractProcessor
 {
+    /** @var int */
+    private const ONE = 1;
+
     /**
      * @param Occurrence $occurrence
      *
@@ -26,7 +29,21 @@ class RemoveSingleFullyQualifiedNameProcessor extends AbstractProcessor
         } else {
             $node = $this->replaceFullyQualifiedName($node, $occurrence);
         }
+
         $occurrence->setNode($node);
+    }
+
+    /**
+     * @param Node\Name\FullyQualified $name
+     *
+     * @return Node\Name
+     */
+    private function generateNameNodeFromFullyQualified(Node\Name\FullyQualified $name): Node\Name
+    {
+        return new Node\Name(
+            end($name->parts),
+            $name->getAttributes()
+        );
     }
 
     /**
@@ -38,9 +55,9 @@ class RemoveSingleFullyQualifiedNameProcessor extends AbstractProcessor
     private function replaceFullyQualifiedName(Node $node, Occurrence $occurrence): Node
     {
         /** @var Node\Expr\FuncCall|Node\Expr\ConstFetch $node */
-        if (property_exists($node, 'name') &&
+        if (property_exists($node, self::NODE_PROPERTY_NAME) &&
             $node->name instanceof Node\Name\FullyQualified &&
-            1 === count($node->name->parts)
+            self::ONE === count($node->name->parts)
         ) {
             /** @var Node\Name\FullyQualified $name */
             $name = $node->name;
@@ -61,26 +78,14 @@ class RemoveSingleFullyQualifiedNameProcessor extends AbstractProcessor
         Node\Expr\BinaryOp $node,
         Occurrence $occurrence
     ): Node\Expr\BinaryOp {
-        foreach (['left', 'right'] as $binaryOpSide) {
+        foreach (self::BINARY_OP_SIDES as $binaryOpSide) {
             if ($node->$binaryOpSide instanceof Node\Expr\BinaryOp) {
                 $node->$binaryOpSide = $this->replaceFullyQualifiedNameInBinaryOp($node->$binaryOpSide, $occurrence);
             }
+
             $node->$binaryOpSide = $this->replaceFullyQualifiedName($node->$binaryOpSide, $occurrence);
         }
 
         return $node;
-    }
-
-    /**
-     * @param Node\Name\FullyQualified $name
-     *
-     * @return Node\Name
-     */
-    private function generateNameNodeFromFullyQualified(Node\Name\FullyQualified $name): Node\Name
-    {
-        return new Node\Name(
-            end($name->parts),
-            $name->getAttributes()
-        );
     }
 }

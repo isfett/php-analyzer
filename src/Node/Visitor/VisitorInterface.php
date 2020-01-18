@@ -12,14 +12,14 @@ use Symfony\Component\Finder\SplFileInfo;
 interface VisitorInterface
 {
     /**
+     * @return OccurrenceList
+     */
+    public function getNodeOccurrenceList(): OccurrenceList;
+
+    /**
      * @param SplFileInfo $file
      *
      * @return void
      */
     public function setFile(SplFileInfo $file): void;
-
-    /**
-     * @return OccurrenceList
-     */
-    public function getNodeOccurrenceList(): OccurrenceList;
 }

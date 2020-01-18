@@ -71,6 +71,8 @@ class MagicStringTestClass
 
         $testSubstring = substr('testString', 0, 4);
 
+        $ternary = $assignment ? 'a' : 'b';
+
         return 'bar';
     }
 }
@@ -86,8 +88,9 @@ The following Visitors are available:
 - `Property`: This Visitor will collect all Magic Strings in class-member-variables , here `'bar'`
 - `Return`: This Visitor will collect all Magic Strings within return statements, here `'bar'` and `'barx'`
 - `SwitchCase`: This Visitor will collect all Magic Strings in switch cases, here `'8'`
+- `Ternary`: This Visitor will collect all Magic Strings in ternary conditions, here `a` and `b`
 
-`php bin/php-analyzer magic-string-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --include-files=visitors.php docs/examples/MagicStringDetector/`
+`php bin/php-analyzer magic-string-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary --include-files=visitors.php docs/examples/MagicStringDetector/`
 
 <img src="./images/MagicStringDetector/demo.png">
 

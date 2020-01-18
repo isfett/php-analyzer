@@ -61,7 +61,7 @@ class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
 
         $this->assertInstanceOf(ConstFetch::class, $occurrence->getNode());
         $this->assertInstanceOf(Name::class, $occurrence->getNode()->name);
-        $this->assertEquals('test', (string) $occurrence->getNode()->name);
+        $this->assertSame('test', (string) $occurrence->getNode()->name);
         $this->assertContains('RemoveSingleFullyQualifiedName', $occurrence->getAffectedByProcessors());
     }
 
@@ -103,7 +103,7 @@ class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
         $this->assertInstanceOf(Identical::class, $occurrence->getNode());
         $this->assertInstanceOf(ConstFetch::class, $occurrence->getNode()->left);
         $this->assertInstanceOf(Name::class, $occurrence->getNode()->left->name);
-        $this->assertEquals('test', (string) $occurrence->getNode()->left->name);
+        $this->assertSame('test', (string) $occurrence->getNode()->left->name);
         $this->assertContains('RemoveSingleFullyQualifiedName', $occurrence->getAffectedByProcessors());
     }
 
@@ -161,7 +161,7 @@ class RemoveSingleFullyQualifiedNameProcessorTest extends AbstractNodeTestCase
         $this->assertInstanceOf(Identical::class, $occurrence->getNode()->left);
         $this->assertInstanceOf(ConstFetch::class, $occurrence->getNode()->left->left);
         $this->assertInstanceOf(Name::class, $occurrence->getNode()->left->left->name);
-        $this->assertEquals('test', (string) $occurrence->getNode()->left->left->name);
+        $this->assertSame('test', (string) $occurrence->getNode()->left->left->name);
         $this->assertContains('RemoveSingleFullyQualifiedName', $occurrence->getAffectedByProcessors());
     }
 

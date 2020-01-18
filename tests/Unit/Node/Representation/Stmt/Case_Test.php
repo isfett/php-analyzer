@@ -36,6 +36,6 @@ class Case_Test extends AbstractNodeRepresentationTest
             ->method('representationForNode')
             ->willReturn('1');
 
-        $this->assertEquals('case 1:', $representation->representation());
+        $this->assertSame('case 1:', $representation->representation());
     }
 }

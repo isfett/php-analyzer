@@ -48,7 +48,7 @@ class ProcessorRunnerTest extends AbstractNodeTestCase
 
         $processorsDoneCounter = 1;
         foreach ($this->processorRunner->process($nodeOccurrenceList) as $processorsDone) {
-            $this->assertEquals($processorsDoneCounter, $processorsDone);
+            $this->assertSame($processorsDoneCounter, $processorsDone);
 
             $processorsDoneCounter++;
         }

@@ -10,6 +10,12 @@ use Doctrine\Common\Collections\Criteria;
  */
 class InvalidSortArgumentException extends \InvalidArgumentException
 {
+    /** @var int */
+    private const ERROR_CODE = 0;
+
+    /** @var string */
+    private const ERROR_MESSAGE = 'Sort direction with \'%s\' is invalid, use \'%s\' or \'%s\' instead';
+
     /**
      * InvalidSortArgumentException constructor.
      *
@@ -18,11 +24,15 @@ class InvalidSortArgumentException extends \InvalidArgumentException
      */
     public function __construct(?string $sort, ?\Throwable $previous = null)
     {
-        parent::__construct(sprintf(
-            "Sort direction with '%s' is invalid, use '%s' or '%s' instead",
-            strtolower($sort),
-            strtolower(Criteria::ASC),
-            strtolower(Criteria::DESC)
-        ), 0, $previous);
+        parent::__construct(
+            sprintf(
+                self::ERROR_MESSAGE,
+                strtolower($sort),
+                strtolower(Criteria::ASC),
+                strtolower(Criteria::DESC)
+            ),
+            self::ERROR_CODE,
+            $previous
+        );
     }
 }

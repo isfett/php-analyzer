@@ -38,6 +38,6 @@ class Array_Test extends AbstractNodeRepresentationTest
 
         $representation = new Array_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('[$test]', $representation->representation());
+        $this->assertSame('[$test]', $representation->representation());
     }
 }

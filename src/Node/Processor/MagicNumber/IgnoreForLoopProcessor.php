@@ -22,8 +22,11 @@ class IgnoreForLoopProcessor extends AbstractProcessor
         /** @var Node\Scalar\LNumber|Node\Scalar\DNumber $node */
         $node = $occurrence->getNode();
 
-        if ($node->getAttribute('parent')->getAttribute('parent') instanceof Node\Stmt\For_) {
-            $this->nodeOccurrenceList->removeOccurrence($occurrence);
+        if (!$node->getAttribute(self::NODE_ATTRIBUTE_PARENT)
+                ->getAttribute(self::NODE_ATTRIBUTE_PARENT) instanceof Node\Stmt\For_) {
+            return;
         }
+
+        $this->nodeOccurrenceList->removeOccurrence($occurrence);
     }
 }

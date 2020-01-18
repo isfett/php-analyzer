@@ -37,6 +37,6 @@ class Instanceof_Test extends AbstractNodeRepresentationTest
 
         $representation = new Instanceof_($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$classObject instanceof test', $representation->representation());
+        $this->assertSame('$classObject instanceof test', $representation->representation());
     }
 }

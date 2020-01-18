@@ -36,6 +36,6 @@ class PostDecTest extends AbstractNodeRepresentationTest
 
         $representation = new PostDec($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('$x--', $representation->representation());
+        $this->assertSame('$x--', $representation->representation());
     }
 }

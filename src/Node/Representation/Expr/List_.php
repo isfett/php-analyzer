@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class List_ extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = 'list(%s)';
+
     /**
      * @return string
      */
@@ -19,7 +22,7 @@ class List_ extends AbstractRepresentation
         $node = $this->node;
 
         return sprintf(
-            'list(%s)',
+            self::FORMAT_REPRESENTATION,
             $this->arguments($node->items)
         );
     }

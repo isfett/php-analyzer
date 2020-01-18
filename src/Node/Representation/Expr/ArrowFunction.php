@@ -10,6 +10,18 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class ArrowFunction extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '(%sfn%s(%s)%s %s %s)';
+
+    /** @var string */
+    private const FORMAT_RETURN_TYPE = ': %s';
+
+    /** @var string */
+    private const FORMAT_STATIC = 'static ';
+
+    /** @var string */
+    private const OPERATOR = '=>';
+
     /**
      * @return string
      */
@@ -18,22 +30,23 @@ class ArrowFunction extends AbstractRepresentation
         /** @var \PhpParser\Node\Expr\ArrowFunction $node */
         $node = $this->node;
 
-        $static = '';
+        $static = self::EMPTY_STRING;
         if ($node->static) {
-            $static = 'static ';
+            $static = self::FORMAT_STATIC;
         }
 
-        $returnType = '';
+        $returnType = self::EMPTY_STRING;
         if (null !== $node->returnType) {
-            $returnType = sprintf(': %s', $this->representate($node->returnType));
+            $returnType = sprintf(self::FORMAT_RETURN_TYPE, $this->representate($node->returnType));
         }
 
         return sprintf(
-            '(%sfn%s(%s)%s => %s)',
+            self::FORMAT_REPRESENTATION,
             $static,
-            $node->byRef ? '&' : '',
+            $node->byRef ? self::REF_SIGN : self::EMPTY_STRING,
             $this->arguments($node->params),
             $returnType,
+            self::OPERATOR,
             $this->representate($node->expr)
         );
     }

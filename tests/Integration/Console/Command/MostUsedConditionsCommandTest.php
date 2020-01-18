@@ -36,14 +36,14 @@ class MostUsedConditionsCommandTest extends TestCase
         parent::setUp();
 
         $this->mostUsedConditionsCommand = new MostUsedConditionsCommand(
-            new FinderBuilder(),
             new ConditionListBuilder(),
-            new VisitorBuilder(),
-            new ProcessorBuilder(),
-            new SortConfigurationBuilder(),
-            new ProcessorRunner(),
+            new FinderBuilder(),
             new NodeRepresentationService(),
-            new SortService()
+            new ProcessorBuilder(),
+            new ProcessorRunner(),
+            new SortConfigurationBuilder(),
+            new SortService(),
+            new VisitorBuilder()
         );
 
         $this->application = new Application();
@@ -71,7 +71,7 @@ class MostUsedConditionsCommandTest extends TestCase
         $exitCode = $this->mostUsedConditionsCommand->run($input, $output);
         $outputText = $output->fetch();
 
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_SUCCESS, $exitCode);
         $this->assertStringStartsWith(
             '<command-start>Starting most-used-conditions command</command-start>',
             $outputText

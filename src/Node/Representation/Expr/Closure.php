@@ -10,6 +10,15 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class Closure extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '%sfunction%s(%s) %s{ /* CLOSURE */ }';
+
+    /** @var string */
+    private const FORMAT_STATIC = 'static ';
+
+    /** @var string */
+    private const FORMAT_USE = 'use (%s) ';
+
     /**
      * @return string
      */
@@ -18,23 +27,23 @@ class Closure extends AbstractRepresentation
         /** @var \PhpParser\Node\Expr\Closure $node */
         $node = $this->node;
 
-        $use = '';
+        $use = self::EMPTY_STRING;
         if (count($node->uses)) {
             $use = sprintf(
-                'use (%s) ',
+                self::FORMAT_USE,
                 $this->arguments($node->uses)
             );
         }
 
-        $static = '';
+        $static = self::EMPTY_STRING;
         if ($node->static) {
-            $static = 'static ';
+            $static = self::FORMAT_STATIC;
         }
 
         return sprintf(
-            '%sfunction%s(%s) %s{ /* CLOSURE */ }',
+            self::FORMAT_REPRESENTATION,
             $static,
-            $node->byRef ? '&' : '',
+            $node->byRef ? self::REF_SIGN : self::EMPTY_STRING,
             $this->arguments($node->params),
             $use
         );

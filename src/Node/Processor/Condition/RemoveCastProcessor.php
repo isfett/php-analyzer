@@ -27,6 +27,7 @@ class RemoveCastProcessor extends AbstractProcessor
         } else {
             $node = $this->replaceCast($node, $occurrence);
         }
+
         $occurrence->setNode($node);
     }
 
@@ -54,10 +55,11 @@ class RemoveCastProcessor extends AbstractProcessor
      */
     private function replaceCastInBinaryOp(Node\Expr\BinaryOp $node, Occurrence $occurrence): Node\Expr\BinaryOp
     {
-        foreach (['left', 'right'] as $binaryOpSide) {
+        foreach (self::BINARY_OP_SIDES as $binaryOpSide) {
             if ($node->$binaryOpSide instanceof Node\Expr\BinaryOp) {
                 $node->$binaryOpSide = $this->replaceCastInBinaryOp($node->$binaryOpSide, $occurrence);
             }
+
             $node->$binaryOpSide = $this->replaceCast($node->$binaryOpSide, $occurrence);
         }
 

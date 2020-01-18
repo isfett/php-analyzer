@@ -37,12 +37,12 @@ class MagicStringDetectorCommandTest extends TestCase
 
         $this->magicStringDetectorCommand = new MagicStringDetectorCommand(
             new FinderBuilder(),
-            new VisitorBuilder(),
-            new ProcessorBuilder(),
-            new SortConfigurationBuilder(),
-            new ProcessorRunner(),
             new NodeRepresentationService(),
-            new SortService()
+            new ProcessorBuilder(),
+            new ProcessorRunner(),
+            new SortConfigurationBuilder(),
+            new SortService(),
+            new VisitorBuilder()
         );
 
         $this->application = new Application();
@@ -60,7 +60,7 @@ class MagicStringDetectorCommandTest extends TestCase
             'magic-string-detector',
             'directory' => __DIR__ . '/../../../../tests/data',
             '--include-files' => 'magic_string_detector_integrationtest.php',
-            '--visitors' => 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase',
+            '--visitors' => 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary',
             '--processors' => 'IgnoreArrayKey,IgnoreDefineFunction',
 
         ], $this->magicStringDetectorCommand->getDefinition());
@@ -69,7 +69,7 @@ class MagicStringDetectorCommandTest extends TestCase
         $exitCode = $this->magicStringDetectorCommand->run($input, $output);
         $outputText = $output->fetch();
 
-        $this->assertEquals(Application::EXIT_CODE_FAILURE, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_FAILURE, $exitCode);
         $this->assertStringStartsWith(
             '<command-start>Starting magic-string-detector command</command-start>',
             $outputText
@@ -85,7 +85,11 @@ class MagicStringDetectorCommandTest extends TestCase
 |--------------------------------------------------------------|----------------------------------------------|
 | 'de'.<focus>'_'</focus>                                      | magic_string_detector_integrationtest.php:38 |
 |--------------------------------------------------------------|----------------------------------------------|
+| 1 === 0 ? <focus>'a'</focus> : 'b'                           | magic_string_detector_integrationtest.php:55 |
+|--------------------------------------------------------------|----------------------------------------------|
 | \$input.<focus>'additional'</focus>                           | magic_string_detector_integrationtest.php:35 |
+|--------------------------------------------------------------|----------------------------------------------|
+| 1 === 0 ? 'a' : <focus>'b'</focus>                           | magic_string_detector_integrationtest.php:55 |
 |--------------------------------------------------------------|----------------------------------------------|
 | \$variable = <focus>'bar'</focus>                             | magic_string_detector_integrationtest.php:11 |
 |--------------------------------------------------------------|----------------------------------------------|
@@ -133,7 +137,7 @@ EOT;
         $exitCode = $this->magicStringDetectorCommand->run($input, $output);
         $outputText = $output->fetch();
 
-        $this->assertEquals(Application::EXIT_CODE_SUCCESS, $exitCode);
+        $this->assertSame(Application::EXIT_CODE_SUCCESS, $exitCode);
         $this->assertStringStartsWith(
             '<command-start>Starting magic-string-detector command</command-start>',
             $outputText

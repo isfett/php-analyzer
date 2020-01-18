@@ -10,6 +10,9 @@ use Isfett\PhpAnalyzer\Node\Representation\AbstractRepresentation;
  */
 class Encapsed extends AbstractRepresentation
 {
+    /** @var string */
+    private const FORMAT_REPRESENTATION = '"%s"';
+
     /**
      * @return string
      */
@@ -18,6 +21,6 @@ class Encapsed extends AbstractRepresentation
         /** @var \PhpParser\Node\Scalar\Encapsed $node */
         $node = $this->node;
 
-        return sprintf('"%s"', $this->arguments($node->parts, ''));
+        return sprintf(self::FORMAT_REPRESENTATION, $this->arguments($node->parts, self::EMPTY_STRING));
     }
 }

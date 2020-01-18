@@ -42,6 +42,6 @@ class FuncCallTest extends AbstractNodeRepresentationTest
 
         $representation = new FuncCall($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('strtolower($x)', $representation->representation());
+        $this->assertSame('strtolower($x)', $representation->representation());
     }
 }

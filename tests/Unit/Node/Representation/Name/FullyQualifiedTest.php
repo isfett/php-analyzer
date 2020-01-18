@@ -36,7 +36,7 @@ class FullyQualifiedTest extends AbstractNodeRepresentationTest
 
         $representation = new FullyQualified($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('\\Exception', $representation->representation());
+        $this->assertSame('\\Exception', $representation->representation());
     }
 
     /**
@@ -58,6 +58,6 @@ class FullyQualifiedTest extends AbstractNodeRepresentationTest
 
         $representation = new FullyQualified($this->nodeRepresentationService, $node);
 
-        $this->assertEquals('\\MyNamespace\\Exception', $representation->representation());
+        $this->assertSame('\\MyNamespace\\Exception', $representation->representation());
     }
 }

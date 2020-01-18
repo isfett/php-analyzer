@@ -36,21 +36,21 @@ class FlipCheckingTest extends AbstractNodeTestCase
         $condition = new Condition('$x === $y', $this->createFakeOccurrence());
         $this->conditionList->addCondition($condition);
         $this->assertCount(1, $this->conditionList->getConditions());
-        $this->assertEquals('$x === $y', $this->conditionList->getConditions()[0]->getCondition());
+        $this->assertSame('$x === $y', $this->conditionList->getConditions()[0]->getCondition());
 
 
         $condition = new Condition('$x === $a', $this->createFakeOccurrence());
         $this->conditionList->addCondition($condition);
         $this->assertCount(2, $this->conditionList->getConditions());
-        $this->assertEquals('$x === $y', $this->conditionList->getConditions()[0]->getCondition());
-        $this->assertEquals('$x === $a', $this->conditionList->getConditions()[1]->getCondition());
+        $this->assertSame('$x === $y', $this->conditionList->getConditions()[0]->getCondition());
+        $this->assertSame('$x === $a', $this->conditionList->getConditions()[1]->getCondition());
 
         // this will get flipped
         $condition = new Condition('$y === $x', $this->createFakeOccurrence());
         $this->conditionList->addCondition($condition);
         $this->assertCount(3, $this->conditionList->getConditions());
-        $this->assertEquals('$x === $y', $this->conditionList->getConditions()[0]->getCondition());
-        $this->assertEquals('$x === $a', $this->conditionList->getConditions()[1]->getCondition());
-        $this->assertEquals('$x === $y', $this->conditionList->getConditions()[2]->getCondition());
+        $this->assertSame('$x === $y', $this->conditionList->getConditions()[0]->getCondition());
+        $this->assertSame('$x === $a', $this->conditionList->getConditions()[1]->getCondition());
+        $this->assertSame('$x === $y', $this->conditionList->getConditions()[2]->getCondition());
     }
 }

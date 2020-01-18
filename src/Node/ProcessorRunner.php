@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\Node;
 
-use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 use Isfett\PhpAnalyzer\DAO\Occurrence;
+use Isfett\PhpAnalyzer\DAO\OccurrenceList;
 
 /**
  * Class ProcessorRunner
@@ -39,6 +39,7 @@ class ProcessorRunner implements ProcessorRunnerInterface
             foreach ($nodeOccurrenceList->getOccurrences() as $occurrence) {
                 $processor->process($occurrence);
             }
+
             yield $counter;
         }
     }
