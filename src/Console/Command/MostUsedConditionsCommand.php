@@ -138,8 +138,7 @@ class MostUsedConditionsCommand extends AbstractCommand
     private const PROCESSOR_PREFIX = self::VISITOR_PROCESSOR_PREFIX;
 
     /** @var string */
-    private const PROGRESSBAR_FORMAT_FLIP_CHECK_PROGRESS = 'Create ConditionList (print ast nodes). Flip-Check: %s. 
-                  Flipped conditions: %d';
+    private const PROGRESSBAR_FORMAT_FLIP_CHECK_PROGRESS = 'Create ConditionList (print ast nodes). Flip-Check: %s. Flipped conditions: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
     private const PROGRESSBAR_FORMAT_MULTIPLE_CONDITIONS = 'Check for multiple conditions. Unique conditions: %d';
