@@ -42,5 +42,6 @@
             "Isfett\\PhpAnalyzer\\Tests\\": "tests/",
             "SlevomatCodingStandard\\": "vendor/isfett/coding-standard/phpcs/SlevomatCodingStandard"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }

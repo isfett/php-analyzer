@@ -5,7 +5,7 @@ php:
   - '7.2'
   - '7.3'
   - '7.4'
-  #- nightly #8 (phpunit/doctrine does not support php 8 yet)
+  - nightly #8 (phpunit/doctrine does not support php 8 yet)
 
 before_install:
   - travis_retry composer install --no-interaction --prefer-source --dev
