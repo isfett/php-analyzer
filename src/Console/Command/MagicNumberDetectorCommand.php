@@ -37,7 +37,7 @@ class MagicNumberDetectorCommand extends AbstractCommand
     private const COMMAND_NAME = 'magic-number-detector';
 
     /** @var string */
-    private const DEFAULT_VISITORS = 'Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary';
+    private const DEFAULT_VISITORS = 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
     private const HEADER_NUMBER = 'Number';
