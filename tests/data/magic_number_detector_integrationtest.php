@@ -64,4 +64,9 @@ class MagicNumberTestClass
         $a = [];
         return $a[1234];
     }
+
+    public function ternary()
+    {
+        return 1 === 0 ? 2 : 3;
+    }
 }

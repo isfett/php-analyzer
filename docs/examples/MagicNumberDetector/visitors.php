@@ -27,6 +27,8 @@ class MagicNumberTestClass
 
         $rounded = round($this->variable, 17);
 
+        $ternary = $assignment ? 2 : 3;
+
         return 5;
     }
 }

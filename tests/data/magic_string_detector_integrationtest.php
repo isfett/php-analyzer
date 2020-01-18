@@ -49,4 +49,9 @@ class MagicStringTestClass
             strval('10')
         ];
     }
+
+    public function ternary()
+    {
+        return 1 === 0 ? 'a' : 'b';
+    }
 }

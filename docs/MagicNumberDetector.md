@@ -69,6 +69,8 @@ class MagicNumberTestClass
         
         $rounded = round($this->variable, 17);
 
+        $ternary = $assignment ? 2 : 3;
+
         return 5;
     }
 }
@@ -84,8 +86,9 @@ The following Visitors are available:
 - `Property`: This Visitor will collect all Magic Numbers in class-member-variables, here `6`
 - `Return`: This Visitor will collect all Magic Numbers within return statements, here `5` and `15`
 - `SwitchCase`: This Visitor will collect all Magic Numbers in switch cases, here `8`
+- `Ternary`: This Visitor will collect all Magic Numbers in ternary conditions, here `2` and `3`
 
-`php bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase --include-files=visitors.php docs/examples/MagicNumberDetector/`
+`php bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary --include-files=visitors.php docs/examples/MagicNumberDetector/`
 
 <img src="./images/MagicNumberDetector/demo.png">
 

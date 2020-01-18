@@ -29,6 +29,8 @@ class MagicStringTestClass
 
         $testSubstring = substr('testString', 0, 4);
 
+        $ternary = $assignment ? 'a' : 'b';
+
         return 'bar';
     }
 }

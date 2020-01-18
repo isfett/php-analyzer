@@ -126,6 +126,7 @@ class MostUsedConditionsCommand extends AbstractCommand
     /** @var string */
     private const FORMAT_TABLE_INFO_MIN_OCCURRENCES = '<info>Showing conditions with at least %d occurrences</info>';
 
+    /** @var string */
     private const FORMAT_TABLE_INFO_SORT_BY = '<info>Sort Conditions by number of occurrences %s.</info>';
 
     /** @var string */
@@ -142,6 +143,18 @@ class MostUsedConditionsCommand extends AbstractCommand
 
     /** @var string */
     private const PROGRESSBAR_FORMAT_MULTIPLE_CONDITIONS = 'Check for multiple conditions. Unique conditions: %d';
+
+    /** @var string */
+    private const REPRESENTATION_ACTIVE = 'active';
+
+    /** @var string */
+    private const REPRESENTATION_COMMA = '[comma]'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
+    private const REPRESENTATION_INACTIVE = 'inactive';
+
+    /** @var string */
+    private const REPRESENTATION_SEMICOLON = '[semicolon]';
 
     /** @var string */
     private const SERIALIZER_FORMAT_CSV = 'csv';
@@ -496,12 +509,16 @@ class MostUsedConditionsCommand extends AbstractCommand
         }
 
         $serializer = new Serializer([], [new CsvEncoder()]);
-        $csvDelimiter = $input->getOption(self::ARGUMENT_CSV_DELIMITER_SEMICOLON) ? ';' : ',';
+        $csvDelimiter = $input->getOption(self::ARGUMENT_CSV_DELIMITER_SEMICOLON) ? self::SEMICOLON : self::COMMA;
         $csvExportOptions = [
             CsvEncoder::NO_HEADERS_KEY => true,
             CsvEncoder::DELIMITER_KEY => $csvDelimiter,
         ];
-        $csvDelimiterReplace = self::COMMA === $csvDelimiter ? '[comma]' : '[semicolon]';
+        $csvDelimiterReplace = self::REPRESENTATION_COMMA;
+        if (self::SEMICOLON  === $csvDelimiter) {
+            $csvDelimiterReplace = self::REPRESENTATION_SEMICOLON;
+        }
+
         array_walk(
             $csvExportData,
             static function (&$data) use ($csvDelimiter, $csvDelimiterReplace) {
@@ -614,7 +631,7 @@ class MostUsedConditionsCommand extends AbstractCommand
      */
     private function getFlipCheckRepresentation(bool $flipChecking): string
     {
-        return $flipChecking ? 'active' : 'inactive';
+        return $flipChecking ? self::REPRESENTATION_ACTIVE : self::REPRESENTATION_INACTIVE;
     }
 
     /**

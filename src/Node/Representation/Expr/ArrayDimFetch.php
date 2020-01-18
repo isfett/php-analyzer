@@ -25,7 +25,7 @@ class ArrayDimFetch extends AbstractRepresentation
         return sprintf(
             self::FORMAT_REPRESENTATION,
             $this->representate($node->var),
-            null === $node->dim ? '' : $this->representate($node->dim)
+            null === $node->dim ? self::EMPTY_STRING : $this->representate($node->dim)
         );
     }
 }

@@ -60,7 +60,7 @@ class MagicStringDetectorCommandTest extends TestCase
             'magic-string-detector',
             'directory' => __DIR__ . '/../../../../tests/data',
             '--include-files' => 'magic_string_detector_integrationtest.php',
-            '--visitors' => 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase',
+            '--visitors' => 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary',
             '--processors' => 'IgnoreArrayKey,IgnoreDefineFunction',
 
         ], $this->magicStringDetectorCommand->getDefinition());
@@ -85,7 +85,11 @@ class MagicStringDetectorCommandTest extends TestCase
 |--------------------------------------------------------------|----------------------------------------------|
 | 'de'.<focus>'_'</focus>                                      | magic_string_detector_integrationtest.php:38 |
 |--------------------------------------------------------------|----------------------------------------------|
+| 1 === 0 ? <focus>'a'</focus> : 'b'                           | magic_string_detector_integrationtest.php:55 |
+|--------------------------------------------------------------|----------------------------------------------|
 | \$input.<focus>'additional'</focus>                           | magic_string_detector_integrationtest.php:35 |
+|--------------------------------------------------------------|----------------------------------------------|
+| 1 === 0 ? 'a' : <focus>'b'</focus>                           | magic_string_detector_integrationtest.php:55 |
 |--------------------------------------------------------------|----------------------------------------------|
 | \$variable = <focus>'bar'</focus>                             | magic_string_detector_integrationtest.php:11 |
 |--------------------------------------------------------------|----------------------------------------------|

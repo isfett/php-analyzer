@@ -110,8 +110,8 @@ abstract class AbstractCommand extends Command
     /** @var string */
     protected const DESCRIPTION_PROCESSORS = 'Comma-separated string of processors which should transform the conditions (on wrong input you can see a list of possible processor)'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-    /** @var string */
-    protected const DESCRIPTION_SORT = 'sort direction of conditions, desc or asc';
+        /** @var string */
+    protected const DESCRIPTION_SORT = 'sort direction of conditions, desc or asc'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
     protected const DESCRIPTION_SUFFIXES = 'Comma-separated string of valid source code filename extensions';
@@ -119,8 +119,8 @@ abstract class AbstractCommand extends Command
     /** @var string */
     protected const DESCRIPTION_VISITORS = 'Comma-separated string of visitors which should check the source code to find conditions (on wrong input you can see a list of possible visitors)'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-    /** @var string */
-    protected const EMPTY_STRING = '';
+        /** @var string */
+    protected const EMPTY_STRING = ''; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
     protected const FORMAT_ADD_PROCESSOR = 'Adding %s Processor';
@@ -149,8 +149,8 @@ abstract class AbstractCommand extends Command
     /** @var string */
     protected const FORMAT_PROCESSORS_PROGRESS_MESSAGE = 'Processor %d is processing magic numbers. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-    /** @var string */
-    private const FORMAT_TO_LINE = '%s%s';
+        /** @var string */
+    private const FORMAT_TO_LINE = '%s%s'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
     private const FORMAT_VISITORS_DONE_MESSAGE = 'Visitors checked magic numbers in %d files. Magic numbers found: %d';
@@ -158,8 +158,8 @@ abstract class AbstractCommand extends Command
     /** @var string */
     private const FORMAT_VISITORS_PROGRESS_MESSAGE = 'Visitors are checking for magic numbers in files. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
-    /** @var string */
-    private const LINE_SEPARATOR = '-';
+        /** @var string */
+    private const LINE_SEPARATOR = '-'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
     protected const NODE_ATTRIBUTE_PARENT = 'parent';
@@ -178,6 +178,9 @@ abstract class AbstractCommand extends Command
 
     /** @var string */
     private const PROGRESSBAR_NAME_FILENAME = 'filename';
+
+    /** @var string */
+    protected const SEMICOLON = ';';
 
     /** @var string */
     private const SEPARATOR_NAMESPACE = '\\';
