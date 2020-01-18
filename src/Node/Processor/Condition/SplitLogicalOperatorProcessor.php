@@ -65,9 +65,9 @@ class SplitLogicalOperatorProcessor extends AbstractProcessor
      * @param Node\Expr $originalNode
      * @param bool      $isBooleanNot
      *
-     * @return Node|Node\Expr\BooleanNot|Node\Expr\BinaryOp
+     * @return Node\Expr|Node\Expr\BooleanNot|Node\Expr\BinaryOp
      */
-    private function createNewLogicalOperatorNode(Node\Expr $originalNode, bool $isBooleanNot): Node
+    private function createNewLogicalOperatorNode(Node\Expr $originalNode, bool $isBooleanNot): Node\Expr
     {
         $node = clone $originalNode;
 

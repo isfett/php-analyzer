@@ -43,8 +43,10 @@ class BinaryOp extends AbstractRepresentation
         $format = self::FORMAT_REPRESENTATION;
 
         if (BooleanOr::class === get_class($node) &&
-            (is_callable([$node->left, self::BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL]) ||
-                is_callable([$node->right, self::BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL]))
+            (
+                is_callable([$node->left, self::BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL]) ||
+                is_callable([$node->right, self::BOOLEAN_OR_FUNCTION_GET_OPERATOR_SIGIL])
+            )
         ) {
             $format = sprintf(self::FORMAT_PARENTHESES, $format);
         }

@@ -29,7 +29,8 @@ class IgnoreMinusOneProcessor extends AbstractProcessor
         $node = $occurrence->getNode();
 
         // phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
-        if ($node->getAttribute(self::NODE_ATTRIBUTE_PARENT) instanceof Node\Expr\UnaryMinus && (
+        if ($node->getAttribute(self::NODE_ATTRIBUTE_PARENT) instanceof Node\Expr\UnaryMinus &&
+            (
                 self::ONE_INT === $node->value ||
                 self::ONE_DOUBLE === $node->value
             )

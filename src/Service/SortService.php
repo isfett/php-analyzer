@@ -14,8 +14,10 @@ use Isfett\PhpAnalyzer\Service\SortService\SortByNodeValues;
  */
 class SortService
 {
+    /** @var int */
     private const ARRAY_FIRST_KEY = 0;
 
+    /** @var int */
     private const HUMAN_TO_COMPUTER_ARRAY_OFFSET = 1;
 
     /**
