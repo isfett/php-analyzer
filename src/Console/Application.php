@@ -22,7 +22,7 @@ class Application extends BaseApplication
     private const APPLICATION_NAME = 'php-analyzer';
 
     /** @var string */
-    private const APPLICATION_VERSION = '1.2.3';
+    private const APPLICATION_VERSION = '1.2.4';
 
     /** @var string */
     private const ARGUMENT_HELP = 'help';

@@ -15,7 +15,8 @@ script:
   - vendor/bin/phpmd src text vendor/isfett/coding-standard/phpmd/isfett.xml
   - bin/php-analyzer magic-number-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary --processors=IgnoreDefineFunction --excludes=vendor,var,tests,docs,bin --exclude-files=Kernel.php
   - bin/php-analyzer magic-string-detector --visitors=Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary --processors=IgnoreDefineFunction --excludes=vendor,var,tests,docs,bin --exclude-files=Kernel.php
-  - vendor/bin/phpunit --testsuite=unit,integration --coverage-clover=coverage.xml
+  - vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml
+  - vendor/bin/phpunit --testsuite=integration --no-coverage
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

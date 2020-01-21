@@ -10,7 +10,7 @@ class MagicNumberTestClass
 
     private $variable = 6;
 
-    public function test($input = 4) {
+    public function test(?int $input = 4) {
         if ($input > 2) {
             return 15;
         }

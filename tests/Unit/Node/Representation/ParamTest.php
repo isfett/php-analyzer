@@ -31,24 +31,25 @@ class ParamTest extends AbstractNodeRepresentationTest
             'returnType' => ['int $value', $this->createVariableNode('value'), $this->createIdentifierNode('int'), null, false, false],
             'default' => ['$value = $x', $this->createVariableNode('value'), null, $this->createVariableNode('x'), false, false],
             'default returnType' => ['int $value = $x', $this->createVariableNode('value'), $this->createIdentifierNode('int'), $this->createVariableNode('x'), false, false],
+            'default nullable returnType' => ['?int $value = $x', $this->createVariableNode('value'), $this->createIdentifierNode('int', true), $this->createVariableNode('x'), false, false],
             'variadic' => ['...$value', $this->createVariableNode('value'), null, null, false, true],
             'variadic returnType' => ['int ...$value', $this->createVariableNode('value'), $this->createIdentifierNode('int'), null, false, true],
         ];
     }
 
     /**
-     * @param string               $expectedOutput
-     * @param Node\Expr\Variable   $value
-     * @param Node\Identifier|null $type
-     * @param Node\Expr|null       $default
-     * @param bool                 $byRef
-     * @param bool                 $variadic
+     * @param string             $expectedOutput
+     * @param Node\Expr\Variable $value
+     * @param Node|null          $type
+     * @param Node\Expr|null     $default
+     * @param bool               $byRef
+     * @param bool               $variadic
      *
      * @return void
      *
      * @dataProvider argProvider
      */
-    public function testGetRepresentation(string $expectedOutput, Node\Expr\Variable $value, ?Node\Identifier $type, ?Node\Expr $default, bool $byRef, bool $variadic): void
+    public function testGetRepresentation(string $expectedOutput, Node\Expr\Variable $value, ?Node $type, ?Node\Expr $default, bool $byRef, bool $variadic): void
     {
         $node = new Node\Param(
             $value,
@@ -59,15 +60,27 @@ class ParamTest extends AbstractNodeRepresentationTest
             $this->getNodeAttributes()
         );
 
-        if (null !== $default) {
-            $this->nodeRepresentationService
-                ->method('representationForNode')
-                ->willReturn('$x', '$value');
-        } else {
-            $this->nodeRepresentationService
-                ->method('representationForNode')
-                ->willReturn('$value');
+        $returnValues = [];
+
+        if (null !== $type) {
+            if ($type instanceof Node\NullableType) {
+                $typeRepresentation = '?' . $type->type->name;
+            } else {
+                $typeRepresentation = $type->name;
+            }
+
+            $returnValues[] = $typeRepresentation;
         }
+
+        if (null !== $default) {
+            $returnValues[] = '$x';
+        }
+
+        $returnValues[] = '$value';
+
+        $this->nodeRepresentationService
+            ->method('representationForNode')
+            ->willReturnOnConsecutiveCalls(...$returnValues);
 
         $representation = new Param($this->nodeRepresentationService, $node);
 

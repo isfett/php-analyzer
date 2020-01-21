@@ -94,12 +94,19 @@ abstract class AbstractNodeTestCase extends TestCase
 
     /**
      * @param string $name
+     * @param bool   $nullable
      *
      * @return Node\Identifier
      */
-    protected function createIdentifierNode(string $name = 'mockedName'): Node\Identifier
+    protected function createIdentifierNode(string $name = 'mockedName', bool $nullable = false): Node
     {
-        return new Node\Identifier($name, $this->getNodeAttributes());
+        $identifier = new Node\Identifier($name, $this->getNodeAttributes());
+
+        if ($nullable) {
+            $identifier = new Node\NullableType($identifier, $this->getNodeAttributes());
+        }
+
+        return $identifier;
     }
 
     /**

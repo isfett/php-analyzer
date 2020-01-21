@@ -9,6 +9,7 @@ use Isfett\PhpAnalyzer\Tests\Unit\Node\AbstractNodeTestCase;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Case_;
 
 /**
  * Class IgnoreArrayKeyProcessorTest
@@ -90,6 +91,30 @@ class IgnoreArrayKeyProcessorTest extends AbstractNodeTestCase
             new String_('test'),
             new String_('test2'),
             false
+        ));
+
+        $occurrence = $this->createOccurrence($node);
+
+        $nodeOccurrenceList = new OccurrenceList();
+        $nodeOccurrenceList->addOccurrence($occurrence);
+        $this->processor->setNodeOccurrenceList($nodeOccurrenceList);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+        $this->assertEmpty($occurrence->getAffectedByProcessors());
+
+        $this->processor->process($occurrence);
+
+        $this->assertCount(1, $nodeOccurrenceList->getOccurrences());
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessWithoutArrayItemWillNotGetRemoved(): void
+    {
+        $node = new String_('test');
+        $node->setAttribute('parent', new Case_(
+            new String_('test')
         ));
 
         $occurrence = $this->createOccurrence($node);

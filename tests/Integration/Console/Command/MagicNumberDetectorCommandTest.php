@@ -92,7 +92,7 @@ class MagicNumberDetectorCommandTest extends TestCase
 |--------------------------------------------------------------|----------------------------------------------|
 | round(\$input, <focus>4</focus>)                              | magic_number_detector_integrationtest.php:25 |
 |--------------------------------------------------------------|----------------------------------------------|
-| \$input = <focus>4</focus>                                    | magic_number_detector_integrationtest.php:13 |
+| ?int \$input = <focus>4</focus>                               | magic_number_detector_integrationtest.php:13 |
 |--------------------------------------------------------------|----------------------------------------------|
 | case <focus>5</focus>:                                       | magic_number_detector_integrationtest.php:20 |
 |--------------------------------------------------------------|----------------------------------------------|

@@ -20,7 +20,7 @@ class Param extends AbstractRepresentation
         $node = $this->node;
 
         $byRef = $node->byRef ? self::REF_SIGN : self::EMPTY_STRING;
-        $type = $node->type ? $node->type . self::SPACE : self::EMPTY_STRING;
+        $type = $node->type ? $this->representate($node->type) . self::SPACE : self::EMPTY_STRING;
         $default = $node->default ?
             self::SPACE . self::EQUAL_SIGN . self::SPACE . $this->representate($node->default) :
             self::EMPTY_STRING;
