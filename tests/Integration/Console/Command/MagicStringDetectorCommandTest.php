@@ -74,6 +74,7 @@ class MagicStringDetectorCommandTest extends TestCase
             '<command-start>Starting magic-string-detector command</command-start>',
             $outputText
         );
+        $this->assertStringContainsString('Processors processed magic strings. Magic strings found:', $outputText);
 
         $expectedOutput = <<<EOT
 +--------------------------------------------------------------+----------------------------------------------+

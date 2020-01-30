@@ -40,6 +40,18 @@ class MagicNumberDetectorCommand extends AbstractCommand
     private const DEFAULT_VISITORS = 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
+    protected const FORMAT_PROCESSORS_DONE_MESSAGE = 'Processors processed magic numbers. Magic numbers found: %d';
+
+    /** @var string */
+    protected const FORMAT_PROCESSORS_PROGRESS_MESSAGE = 'Processor %d is processing magic numbers. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
+    protected const FORMAT_VISITORS_DONE_MESSAGE = 'Visitors checked magic numbers in %d files. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
+    protected const FORMAT_VISITORS_PROGRESS_MESSAGE = 'Visitors are checking for magic numbers in files. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
     private const HEADER_NUMBER = 'Number';
 
     /** @var string */

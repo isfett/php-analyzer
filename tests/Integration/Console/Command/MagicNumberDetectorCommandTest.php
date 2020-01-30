@@ -73,6 +73,7 @@ class MagicNumberDetectorCommandTest extends TestCase
             '<command-start>Starting magic-number-detector command</command-start>',
             $outputText
         );
+        $this->assertStringContainsString('Processors processed magic numbers. Magic numbers found:', $outputText);
 
         $expectedOutput = <<<EOT
 +--------------------------------------------------------------+----------------------------------------------+

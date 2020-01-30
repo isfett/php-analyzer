@@ -141,19 +141,19 @@ abstract class AbstractCommand extends Command
     private const FORMAT_PATH_LINE = '%s:%s';
 
     /** @var string */
-    protected const FORMAT_PROCESSORS_DONE_MESSAGE = 'Processors processed magic numbers. Magic numbers found: %d';
+    protected const FORMAT_PROCESSORS_DONE_MESSAGE = '';
 
     /** @var string */
-    protected const FORMAT_PROCESSORS_PROGRESS_MESSAGE = 'Processor %d is processing magic numbers. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+    protected const FORMAT_PROCESSORS_PROGRESS_MESSAGE = '';
 
     /** @var string */
-    private const FORMAT_TO_LINE = '%s%s'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+    private const FORMAT_TO_LINE = '%s%s';
 
     /** @var string */
-    private const FORMAT_VISITORS_DONE_MESSAGE = 'Visitors checked magic numbers in %d files. Magic numbers found: %d';
+    protected const FORMAT_VISITORS_DONE_MESSAGE = '';
 
     /** @var string */
-    private const FORMAT_VISITORS_PROGRESS_MESSAGE = 'Visitors are checking for magic numbers in files. Magic numbers found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+    protected const FORMAT_VISITORS_PROGRESS_MESSAGE = '';
 
     /** @var string */
     private const LINE_SEPARATOR = '-'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
@@ -431,7 +431,7 @@ abstract class AbstractCommand extends Command
             $traverser->setFile($file);
             $traverser->traverse($ast);
             $traverserProgressBar->setMessage(sprintf(
-                self::FORMAT_VISITORS_PROGRESS_MESSAGE,
+                static::FORMAT_VISITORS_PROGRESS_MESSAGE,
                 $traverser->getNodeOccurrencesCount()
             ));
         }
@@ -501,7 +501,7 @@ abstract class AbstractCommand extends Command
 
         foreach ($this->processorRunner->process($occurrenceList) as $processorsDone) {
             $processorsProgressBar->setMessage(sprintf(
-                self::FORMAT_PROCESSORS_PROGRESS_MESSAGE,
+                static::FORMAT_PROCESSORS_PROGRESS_MESSAGE,
                 $processorsDone,
                 count($occurrenceList->getOccurrences())
             ));
@@ -509,7 +509,7 @@ abstract class AbstractCommand extends Command
         }
 
         $processorsProgressBar->setMessage(sprintf(
-            self::FORMAT_PROCESSORS_DONE_MESSAGE,
+            static::FORMAT_PROCESSORS_DONE_MESSAGE,
             count($occurrenceList->getOccurrences())
         ));
         $this->finishProgressBar($processorsProgressBar, $output);
@@ -564,7 +564,7 @@ abstract class AbstractCommand extends Command
         $this->parseFiles($files, $traverser, $traverserProgressBar);
 
         $traverserProgressBar->setMessage(sprintf(
-            self::FORMAT_VISITORS_DONE_MESSAGE,
+            static::FORMAT_VISITORS_DONE_MESSAGE,
             count($files),
             $traverser->getNodeOccurrencesCount()
         ));

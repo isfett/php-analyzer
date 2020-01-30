@@ -39,6 +39,18 @@ class MagicStringDetectorCommand extends AbstractCommand
     private const DEFAULT_VISITORS = 'Argument,Array,Assign,Condition,DefaultParameter,Operation,Property,Return,SwitchCase,Ternary'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
+    protected const FORMAT_PROCESSORS_DONE_MESSAGE = 'Processors processed magic strings. Magic strings found: %d';
+
+    /** @var string */
+    protected const FORMAT_PROCESSORS_PROGRESS_MESSAGE = 'Processor %d is processing magic strings. Magic strings found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
+    protected const FORMAT_VISITORS_DONE_MESSAGE = 'Visitors checked magic strings in %d files. Magic strings found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
+    protected const FORMAT_VISITORS_PROGRESS_MESSAGE = 'Visitors are checking for magic strings in files. Magic strings found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
     private const HEADER_OCCURRENCE = 'Occurrence';
 
     /** @var string */

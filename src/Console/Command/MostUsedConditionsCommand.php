@@ -124,6 +124,12 @@ class MostUsedConditionsCommand extends AbstractCommand
     private const FORMAT_OCCURRENCE = '%s <flag>%s</flag><special-info>%s</special-info>';
 
     /** @var string */
+    protected const FORMAT_PROCESSORS_DONE_MESSAGE = 'Processors processed conditions. Conditions found: %d';
+
+    /** @var string */
+    protected const FORMAT_PROCESSORS_PROGRESS_MESSAGE = 'Processor %d is processing conditions. Conditions found: %d'; //phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
     private const FORMAT_TABLE_INFO_MAX_ENTRIES = '<info>Showing maximum %d conditions.</info>';
 
     /** @var string */
@@ -131,6 +137,12 @@ class MostUsedConditionsCommand extends AbstractCommand
 
     /** @var string */
     private const FORMAT_TABLE_INFO_SORT_BY = '<info>Sort Conditions by number of occurrences %s.</info>';
+
+    /** @var string */
+    protected const FORMAT_VISITORS_DONE_MESSAGE = 'Visitors checked conditions in %d files. Conditions found: %d'; //phpcs:ignore Generic.Files.LineLength.MaxExceeded
+
+    /** @var string */
+    protected const FORMAT_VISITORS_PROGRESS_MESSAGE = 'Visitors are checking for conditions in files. Conditions found: %d'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
     private const HEADER_CONDITION = 'Condition';
