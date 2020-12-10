@@ -16,6 +16,7 @@ use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Expr\UnaryMinus;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -31,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MagicNumberDetectorCommand extends AbstractCommand
 {
     /** @var string */
-    private const COMMAND_HELP = 'Find out your most used conditions';
+    private const COMMAND_HELP = 'Find magic numbers';
 
     /** @var string */
     private const COMMAND_NAME = 'magic-number-detector';
@@ -56,9 +57,6 @@ class MagicNumberDetectorCommand extends AbstractCommand
 
     /** @var string */
     private const HEADER_OCCURRENCE = 'Occurrence';
-
-    /** @var string */
-    private const MINUS_SIGN = '-';
 
     /** @var string */
     private const PROCESSOR_PREFIX = self::VISITOR_PROCESSOR_PREFIX;
@@ -140,6 +138,8 @@ class MagicNumberDetectorCommand extends AbstractCommand
 
         $output->write(\PHP_EOL);
 
+        $this->exportJson($occurrenceList, $input);
+
         return Application::EXIT_CODE_FAILURE;
     }
 
@@ -149,8 +149,6 @@ class MagicNumberDetectorCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName(self::COMMAND_NAME)
-            ->setHelp(self::COMMAND_HELP)
             ->setDefinition(
                 new InputDefinition([
                     new InputArgument(
@@ -161,55 +159,8 @@ class MagicNumberDetectorCommand extends AbstractCommand
                     ),
                 ])
             )
-            ->addOption(
-                self::ARGUMENT_EXCLUDES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDES,
-                self::DEFAULT_EXCLUDES
-            )
-            ->addOption(
-                self::ARGUMENT_EXCLUDE_PATHS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDE_PATHS,
-                self::DEFAULT_EXCLUDE_PATHS
-            )
-            ->addOption(
-                self::ARGUMENT_EXCLUDE_FILES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDE_FILES,
-                self::DEFAULT_EXCLUDE_FILES
-            )
-            ->addOption(
-                self::ARGUMENT_INCLUDE_FILES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_INCLUDE_FILES,
-                self::DEFAULT_INCLUDE_FILES
-            )
-            ->addOption(
-                self::ARGUMENT_SUFFIXES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_SUFFIXES,
-                self::DEFAULT_SUFFIXES
-            )
-            ->addOption(
-                self::ARGUMENT_VISITORS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_VISITORS,
-                self::DEFAULT_VISITORS
-            )
-            ->addOption(
-                self::ARGUMENT_PROCESSORS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_PROCESSORS,
-                self::DEFAULT_PROCESSORS
-            )
+            ->setName(self::COMMAND_NAME)
+            ->setHelp(self::COMMAND_HELP)
             ->addOption(
                 self::ARGUMENT_SORT,
                 null,
@@ -217,22 +168,7 @@ class MagicNumberDetectorCommand extends AbstractCommand
                 self::DESCRIPTION_SORT,
                 self::DEFAULT_SORT
             );
-    }
-
-    /**
-     * @param Node $node
-     * @param bool $isMinus
-     *
-     * @return float
-     */
-    private function getNodeValue(Node $node, bool $isMinus): float
-    {
-        $value = $node->value;
-        if ($isMinus) {
-            $value = self::MINUS_SIGN . $value;
-        }
-
-        return (float) $value;
+        $this->configureDefaultFields(self::DEFAULT_VISITORS, true);
     }
 
     /**
@@ -264,7 +200,7 @@ class MagicNumberDetectorCommand extends AbstractCommand
                 $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
             }
 
-            if ($parent instanceof Arg) {
+            if ($parent instanceof Arg || $parent instanceof PropertyProperty) {
                 $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
             }
 
@@ -273,7 +209,7 @@ class MagicNumberDetectorCommand extends AbstractCommand
             $representation = $this->nodeRepresentationService->representationForNode(
                 $parent
             );
-            $value = $this->getNodeValue($node, $isMinus);
+            $value = $this->getIntegerNodeValue($node, $isMinus);
 
             $representation = $this->leftReplace(
                 (string) $value,

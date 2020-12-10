@@ -20,7 +20,7 @@ It can also be used on your deploying pipeline and cancel the build if Magic Str
 bin/php-analyzer magic-string-detector [--options] directory
 
 # phar
-php-analyzer.phar mmagic-string-detector [--options] directory
+php-analyzer.phar magic-string-detector [--options] directory
 ```
 
 If you omit the directory it will use the current working directory. You can use absolute or relative paths.

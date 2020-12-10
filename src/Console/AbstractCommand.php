@@ -20,12 +20,22 @@ use Isfett\PhpAnalyzer\Node\VisitorConnector\ParentConnector;
 use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Error;
+use PhpParser\Lexer;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class AbstractCommand
@@ -58,6 +68,9 @@ abstract class AbstractCommand extends Command
 
     /** @var string */
     protected const ARGUMENT_VISITORS = 'visitors';
+
+    /** @var string */
+    private const ARGUMENT_WITH_JSON = 'with-json';
 
     /** @var string */
     protected const COMMA = ',';
@@ -117,6 +130,9 @@ abstract class AbstractCommand extends Command
     protected const DESCRIPTION_VISITORS = 'Comma-separated string of visitors which should check the source code to find conditions (on wrong input you can see a list of possible visitors)'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
+    private const DESCRIPTION_WITH_JSON = 'enable json export to filepath';
+
+    /** @var string */
     protected const EMPTY_STRING = ''; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
@@ -159,10 +175,13 @@ abstract class AbstractCommand extends Command
     private const LINE_SEPARATOR = '-'; // phpcs:ignore Generic.Files.LineLength.MaxExceeded
 
     /** @var string */
+    private const MINUS_SIGN = '-';
+
+    /** @var string */
     protected const NODE_ATTRIBUTE_PARENT = 'parent';
 
     /** @var string */
-    protected const NO_FILES_FOUND_ERROR_MESSAGE = '<error>No files found</error>';
+    protected const NO_FILES_FOUND_EXCEPTION_MESSAGE = 'No files found';
 
     /** @var string */
     protected const NO_SUCH_DIRECTORY_EXCEPTION_MESSAGE = 'Directory %s does not exist';
@@ -254,6 +273,75 @@ abstract class AbstractCommand extends Command
         $this->visitorBuilder = $visitorBuilder;
 
         parent::__construct($commandName);
+    }
+
+    /**
+     * @param string $defaultVisitors
+     * @param bool   $withJsonExport
+     *
+     * @return void
+     */
+    protected function configureDefaultFields(string $defaultVisitors, bool $withJsonExport = false): void
+    {
+        $this->addOption(
+            self::ARGUMENT_EXCLUDES,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_EXCLUDES,
+            self::DEFAULT_EXCLUDES
+        )
+        ->addOption(
+            self::ARGUMENT_EXCLUDE_PATHS,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_EXCLUDE_PATHS,
+            self::DEFAULT_EXCLUDE_PATHS
+        )
+        ->addOption(
+            self::ARGUMENT_EXCLUDE_FILES,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_EXCLUDE_FILES,
+            self::DEFAULT_EXCLUDE_FILES
+        )
+        ->addOption(
+            self::ARGUMENT_INCLUDE_FILES,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_INCLUDE_FILES,
+            self::DEFAULT_INCLUDE_FILES
+        )
+        ->addOption(
+            self::ARGUMENT_SUFFIXES,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_SUFFIXES,
+            self::DEFAULT_SUFFIXES
+        )
+        ->addOption(
+            self::ARGUMENT_VISITORS,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_VISITORS,
+            $defaultVisitors
+        )
+        ->addOption(
+            self::ARGUMENT_PROCESSORS,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_PROCESSORS,
+            self::DEFAULT_PROCESSORS
+        );
+
+        if ($withJsonExport) {
+            $this->addOption(
+                self::ARGUMENT_WITH_JSON,
+                null,
+                InputOption::VALUE_REQUIRED,
+                self::DESCRIPTION_WITH_JSON,
+                null
+            );
+        }
     }
 
     /**
@@ -356,7 +444,7 @@ abstract class AbstractCommand extends Command
         $this->finishProgressBar($finderProgressBar, $output);
 
         if (!count($files)) {
-            throw new \RuntimeException(self::NO_FILES_FOUND_ERROR_MESSAGE);
+            throw new \RuntimeException(self::NO_FILES_FOUND_EXCEPTION_MESSAGE);
         }
 
         return $files;
@@ -417,7 +505,12 @@ abstract class AbstractCommand extends Command
      */
     protected function parseFiles(array $files, Traverser $traverser, ProgressBar $traverserProgressBar): void
     {
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $lexer = new Lexer([
+            'usedAttributes' => [
+                'comments', 'startLine', 'endLine', 'startFilePos', 'endFilePos',
+            ],
+        ]);
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, $lexer);
 
         foreach ($files as $file) {
             try {
@@ -596,5 +689,63 @@ abstract class AbstractCommand extends Command
         }
 
         return explode(self::COMMA, $inputOption);
+    }
+
+    protected function exportJson(OccurrenceList $occurrenceList, InputInterface $input): void
+    {
+        $jsonExport = $input->getOption(self::ARGUMENT_WITH_JSON);
+        if (!$jsonExport) {
+            return;
+        }
+
+        $jsonExportData = [];
+
+        /** @var Occurrence $occurrence */
+        foreach ($occurrenceList->getOccurrences() as $occurrence) {
+            /** @var Node $node */
+            $node = $occurrence->getNode();
+            /** @var Node $parent */
+            $parent = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
+            $isMinus = false;
+            if ($parent instanceof UnaryMinus) {
+                $isMinus = true;
+                $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
+            }
+
+            if ($parent instanceof Arg || $parent instanceof PropertyProperty) {
+                $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
+            }
+
+            $jsonExportData[] = [
+                'type' => $parent->getType(),
+                'value' => is_numeric($node->value) ? $this->getIntegerNodeValue($node, $isMinus)  : $node->value,
+                'visitor' => $occurrence->getFoundByVisitor(),
+                'startFilePos' => $parent->getStartFilePos(),
+                'endFilePos' => $parent->getEndFilePos(),
+            ];
+        }
+
+        $serializer = new Serializer([], [new JsonEncoder()]);
+
+        file_put_contents(
+            $jsonExport,
+            $serializer->encode($jsonExportData, 'json')
+        );
+    }
+
+    /**
+     * @param Node $node
+     * @param bool $isMinus
+     *
+     * @return float
+     */
+    protected function getIntegerNodeValue(Node $node, bool $isMinus): float
+    {
+        $value = $node->value;
+        if ($isMinus) {
+            $value = self::MINUS_SIGN . $value;
+        }
+
+        return (float) $value;
     }
 }

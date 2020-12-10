@@ -16,7 +16,16 @@ use Symfony\Component\Finder\SplFileInfo;
 abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInterface
 {
     /** @var string */
+    protected const EMPTY_STRING = '';
+
+    /** @var string */
+    protected const NAMESPACE_SEPARATOR = '\\';
+
+    /** @var string */
     protected const NODE_ATTRIBUTE_PARENT = 'parent';
+
+    /** @var string */
+    private const REPLACE_SEARCH = 'Visitor';
 
     /** @var SplFileInfo */
     protected $file;
@@ -57,6 +66,7 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
     {
         $node = $this->replaceUnaryNumbers($node);
         $occurrence = new Occurrence($node, $this->file);
+        $occurrence->setFoundByVisitor($this->getVisitorName(static::class));
         $this->nodeOccurrenceList->addOccurrence($occurrence);
     }
 
@@ -96,5 +106,27 @@ abstract class AbstractVisitor extends NodeVisitorAbstract implements VisitorInt
         }
 
         return $node;
+    }
+
+    /**
+     * @param string $classname
+     *
+     * @return string
+     */
+    private function getClassnameWithoutNamespace(string $classname): string
+    {
+        $classWithNamespaces = explode(self::NAMESPACE_SEPARATOR, $classname);
+
+        return end($classWithNamespaces);
+    }
+
+    /**
+     * @param string $classname
+     *
+     * @return string
+     */
+    private function getVisitorName(string $classname): string
+    {
+        return str_replace(self::REPLACE_SEARCH, self::EMPTY_STRING, $this->getClassnameWithoutNamespace($classname));
     }
 }

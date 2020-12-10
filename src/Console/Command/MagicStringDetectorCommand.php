@@ -16,6 +16,7 @@ use Isfett\PhpAnalyzer\Service\NodeRepresentationService;
 use Isfett\PhpAnalyzer\Service\SortService;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Stmt\PropertyProperty;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MagicStringDetectorCommand extends AbstractCommand
 {
     /** @var string */
-    private const COMMAND_HELP = 'Find out your most used conditions';
+    private const COMMAND_HELP = 'Find magic strings';
 
     /** @var string */
     private const COMMAND_NAME = 'magic-string-detector';
@@ -137,6 +138,8 @@ class MagicStringDetectorCommand extends AbstractCommand
 
         $this->renderResultTable($sortedOccurrences, $output);
 
+        $this->exportJson($occurrenceList, $input);
+
         return Application::EXIT_CODE_FAILURE;
     }
 
@@ -146,8 +149,6 @@ class MagicStringDetectorCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName(self::COMMAND_NAME)
-            ->setHelp(self::COMMAND_HELP)
             ->setDefinition(
                 new InputDefinition([
                     new InputArgument(
@@ -158,55 +159,8 @@ class MagicStringDetectorCommand extends AbstractCommand
                     ),
                 ])
             )
-            ->addOption(
-                self::ARGUMENT_EXCLUDES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDES,
-                self::DEFAULT_EXCLUDES
-            )
-            ->addOption(
-                self::ARGUMENT_EXCLUDE_PATHS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDE_PATHS,
-                self::DEFAULT_EXCLUDE_PATHS
-            )
-            ->addOption(
-                self::ARGUMENT_EXCLUDE_FILES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDE_FILES,
-                self::DEFAULT_EXCLUDE_FILES
-            )
-            ->addOption(
-                self::ARGUMENT_INCLUDE_FILES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_INCLUDE_FILES,
-                self::DEFAULT_INCLUDE_FILES
-            )
-            ->addOption(
-                self::ARGUMENT_SUFFIXES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_SUFFIXES,
-                self::DEFAULT_SUFFIXES
-            )
-            ->addOption(
-                self::ARGUMENT_VISITORS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_VISITORS,
-                self::DEFAULT_VISITORS
-            )
-            ->addOption(
-                self::ARGUMENT_PROCESSORS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_PROCESSORS,
-                self::DEFAULT_PROCESSORS
-            )
+            ->setName(self::COMMAND_NAME)
+            ->setHelp(self::COMMAND_HELP)
             ->addOption(
                 self::ARGUMENT_SORT,
                 null,
@@ -214,6 +168,7 @@ class MagicStringDetectorCommand extends AbstractCommand
                 self::DESCRIPTION_SORT,
                 self::DEFAULT_SORT
             );
+        $this->configureDefaultFields(self::DEFAULT_VISITORS, true);
     }
 
     /**
@@ -249,7 +204,7 @@ class MagicStringDetectorCommand extends AbstractCommand
             $occurrenceCounter++;
             $node = $occurrence->getNode();
             $parent = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
-            if ($parent instanceof Arg) {
+            if ($parent instanceof Arg || $parent instanceof PropertyProperty) {
                 $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
             }
 

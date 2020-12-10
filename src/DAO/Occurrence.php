@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Isfett\PhpAnalyzer\DAO;
 
+use Isfett\PhpAnalyzer\Node\AbstractVisitor;
 use PhpParser\Node;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -13,6 +14,9 @@ class Occurrence
 {
     /** @var array */
     private $affectedByProcessors = [];
+
+    /** @var string|null */
+    private $foundByVisitor;
 
     /** @var SplFileInfo */
     private $file;
@@ -55,6 +59,24 @@ class Occurrence
     public function getAffectedByProcessors(): array
     {
         return $this->affectedByProcessors;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFoundByVisitor(): ?string
+    {
+        return $this->foundByVisitor;
+    }
+
+    /**
+     * @param string|null $foundByVisitor
+     *
+     * @return void
+     */
+    public function setFoundByVisitor(?string $foundByVisitor): void
+    {
+        $this->foundByVisitor = $foundByVisitor;
     }
 
     /**

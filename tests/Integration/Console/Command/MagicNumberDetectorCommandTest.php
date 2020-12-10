@@ -97,7 +97,7 @@ class MagicNumberDetectorCommandTest extends TestCase
 |--------------------------------------------------------------|----------------------------------------------|
 | case <focus>5</focus>:                                       | magic_number_detector_integrationtest.php:20 |
 |--------------------------------------------------------------|----------------------------------------------|
-| \$variable = <focus>6</focus>                                 | magic_number_detector_integrationtest.php:11 |
+| private \$variable = <focus>6</focus>                         | magic_number_detector_integrationtest.php:11 |
 |--------------------------------------------------------------|----------------------------------------------|
 | \$input > <focus>7</focus>                                    | magic_number_detector_integrationtest.php:26 |
 |--------------------------------------------------------------|----------------------------------------------|

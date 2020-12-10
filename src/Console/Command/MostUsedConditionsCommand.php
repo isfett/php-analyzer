@@ -344,55 +344,6 @@ class MostUsedConditionsCommand extends AbstractCommand
                 ])
             )
             ->addOption(
-                self::ARGUMENT_EXCLUDES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDES,
-                self::DEFAULT_EXCLUDES
-            )
-            ->addOption(
-                self::ARGUMENT_EXCLUDE_PATHS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDE_PATHS,
-                self::DEFAULT_EXCLUDE_PATHS
-            )
-            ->addOption(
-                self::ARGUMENT_EXCLUDE_FILES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_EXCLUDE_FILES,
-                self::DEFAULT_EXCLUDE_FILES
-            )
-            ->addOption(
-                self::ARGUMENT_INCLUDE_FILES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_INCLUDE_FILES,
-                self::DEFAULT_INCLUDE_FILES
-            )
-            ->addOption(
-                self::ARGUMENT_SUFFIXES,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_SUFFIXES,
-                self::DEFAULT_SUFFIXES
-            )
-            ->addOption(
-                self::ARGUMENT_VISITORS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_VISITORS,
-                self::DEFAULT_VISITORS
-            )
-            ->addOption(
-                self::ARGUMENT_PROCESSORS,
-                null,
-                InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_PROCESSORS,
-                self::DEFAULT_PROCESSORS
-            )
-            ->addOption(
                 self::ARGUMENT_SORT,
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -454,6 +405,7 @@ class MostUsedConditionsCommand extends AbstractCommand
                 InputOption::VALUE_NONE,
                 self::DESCRIPTION_CSV_DELIMITER_SEMICOLON
             );
+        $this->configureDefaultFields(self::DEFAULT_VISITORS);
     }
 
     /**

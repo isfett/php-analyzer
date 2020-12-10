@@ -20,7 +20,7 @@ or download the latest phar from [this repository](https://github.com/isfett/php
 Each command has its own documentation; you can find those in the 'docs' subfolder.
 
 ## Information
-This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser), ignoring different code-style or whitespaces. 
+This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser), ignoring different code-styles or whitespaces. 
 
 ## Commands
 - [Magic Number Detector](docs/MagicNumberDetector.md) This command helps to find Magic Numbers in your source code. You can also specify to check only case's inside switch's or default parameter values. You can find many examples in the linked command documentation.
@@ -31,8 +31,9 @@ This tool uses [a php parser written in php](https://github.com/nikic/PHP-Parser
 - Find Duplicate Code (ignoring codestyle, just checking statements)
 - Find Classes/Functions with the highest cyclomatic complexity
 - Halstead-Metrics
+- Refactoring-Score (including number of git-commits within a file)
 - Most Used Constants (Order by name or value)
-- IDE-Integration (PHPStorm)
+- IDE-Integration (PHPStorm, IntelliJ)
 
 ## Contributing
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
