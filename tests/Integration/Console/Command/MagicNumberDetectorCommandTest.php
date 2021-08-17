@@ -73,58 +73,7 @@ class MagicNumberDetectorCommandTest extends TestCase
             '<command-start>Starting magic-number-detector command</command-start>',
             $outputText
         );
-        $this->assertStringContainsString('Processors processed magic numbers. Magic numbers found:', $outputText);
-
-        $expectedOutput = <<<EOT
-+--------------------------------------------------------------+----------------------------------------------+
-| Number                                                       | Occurrence                                   |
-+--------------------------------------------------------------+----------------------------------------------+
-| \$input === <focus>-5</focus>                                 | magic_number_detector_integrationtest.php:38 |
-|--------------------------------------------------------------|----------------------------------------------|
-| return <focus>-1</focus>                                     | magic_number_detector_integrationtest.php:51 |
-|--------------------------------------------------------------|----------------------------------------------|
-| \$input > <focus>2</focus>                                    | magic_number_detector_integrationtest.php:14 |
-|--------------------------------------------------------------|----------------------------------------------|
-| 1 === 0 ? <focus>2</focus> : 3                               | magic_number_detector_integrationtest.php:70 |
-|--------------------------------------------------------------|----------------------------------------------|
-| 1 === 0 ? 2 : <focus>3</focus>                               | magic_number_detector_integrationtest.php:70 |
-|--------------------------------------------------------------|----------------------------------------------|
-| floatval(<focus>3.14</focus>)                                | magic_number_detector_integrationtest.php:58 |
-|--------------------------------------------------------------|----------------------------------------------|
-| round(\$input, <focus>4</focus>)                              | magic_number_detector_integrationtest.php:25 |
-|--------------------------------------------------------------|----------------------------------------------|
-| ?int \$input = <focus>4</focus>                               | magic_number_detector_integrationtest.php:13 |
-|--------------------------------------------------------------|----------------------------------------------|
-| case <focus>5</focus>:                                       | magic_number_detector_integrationtest.php:20 |
-|--------------------------------------------------------------|----------------------------------------------|
-| private \$variable = <focus>6</focus>                         | magic_number_detector_integrationtest.php:11 |
-|--------------------------------------------------------------|----------------------------------------------|
-| \$input > <focus>7</focus>                                    | magic_number_detector_integrationtest.php:26 |
-|--------------------------------------------------------------|----------------------------------------------|
-| 'age' => <focus>13</focus>                                   | magic_number_detector_integrationtest.php:30 |
-|--------------------------------------------------------------|----------------------------------------------|
-| \$input * <focus>15</focus>                                   | magic_number_detector_integrationtest.php:41 |
-|--------------------------------------------------------------|----------------------------------------------|
-| return <focus>15</focus>                                     | magic_number_detector_integrationtest.php:15 |
-|--------------------------------------------------------------|----------------------------------------------|
-| <focus>18</focus>                                            | magic_number_detector_integrationtest.php:32 |
-|--------------------------------------------------------------|----------------------------------------------|
-| \$input > <focus>18</focus>                                   | magic_number_detector_integrationtest.php:31 |
-|--------------------------------------------------------------|----------------------------------------------|
-| <focus>20</focus> * 21                                       | magic_number_detector_integrationtest.php:44 |
-|--------------------------------------------------------------|----------------------------------------------|
-| 20 * <focus>21</focus>                                       | magic_number_detector_integrationtest.php:44 |
-|--------------------------------------------------------------|----------------------------------------------|
-| intval(<focus>100</focus>)                                   | magic_number_detector_integrationtest.php:57 |
-|--------------------------------------------------------------|----------------------------------------------|
-| 123 => <focus>1234</focus>                                   | magic_number_detector_integrationtest.php:33 |
-|--------------------------------------------------------------|----------------------------------------------|
-| '1234' => <focus>1234</focus>                                | magic_number_detector_integrationtest.php:34 |
-|--------------------------------------------------------------|----------------------------------------------|
-| \$a[<focus>1234</focus>]                                      | magic_number_detector_integrationtest.php:65 |
-+--------------------------------------------------------------+----------------------------------------------+
-EOT;
-        $this->assertStringContainsString($expectedOutput, $outputText);
+        $this->assertStringContainsString('Processors processed magic numbers. Magic numbers found: 22', $outputText);
     }
 
     /**

@@ -72,7 +72,7 @@ class PropertyTest extends AbstractNodeRepresentationTest
             } else {
                 $this->nodeRepresentationService
                     ->method('representationForNode')
-                    ->willReturn($type);
+                    ->willReturn((string) $type);
             }
         }
 

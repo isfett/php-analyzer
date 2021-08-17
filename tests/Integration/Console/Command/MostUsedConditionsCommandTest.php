@@ -76,7 +76,7 @@ class MostUsedConditionsCommandTest extends TestCase
             '<command-start>Starting most-used-conditions command</command-start>',
             $outputText
         );
-        $this->assertStringContainsString('Processors processed conditions. Conditions found:', $outputText);
+        $this->assertStringContainsString('Processors processed conditions. Conditions found: 16', $outputText);
 
         $expectedOutput = <<<EOT
 +-----------------------------------------------------------------------------------------------------------------------------------------+-------+
