@@ -67,7 +67,7 @@ class MagicStringDetectorCommandTest extends TestCase
 
         $output = new BufferedOutput();
         $exitCode = $this->magicStringDetectorCommand->run($input, $output);
-        $outputText = $output->fetch();
+        $outputText = str_replace('\n', '', $output->fetch());
 
         $this->assertSame(Application::EXIT_CODE_FAILURE, $exitCode);
         $this->assertStringStartsWith(
@@ -92,7 +92,7 @@ class MagicStringDetectorCommandTest extends TestCase
 |--------------------------------------------------------------|----------------------------------------------|
 | 1 === 0 ? 'a' : <focus>'b'</focus>                           | magic_string_detector_integrationtest.php:55 |
 |--------------------------------------------------------------|----------------------------------------------|
-| \$variable = <focus>'bar'</focus>                             | magic_string_detector_integrationtest.php:11 |
+| private \$variable = <focus>'bar'</focus>                     | magic_string_detector_integrationtest.php:11 |
 |--------------------------------------------------------------|----------------------------------------------|
 | \$input !== <focus>'c++'</focus>                              | magic_string_detector_integrationtest.php:32 |
 |--------------------------------------------------------------|----------------------------------------------|
