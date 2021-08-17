@@ -73,6 +73,48 @@ abstract class AbstractCommand extends Command
     private const ARGUMENT_WITH_JSON = 'with-json';
 
     /** @var string */
+    private const LEXER_USED_ATTRIBUTES_KEY = 'usedAttributes';
+
+    /** @var string */
+    private const LEXER_USED_ATTRIBUTES_COMMENTS = 'comments';
+
+    /** @var string */
+    private const LEXER_USED_ATTRIBUTES_STARTLINE = 'startLine';
+
+    /** @var string */
+    private const LEXER_USED_ATTRIBUTES_ENDLINE = 'endLine';
+
+    /** @var string */
+    private const LEXER_USED_ATTRIBUTES_STARTFILEPOS = 'startFilePos';
+
+    /** @var string */
+    private const LEXER_USED_ATTRIBUTES_ENDFILEPOS = 'endFilePos';
+
+    /** @var string */
+    private const JSON_EXPORT_TYPE = 'type';
+
+    /** @var string */
+    private const JSON_EXPORT_VALUE = 'value';
+
+    /** @var string */
+    private const JSON_EXPORT_VISITOR = 'visitor';
+
+    /** @var string */
+    private const JSON_EXPORT_STARTFILEPOS = 'startFilePos';
+
+    /** @var string */
+    private const JSON_EXPORT_ENDFILEPOS = 'endFilePos';
+
+    /** @var array<string> */
+    private const LEXER_USED_ATTRIBUTES = [
+        self::LEXER_USED_ATTRIBUTES_COMMENTS,
+        self::LEXER_USED_ATTRIBUTES_STARTLINE,
+        self::LEXER_USED_ATTRIBUTES_ENDLINE,
+        self::LEXER_USED_ATTRIBUTES_STARTFILEPOS,
+        self::LEXER_USED_ATTRIBUTES_ENDFILEPOS,
+    ];
+
+    /** @var string */
     protected const COMMA = ',';
 
     /** @var string */
@@ -219,6 +261,9 @@ abstract class AbstractCommand extends Command
     /** @var string */
     protected const TABLE_MESSAGE_FOCUSED_VALUE = '<focus>%s</focus>';
 
+    /** @var string */
+    private const SERIALIZER_FORMAT_JSON = 'json';
+
     /** @var FinderBuilderInterface */
     protected $finderBuilder;
 
@@ -290,58 +335,60 @@ abstract class AbstractCommand extends Command
             self::DESCRIPTION_EXCLUDES,
             self::DEFAULT_EXCLUDES
         )
-        ->addOption(
-            self::ARGUMENT_EXCLUDE_PATHS,
-            null,
-            InputOption::VALUE_REQUIRED,
-            self::DESCRIPTION_EXCLUDE_PATHS,
-            self::DEFAULT_EXCLUDE_PATHS
-        )
-        ->addOption(
-            self::ARGUMENT_EXCLUDE_FILES,
-            null,
-            InputOption::VALUE_REQUIRED,
-            self::DESCRIPTION_EXCLUDE_FILES,
-            self::DEFAULT_EXCLUDE_FILES
-        )
-        ->addOption(
-            self::ARGUMENT_INCLUDE_FILES,
-            null,
-            InputOption::VALUE_REQUIRED,
-            self::DESCRIPTION_INCLUDE_FILES,
-            self::DEFAULT_INCLUDE_FILES
-        )
-        ->addOption(
-            self::ARGUMENT_SUFFIXES,
-            null,
-            InputOption::VALUE_REQUIRED,
-            self::DESCRIPTION_SUFFIXES,
-            self::DEFAULT_SUFFIXES
-        )
-        ->addOption(
-            self::ARGUMENT_VISITORS,
-            null,
-            InputOption::VALUE_REQUIRED,
-            self::DESCRIPTION_VISITORS,
-            $defaultVisitors
-        )
-        ->addOption(
-            self::ARGUMENT_PROCESSORS,
-            null,
-            InputOption::VALUE_REQUIRED,
-            self::DESCRIPTION_PROCESSORS,
-            self::DEFAULT_PROCESSORS
-        );
-
-        if ($withJsonExport) {
-            $this->addOption(
-                self::ARGUMENT_WITH_JSON,
+            ->addOption(
+                self::ARGUMENT_EXCLUDE_PATHS,
                 null,
                 InputOption::VALUE_REQUIRED,
-                self::DESCRIPTION_WITH_JSON,
-                null
+                self::DESCRIPTION_EXCLUDE_PATHS,
+                self::DEFAULT_EXCLUDE_PATHS
+            )
+            ->addOption(
+                self::ARGUMENT_EXCLUDE_FILES,
+                null,
+                InputOption::VALUE_REQUIRED,
+                self::DESCRIPTION_EXCLUDE_FILES,
+                self::DEFAULT_EXCLUDE_FILES
+            )
+            ->addOption(
+                self::ARGUMENT_INCLUDE_FILES,
+                null,
+                InputOption::VALUE_REQUIRED,
+                self::DESCRIPTION_INCLUDE_FILES,
+                self::DEFAULT_INCLUDE_FILES
+            )
+            ->addOption(
+                self::ARGUMENT_SUFFIXES,
+                null,
+                InputOption::VALUE_REQUIRED,
+                self::DESCRIPTION_SUFFIXES,
+                self::DEFAULT_SUFFIXES
+            )
+            ->addOption(
+                self::ARGUMENT_VISITORS,
+                null,
+                InputOption::VALUE_REQUIRED,
+                self::DESCRIPTION_VISITORS,
+                $defaultVisitors
+            )
+            ->addOption(
+                self::ARGUMENT_PROCESSORS,
+                null,
+                InputOption::VALUE_REQUIRED,
+                self::DESCRIPTION_PROCESSORS,
+                self::DEFAULT_PROCESSORS
             );
+
+        if (!$withJsonExport) {
+            return;
         }
+
+        $this->addOption(
+            self::ARGUMENT_WITH_JSON,
+            null,
+            InputOption::VALUE_REQUIRED,
+            self::DESCRIPTION_WITH_JSON,
+            null
+        );
     }
 
     /**
@@ -506,9 +553,7 @@ abstract class AbstractCommand extends Command
     protected function parseFiles(array $files, Traverser $traverser, ProgressBar $traverserProgressBar): void
     {
         $lexer = new Lexer([
-            'usedAttributes' => [
-                'comments', 'startLine', 'endLine', 'startFilePos', 'endFilePos',
-            ],
+            self::LEXER_USED_ATTRIBUTES_KEY => self::LEXER_USED_ATTRIBUTES,
         ]);
         $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, $lexer);
 
@@ -682,7 +727,7 @@ abstract class AbstractCommand extends Command
      *
      * @return array
      */
-    private function getArrayOption(string $name, InputInterface $input): array
+    protected function getArrayOption(string $name, InputInterface $input): array
     {
         if (self::EMPTY_STRING === $inputOption = $input->getOption($name)) {
             return [];
@@ -691,6 +736,10 @@ abstract class AbstractCommand extends Command
         return explode(self::COMMA, $inputOption);
     }
 
+    /**
+     * @param OccurrenceList $occurrenceList
+     * @param InputInterface $input
+     */
     protected function exportJson(OccurrenceList $occurrenceList, InputInterface $input): void
     {
         $jsonExport = $input->getOption(self::ARGUMENT_WITH_JSON);
@@ -707,21 +756,19 @@ abstract class AbstractCommand extends Command
             /** @var Node $parent */
             $parent = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
             $isMinus = false;
-            if ($parent instanceof UnaryMinus) {
-                $isMinus = true;
+
+            if ($this->hasParent($parent)) {
+                $isMinus = $this->hasMinusSign($parent);
                 $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
             }
 
-            if ($parent instanceof Arg || $parent instanceof PropertyProperty) {
-                $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
-            }
-
+            $nodeValue = is_numeric($node->value) ? $this->getIntegerNodeValue($node, $isMinus) : $node->value;
             $jsonExportData[] = [
-                'type' => $parent->getType(),
-                'value' => is_numeric($node->value) ? $this->getIntegerNodeValue($node, $isMinus)  : $node->value,
-                'visitor' => $occurrence->getFoundByVisitor(),
-                'startFilePos' => $parent->getStartFilePos(),
-                'endFilePos' => $parent->getEndFilePos(),
+                self::JSON_EXPORT_TYPE => $parent->getType(),
+                self::JSON_EXPORT_VALUE => $nodeValue,
+                self::JSON_EXPORT_VISITOR => $occurrence->getFoundByVisitor(),
+                self::JSON_EXPORT_STARTFILEPOS => $parent->getStartFilePos(),
+                self::JSON_EXPORT_ENDFILEPOS => $parent->getEndFilePos(),
             ];
         }
 
@@ -729,7 +776,7 @@ abstract class AbstractCommand extends Command
 
         file_put_contents(
             $jsonExport,
-            $serializer->encode($jsonExportData, 'json')
+            $serializer->encode($jsonExportData, self::SERIALIZER_FORMAT_JSON)
         );
     }
 
@@ -747,5 +794,25 @@ abstract class AbstractCommand extends Command
         }
 
         return (float) $value;
+    }
+
+    /**
+     * @param Node $parent
+     *
+     * @return bool
+     */
+    protected function hasParent(Node $parent): bool
+    {
+        return $parent instanceof Arg || $parent instanceof PropertyProperty || $parent instanceof UnaryMinus;
+    }
+
+    /**
+     * @param Node $parent
+     *
+     * @return bool
+     */
+    protected function hasMinusSign(Node $parent): bool
+    {
+        return $parent instanceof UnaryMinus;
     }
 }

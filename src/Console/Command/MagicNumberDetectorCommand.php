@@ -195,12 +195,9 @@ class MagicNumberDetectorCommand extends AbstractCommand
             $node = $occurrence->getNode();
             $parent = $node->getAttribute(self::NODE_ATTRIBUTE_PARENT);
             $isMinus = false;
-            if ($parent instanceof UnaryMinus) {
-                $isMinus = true;
-                $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
-            }
 
-            if ($parent instanceof Arg || $parent instanceof PropertyProperty) {
+            if ($this->hasParent($parent)) {
+                $isMinus = $this->hasMinusSign($parent);
                 $parent = $parent->getAttribute(self::NODE_ATTRIBUTE_PARENT);
             }
 
