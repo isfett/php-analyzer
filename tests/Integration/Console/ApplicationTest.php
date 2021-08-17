@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 class ApplicationTest extends TestCase
 {
     /** @var string */
-    private const APPLICATION_INFO = 'php-analyzer 1.2.5 by Christopher Stenke <chris@isfett.com>' . \PHP_EOL;
+    private const APPLICATION_INFO = 'php-analyzer 1.2.6 by Chris Stenke <chris@isfett.com>' . \PHP_EOL;
 
     /** @var Application */
     private $application;

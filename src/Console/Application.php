@@ -16,13 +16,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends BaseApplication
 {
     /** @var string */
-    private const APPLICATION_AUTHOR = 'Christopher Stenke <chris@isfett.com>';
+    private const APPLICATION_AUTHOR = 'Chris Stenke <chris@isfett.com>';
 
     /** @var string */
     private const APPLICATION_NAME = 'php-analyzer';
 
     /** @var string */
-    private const APPLICATION_VERSION = '1.2.5';
+    private const APPLICATION_VERSION = '1.2.6';
 
     /** @var string */
     private const ARGUMENT_HELP = 'help';
