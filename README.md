@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/isfett/php-analyzer/master?style=flat-square)](https://travis-ci.org/isfett/php-analyzer)
+[![Build Status](https://img.shields.io/travis/com/isfett/php-analyzer/master?style=flat-square)](https://travis-ci.com/isfett/php-analyzer)
 [![codecov](https://img.shields.io/codecov/c/github/isfett/php-analyzer?style=flat-square)](https://codecov.io/gh/isfett/php-analyzer)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square)](https://php.net/)
 [![Latest Stable Version](https://poser.pugx.org/isfett/php-analyzer/v/stable)](https://packagist.org/packages/isfett/php-analyzer)
